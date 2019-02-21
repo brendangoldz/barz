@@ -41,3 +41,8 @@ hr{
   border-radius: 3px;
   font-family: "Qualio"
 }
+.body{
+  align-items:  center;
+  display: flex;
+  flex-direction: column;
+}

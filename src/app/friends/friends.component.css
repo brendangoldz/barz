@@ -1,0 +1,18 @@
+.body{
+  margin-top: 10vh;
+  text-align: center;
+}
+.body li{
+  list-style: none;
+  display: inline-block;
+  padding: 1rem;
+}
+.body img{
+  width: 75px;
+  height: auto;
+  background-color: white;
+  border-radius: 50px;
+}
+.body span i{
+  padding: 1rem;
+}

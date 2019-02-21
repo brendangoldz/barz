@@ -2,11 +2,7 @@
   --voted-color: #49f95e;
   --voted-secondary-color: #11671b;
 }
-.body{
-  align-items:  center;
-  display: flex;
-  flex-direction: column;
-}
+
 .body li{
   list-style: none;
   width: 80vw;
