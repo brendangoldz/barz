@@ -30,12 +30,35 @@
 <div class="body col-md-12">
   <div *ngFor="let r of restaurants; let i = index" class="vote_section">
     <li>
-        <h3>{{r.name}}</h3>
+      <!--<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+  Launch demo modal
+</button>  -->
+        <h3 class="rest_name">{{r.name}} <i (tap)="info(i)" class="fas fa-info-circle fa-xs" data-toggle="modal" role="button" data-target="#myModal"></i></h3>
         <a href="javascript:0;" (tap)="vote(i)"><button class="vote">VOTE</button></a>
       <mat-progress-bar [mode]="mode" [color]="color" [value]="r.votes">
       </mat-progress-bar>
         <h5>{{r.votes}}</h5>
         <hr>
+        <div id="myModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h3 id="myModalLabel">{{r.name}}</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+              </div>
+              <div class="modal-body">
+                <p>MAP FOR RESTAURANT</p>
+                <p>HOURS FOR RESTAURANT</p>
+                <p>WEBSITE FOR RESTAURANT</p>
+              </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+                <button class="btn btn-primary">Save changes</button>
+              </div>
+            </div>
+          </div>
+      </div>
   </li>
+
   </div>
 </div>

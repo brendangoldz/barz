@@ -6,6 +6,11 @@
  src: url("./assets/Qualio.otf");
  font-weight:400;
 }
+@media (max-width: 900px) {
+  .logout{
+    float: right;
+  }
+}
 body, html{
   background: #2b2b2b;
   color: white;

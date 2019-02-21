@@ -35,3 +35,9 @@ mat-progress-bar{
 .voted-buffer{
   background: var(--voted-secondary-color);
 }
+.rest_name{
+  font-size: 2rem;
+}
+.modal{
+  color: black;
+}

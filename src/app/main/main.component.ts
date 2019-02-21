@@ -60,4 +60,7 @@ export class MainComponent implements OnInit {
      this.router.navigate(['/','login']);
   });
   }
+  info = function(i){
+    console.log("Getting Info For: ", this.restaurants[i]);
+  }
 }
