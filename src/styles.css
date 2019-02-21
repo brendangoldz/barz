@@ -1,7 +1,38 @@
 /* You can add global styles to this file, and also import other style files */
 @import '@angular/material/prebuilt-themes/deeppurple-amber.css';
 @import '~firebaseui/dist/firebaseui.css';
+@font-face {
+  font-family: "Qualio";
+ src: url("./assets/Qualio.otf");
+ font-weight:400;
+}
 body, html{
-  background: #7A8B99;
+  background: #2b2b2b;
   color: white;
+  font-family: "Qualio"
+}
+.mat-progress-bar-fill::after{
+  background: #F25757;
+}
+.mat-progress-bar-buffer{
+  background: #7F2D2D;
+}
+hr{
+  border: 1px solid gray;
+}
+.navbar-brand{
+  font-size: 3.33rem;
+}
+.nav-link{
+  font-size: 2rem;
+}
+.logout{
+  font-size: 1.5rem;
+}
+.vote{
+  padding: .5rem;
+  color: black;
+  width: 33%;
+  border-radius: 3px;
+  font-family: "Qualio"
 }

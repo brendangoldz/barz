@@ -1,3 +1,7 @@
+:root {
+  --voted-color: #49f95e;
+  --voted-secondary-color: #11671b;
+}
 .body{
   align-items:  center;
   display: flex;
@@ -25,17 +29,9 @@ mat-progress-bar{
   height: 50px;
   box-shadow: 1px 5px 1px 3px rgba(10, 10, 10, .2);
 }
-hr{
-  border: 1px solid gray;
+.mat-progress-bar-fill.voted-fill{
+  background: var(--voted-color) !important;
 }
-.navbar-brand{
-  font-size: 2.33rem;
-  padding-top: 0.66rem;
-}
-.nav-link{
-  font-size: 1.5rem;
-  padding-top: 1rem;
-}
-.logout{
-  float: right;
+.voted-buffer{
+  background: var(--voted-secondary-color);
 }

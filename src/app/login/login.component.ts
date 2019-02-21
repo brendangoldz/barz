@@ -10,15 +10,18 @@ import {AngularFireAuth} from '@angular/fire/auth';
 export class LoginComponent implements OnInit {
   private currentUser: firebase.User = null;
   constructor(private fb: FirebaseuiAngularLibraryService, private route: Router, private af: AngularFireAuth) {
+    var that = this;
+
     this.fb.firebaseUiInstance.disableAutoSignIn();
+    this.af.auth.onAuthStateChanged(function(user) {
+      if (that.checkUser()) {
+        that.route.navigate(['/','main']);
+      }
+    });
   }
 
   ngOnInit() {
-    this.af.auth.onAuthStateChanged(function(user) {
-      if (user) {
-        this.route.navigate(['/','main']);
-      }
-    });
+
   }
   successCallback(event){
     console.log(event);
