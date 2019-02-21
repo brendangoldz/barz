@@ -1,0 +1,41 @@
+.body{
+  align-items:  center;
+  display: flex;
+  flex-direction: column;
+}
+.body li{
+  list-style: none;
+  width: 80vw;
+  /* border: .5px solid black; */
+  border-radius: 20px;
+  margin-top: 10vh;
+  margin-bottom: 10vh;
+  padding-top: 1.2vh;
+  height: 50px;
+  text-align: center;
+  text-transform: uppercase;
+}
+.body h5{
+  text-align:center;
+  margin-top: 1rem;
+}
+mat-progress-bar{
+  position: relative;
+  border-radius: 20px;
+  height: 50px;
+  box-shadow: 1px 5px 1px 3px rgba(10, 10, 10, .2);
+}
+hr{
+  border: 1px solid gray;
+}
+.navbar-brand{
+  font-size: 2.33rem;
+  padding-top: 0.66rem;
+}
+.nav-link{
+  font-size: 1.5rem;
+  padding-top: 1rem;
+}
+.logout{
+  float: right;
+}

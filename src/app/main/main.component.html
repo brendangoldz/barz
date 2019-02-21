@@ -1,0 +1,40 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+  <a class="navbar-brand" href="#">BARZ</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/#/friends">Friends</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/#/profile">Profile</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/#/settings">Settings</a>
+      </li>
+
+    </ul>
+    <form>
+      <li class="nav-item logout">
+        <button class="btn btn-outline-danger my-2 my-sm-0" type="submit" (click)="logout()">Logout</button>
+      </li>
+    </form>
+
+  </div>
+</nav>
+<div class="body col-md-12">
+  <div *ngFor="let r of restaurants; let i = index">
+    <li (tap)="vote(i)">
+        <h3>{{r.name}}</h3>
+      <mat-progress-bar [mode]="mode" [color]="color" [value]="r.votes">
+      </mat-progress-bar>
+        <h5>{{r.votes}}</h5>
+        <hr>
+  </li>
+  </div>
+</div>
