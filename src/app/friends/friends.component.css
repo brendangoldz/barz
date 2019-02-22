@@ -16,3 +16,11 @@
 .body span i{
   padding: 1rem;
 }
+.profile_pic{
+  text-align: center;
+}
+.close{
+  position: absolute;
+right: 0vw;
+top: 0vw;
+}

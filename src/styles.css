@@ -40,3 +40,6 @@ hr{
   display: flex;
   flex-direction: column;
 }
+.modal{
+  color: black
+}
