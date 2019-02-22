@@ -1,0 +1,26 @@
+.body{
+  margin-top: 25vh;
+  background-color: #f8f9fa;
+  color: black;
+  border-radius: 10px;
+  width: 50%;
+  box-shadow: 1px 5px 1px 3px rgba(10, 10, 10, .2);
+}
+.body img{
+  width: 7rem;
+  height: auto;
+  background-color: white;
+  border-radius: 60px;
+}
+.bio{
+  text-align: center;
+}
+.edit i{
+  left: 20vw;
+top: 2vh;
+position: relative;
+float: right;
+}
+.row{
+  text-align: center;
+}
