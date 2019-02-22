@@ -26,21 +26,15 @@ hr{
   border: 1px solid gray;
 }
 .navbar-brand{
-  font-size: 3.33rem;
-}
-.nav-link{
   font-size: 2rem;
 }
-.logout{
+.nav-link{
   font-size: 1.5rem;
 }
-.vote{
-  padding: .5rem;
-  color: black;
-  width: 33%;
-  border-radius: 3px;
-  font-family: "Qualio"
+.logout{
+  font-size: 1rem;
 }
+
 .body{
   align-items:  center;
   display: flex;

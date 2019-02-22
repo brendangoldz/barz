@@ -29,13 +29,13 @@
 </nav>
 <div class="body col-md-12">
   <div *ngFor="let r of restaurants; let i = index" class="vote_section">
-    <ul>
+
     <li>
       <!--<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
   Launch demo modal
 </button>  -->
-        <h3 class="rest_name">{{r.name}} <i (tap)="info(i)" class="fas fa-info-circle fa-xs" data-toggle="modal" role="button" data-target="#myModal"></i></h3>
-        <a href="javascript:0;" (tap)="vote(i)"><button class="vote">VOTE</button></a>
+        <h3 class="rest_name"> <a href="javscript:0;" data-toggle="modal" role="button" data-target="#myModal">{{r.name}}<i class="fas fa-info-circle fa-xs" ></i></a></h3>
+        <a href="javascript:0;" (tap)="vote(i)"><button class="btn btn-default vote">VOTE</button></a>
       <mat-progress-bar [mode]="mode" [color]="color" [value]="r.votes">
       </mat-progress-bar>
         <h5>{{r.votes}}</h5>
@@ -60,6 +60,5 @@
           </div>
       </div>
   </li>
-  </ul>
   </div>
 </div>

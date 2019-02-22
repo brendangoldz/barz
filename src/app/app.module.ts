@@ -4,13 +4,13 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
-import {FirebaseUIModule} from 'firebaseui-angular';
-import * as firebase from 'firebase/app';
-import * as firebaseui from 'firebaseui';
+// import {FirebaseUIModule} from 'firebaseui-angular';
+// import * as firebase from 'firebase/app';
+// import * as firebaseui from 'firebaseui';
 // currently there is a bug while building the app with --prod
 // - https://github.com/RaphaelJenni/FirebaseUI-Angular/issues/76
 // the plugin exposes the two libraries as well. You can use those:
-// import {FirebaseUIModule, firebase, firebaseui} from 'firebaseui-angular';
+import {FirebaseUIModule, firebase, firebaseui} from 'firebaseui-angular';
 
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';

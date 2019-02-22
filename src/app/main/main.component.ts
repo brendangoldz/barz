@@ -3,7 +3,6 @@ import {Router} from '@angular/router';
 import { HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 import {AngularFireAuth} from '@angular/fire/auth';
 import {FirebaseuiAngularLibraryService} from 'firebaseui-angular';
-declare var restaurants: ["PORTA", "JMACS", "BOND STREET", "ALE HOUSE", "STINGERS"]
 declare var $: any;
 @Component({
   selector: 'app-main',
@@ -12,6 +11,8 @@ declare var $: any;
 })
 export class MainComponent implements OnInit {
   restaurants: Array<Object> = new Array<Object>();
+  voted: boolean;
+  prevVoteInd: any;
   private color = "primary";
   private mode = "determinate";
   constructor(private fb:FirebaseuiAngularLibraryService, private af: AngularFireAuth, private router: Router) {
@@ -39,20 +40,17 @@ export class MainComponent implements OnInit {
   }
   vote = function(i){
     console.log('Tapped: ', $(event.target));
-    /*.mat-progress-bar-fill::after{
-      background: #F25757;
+
+    if(this.voted){
+      this.restaurants[this.prevVoteInd].votes--;
+      this.restaurants[i].votes++;
+      this.prevVoteInd = i;
     }
-    .mat-progress-bar-buffer{
-      background: #7F2D2D;
+    else{
+      this.voted = true;
+      this.restaurants[i].votes++;
+      this.prevVoteInd = i;
     }
-    */
-    let el = document.getElementsByClassName("mat-progress-bar-fill");
-    $(el[i]).addClass("voted-fill");
-    let el2 = document.getElementsByClassName("mat-progress-bar-buffer");
-    $(el2[i]).css("background", "#11671b")
-    // $(".mat-progress-bar-fill::after").css("background", "#49f95e")
-    // $(".mat-progress-bar-buffer").css("background", "#11671b")
-    this.restaurants[i].votes++;
   }
   logout = function(){
     this.af.auth.signOut().then(() => {

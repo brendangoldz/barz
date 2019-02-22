@@ -31,9 +31,23 @@ mat-progress-bar{
 .voted-buffer{
   background: var(--voted-secondary-color);
 }
+.vote{
+  padding: .5rem;
+  color: black;
+  background-color: white;
+  width: 33%;
+  border-radius: 3px;
+}
 .rest_name{
   font-size: 2rem;
 }
+.rest_name a{
+  color: white;
+}
 .modal{
   color: black;
+}
+.vote_section{
+  margin-top: 5vh;
+padding: 1rem;
 }
