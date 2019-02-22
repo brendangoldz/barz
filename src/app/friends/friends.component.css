@@ -1,5 +1,5 @@
 .body{
-  margin-top: 11vh;
+  margin-top: 15vh;
   text-align: center;
 }
 .body li{
@@ -15,6 +15,7 @@
 }
 .body span i{
   padding: 1rem;
+  color: #F25757;
 }
 .profile_pic{
   text-align: center;
@@ -23,4 +24,15 @@
   position: absolute;
 right: 0vw;
 top: 0vw;
+}
+.page_title{
+  letter-spacing: .5rem;
+  margin: .5rem;
+}
+.page_title hr{
+  width: 20vw;
+}
+.name{
+  letter-spacing: 0.25rem;
+  color: #F25757;
 }

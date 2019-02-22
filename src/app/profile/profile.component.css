@@ -24,3 +24,7 @@ float: right;
 .row{
   text-align: center;
 }
+.name{
+  letter-spacing: 0.25rem;
+  color: #F25757;
+}

@@ -41,8 +41,8 @@ export class MainComponent implements OnInit {
   }
   vote = function(i){
     console.log('Tapped: ', $(event.target));
-    if(this.prevEl) this.prevEl.css("background", "white");
-    $(event.target).css("background", "#49f95e");
+    if(this.prevEl) this.prevEl.css("background-position", "right bottom");
+    $(event.target).css("background-position", "left bottom");
     this.prevEl = $(event.target);
     if(this.voted){
       this.restaurants[this.prevVoteInd].votes--;

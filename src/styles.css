@@ -41,5 +41,14 @@ hr{
   flex-direction: column;
 }
 .modal{
-  color: black
+  color: black;
+  transition: background 1s;
+}
+.modal-dialog{
+  transition: all 1s;
+}
+.fa-xs {
+    font-size: 0.5em;
+    padding: 0.5rem;
+    vertical-align: top;
 }
