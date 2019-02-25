@@ -24,7 +24,7 @@
     "@angular/platform-browser-dynamic": "~7.2.0",
     "@angular/router": "~7.2.0",
     "auth0-lock": "^11.14.0",
-    "bootstrap": "^4.2.1",
+    "bootstrap": ">=4.3.1",
     "core-js": "^2.5.4",
     "firebase": "^5.8.3",
     "firebaseui": "^3.5.2",
