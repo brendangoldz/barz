@@ -1,12 +1,17 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
   <a class="navbar-brand" href="#">BARZ</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+  <button class="navbar-toggler" type="button" data-toggle="collapse"
+                                  data-target="#navbarNav"
+                                  aria-controls="navbarNav"
+                                  aria-expanded="false"
+                                  aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav">
       <li class="nav-item active">
-        <a class="nav-link" href="/#/main">Home <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="/#/main">Home <span class="sr-only">(current)
+        </span></a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="/#/friends">Friends</a>
@@ -21,7 +26,8 @@
     </ul>
     <form>
       <li class="nav-item logout">
-        <button class="btn btn-outline-danger my-2 my-sm-0 logout" type="submit" (click)="logout()">Logout</button>
+        <button class="btn btn-outline-danger my-2 my-sm-0 logout" type="submit"
+                                    (click)="logout()">Logout</button>
       </li>
     </form>
 
@@ -31,29 +37,37 @@
   <div *ngFor="let r of restaurants; let i = index" class="vote_section">
 
     <li>
-      <!--<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+      <!--<button type="button" class="btn btn-primary" data-toggle="modal"
+                                            data-target="#exampleModalCenter">
   Launch demo modal
 </button>  -->
-        <h3 class="rest_name"> <a href="javscript:0;" data-toggle="modal" role="button" data-target="#myModal">{{r.name}}<i class="fas fa-info-circle fa-xs" ></i></a></h3>
-        <a href="javascript:0;" (tap)="vote(i)"><button class="btn btn-default vote">VOTE</button></a>
+        <h3 class="rest_name"> <a href="javscript:0;" data-toggle="modal"
+                                        role="button" data-target="#myModal">
+                                        {{r.name}}<i class="fas fa-info-circle
+                                        fa-xs" ></i></a></h3>
+        <a href="javascript:0;" (tap)="vote(i)">
+          <button class="btn btn-default vote">VOTE</button></a>
       <mat-progress-bar [mode]="mode" [color]="color" [value]="r.votes">
       </mat-progress-bar>
         <h5>{{r.votes}}</h5>
         <hr>
-        <div id="myModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div id="myModal" class="modal" tabindex="-1" role="dialog"
+                            aria-labelledby="myModalLabel" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
               <div class="modal-header">
                 <h3 id="myModalLabel">{{r.name}}</h3>
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <button type="button" class="close" data-dismiss="modal"
+                            aria-hidden="true">×</button>
               </div>
               <div class="modal-body">
-                <p>MAP FOR RESTAURANT</p>
-                <p>HOURS FOR RESTAURANT</p>
-                <p>WEBSITE FOR RESTAURANT</p>
+                <p>MAP FOR BAR</p>
+                <p>HOURS FOR BAR</p>
+                <p>WEBSITE FOR BAR</p>
               </div>
               <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+                <button class="btn" data-dismiss="modal" aria-hidden="true">
+                    Close</button>
                 <button class="btn btn-primary">Save changes</button>
               </div>
             </div>

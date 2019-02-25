@@ -1,0 +1,24 @@
+.text
+{
+  margin-top: 20vh;
+  padding: 5vh;
+}
+
+pre
+{
+  padding-left: 5vh;
+  color: white;
+  font-kerning: auto;
+
+}
+.faq
+{
+  padding: 5vh;
+  font-size: 22pt;
+}
+
+.deleteP
+{
+  margin-top: 15vh;
+  padding: 5vh;
+}
