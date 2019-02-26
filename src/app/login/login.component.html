@@ -1,8 +1,80 @@
-<div class="login col-md-12">
-  <h2>Barz  <hr></h2>
+<div class="login col-md-12" *ngIf="!new">
+  <h2>Barz<hr></h2>
 
-  <firebase-ui
-      (signInSuccessWithAuthResult)="successCallback($event)"
-      (signInFailure)="errorCallback($event)"></firebase-ui>
+  <div class="col-md-4 providers">
+    <button class="btn" (click)="loginWithGoogle()"><img class="google">Login with Google</button>
+    <hr>
+  </div>
+  <form name="login" class="login_form" [formGroup]="loginForm" (ngSubmit)="login()">
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="basic-addon1"><i class="fas fa-envelope"></i></span>
+      </div>
+      <input type="email" class="form-control" placeholder="Email" formControlName="email" aria-label="Username" aria-describedby="basic-addon1" required>
+    </div>
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="basic-addon2"><i class="fas fa-lock"></i></span>
+      </div>
+      <input type="password" class="form-control" formControlName="password" placeholder="Password" aria-label="Password" aria-describedby="basic-addon2">
+    </div>
+    <a href="javscript:0;">Need an account? Click here.</a>
+    <br>
+    <a href="javscript:0;" data-toggle="modal" role="button" data-target="#enter_email">Forgot password? Click here.</a>
+    <br>
+    <input type="submit" class="btn btn-danger">
 
+  </form>
+  <div id="enter_email" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Password Recovery</h2>
+        </div>
+        <div class="modal-body">
+            <h5>Please enter your email below. You will be sent a password reset link.</h5>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+
+              <br>
+              <span class="input-group-text" id="basic-addon1"><i class="fas fa-envelope"></i></span>
+            </div>
+            <input type="email" class="form-control" placeholder="Email" aria-label="Username" aria-describedby="basic-addon1" required [(ngModel)]="forgottenEmail">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn" data-dismiss="modal" aria-hidden="true">
+              Close</button>
+              <button class="btn btn-danger" data-dismiss="modal" aria-hidden="true" (click)="forgotPassword()">
+                  Submit</button>
+        </div>
+      </div>
+    </div>
+</div>
+</div>
+<div class="signup col-md-12" *ngIf="new">
+  <h2>Barz<hr></h2>
+  <form name="signup" class="signup_form" [formGroup]="signupForm" (ngSubmit)="signup()">
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="basic-addon1"><i class="fas fa-envelope"></i></span>
+      </div>
+      <input type="email" class="form-control" formControlName="email" placeholder="Email" aria-label="Email" aria-describedby="basic-addon1">
+    </div>
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="basic-addon2"><i class="fas fa-lock"></i></span>
+      </div>
+      <input type="password" class="form-control" formControlName="password" placeholder="Password" aria-label="Password" aria-describedby="basic-addon2">
+    </div>
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="basic-addon3"><i class="fas fa-lock"></i></span>
+      </div>
+      <input type="password" class="form-control" formControlName="confirmPassword" placeholder="Confirm Password" aria-label="Password" aria-describedby="basic-addon3">
+    </div>
+    <a href="javscript:0;" (click)="newAccount()">Have an account? Click here.</a>
+    <br>
+    <input type="submit" class="btn btn-danger">
+  </form>
 </div>
