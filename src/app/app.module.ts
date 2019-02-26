@@ -4,6 +4,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
 // import {FirebaseUIModule} from 'firebaseui-angular';
 // import * as firebase from 'firebase/app';
 // import * as firebaseui from 'firebaseui';
@@ -11,6 +12,8 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 // - https://github.com/RaphaelJenni/FirebaseUI-Angular/issues/76
 // the plugin exposes the two libraries as well. You can use those:
 import {FirebaseUIModule, firebase, firebaseui} from 'firebaseui-angular';
+import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
+
 
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
@@ -49,8 +52,11 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
     MatProgressBarModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
+    AngularFirestoreModule,
     ToastrModule,
-    FirebaseUIModule.forRoot(firebaseUiAuthConfig)
+    FirebaseUIModule.forRoot(firebaseUiAuthConfig),
+    FormsModule,
+    ReactiveFormsModule
   ],
   exports: [MatProgressBarModule],
   bootstrap: [AppComponent]

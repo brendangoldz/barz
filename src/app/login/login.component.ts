@@ -1,7 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import {FirebaseuiAngularLibraryService} from 'firebaseui-angular';
+import {AuthService} from '../../assets/auth.service';
 import {AngularFireAuth} from '@angular/fire/auth';
+import {auth} from 'firebase/app';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -10,13 +12,24 @@ import {AngularFireAuth} from '@angular/fire/auth';
 export class LoginComponent implements OnInit {
   private currentUser: firebase.User = null;
   private sub: any;
-  constructor(private fb: FirebaseuiAngularLibraryService, private route: Router, private af: AngularFireAuth) {
+  private new: boolean = false;
+
+  loginForm = new FormGroup({
+   email: new FormControl(''),
+   password: new FormControl(''),
+ });
+ signupForm = new FormGroup({
+   email: new FormControl(''),
+   password: new FormControl(''),
+   confirmPassword: new FormControl(''),
+ });
+ forgottenEmail: string;
+  constructor(private route: Router, private af: AngularFireAuth, private auth: AuthService) {
     var that = this;
 
-    this.fb.firebaseUiInstance.disableAutoSignIn();
     this.sub = this.af.authState.subscribe(user => {
           if (user) {
-            this.route.navigate(['/','main']);
+            console.log("User in authState:", user);
           } else {
             return;
           }
@@ -30,9 +43,6 @@ export class LoginComponent implements OnInit {
   }
   successCallback(event){
     console.log(event);
-    if(this.checkUser()){
-      this.route.navigate(['/','main']);
-    }
   }
   errorCallback(event){
     console.log(event)
@@ -42,5 +52,27 @@ export class LoginComponent implements OnInit {
       return false;
     }
     return true;
+  }
+  loginWithGoogle = function(){
+    this.auth.GoogleAuth();
+  }
+  login = function(){
+    console.log(this.loginForm);
+    this.auth.SignIn(this.loginForm.value.email, this.loginForm.value.password);
+  }
+  signup = function(){
+    console.log(this.signupForm);
+    if(this.signupForm.password === this.signupForm.confirmPassword)this.auth.SignUp(this.signupForm.value.email, this.signupForm.value.password)
+  }
+  forgotPassword = function(){
+    this.auth.ForgotPassword(this.forgottenEmail);
+  }
+  newAccount = function(){
+    if(!this.new){
+      this.new = true;
+    }
+    else{
+      this.new = false;
+    }
   }
 }
