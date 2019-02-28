@@ -4,6 +4,7 @@ import { auth } from 'firebase/app';
 import { AngularFireAuth } from "@angular/fire/auth";
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { Router } from "@angular/router";
+import * as firebase from 'firebase';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,7 @@ import { Router } from "@angular/router";
 
 export class AuthService {
   userData: any; // Save logged in user data
+
 
   constructor(
     public afs: AngularFirestore,   // Inject Firestore service
@@ -34,25 +36,26 @@ export class AuthService {
 
   // Sign in with email/password
   SignIn(email, password) {
+
     return this.afAuth.auth.signInWithEmailAndPassword(email, password)
       .then((result) => {
         this.ngZone.run(() => {
           this.router.navigate(['main']);
         });
-        this.SetUserData(result.user);
+        //this.SetUserData(result.user); //result.user
       }).catch((error) => {
         window.alert(error.message)
       })
   }
 
   // Sign up with email/password
-  SignUp(email, password) {
+  SignUp(email, password, firstName, lastName, dob, gender) {
     return this.afAuth.auth.createUserWithEmailAndPassword(email, password)
       .then((result) => {
         /* Call the SendVerificaitonMail() function when new user sign
         up and returns promise */
         this.SendVerificationMail();
-        this.SetUserData(result.user);
+        this.SetUserData(email, firstName, lastName, dob, gender); //result.user
       }).catch((error) => {
         window.alert(error.message)
       })
@@ -95,7 +98,7 @@ export class AuthService {
        this.ngZone.run(() => {
           this.router.navigate(['main']);
         })
-      this.SetUserData(result.user);
+      //this.SetUserData(result.user);
     }).catch((error) => {
       window.alert(error)
     })
@@ -104,18 +107,54 @@ export class AuthService {
   /* Setting up user data when sign in with username/password,
   sign up with username/password and sign in with social auth
   provider in Firestore database using AngularFirestore + AngularFirestoreDocument service */
-  SetUserData(user) {
+  SetUserData(email, firstName, lastName, dob, gender) { //user
+
+
+  var db = firebase.firestore();
+
+  db.collection("users").add({
+
+    firstName: firstName,
+    lastName: lastName,
+    gender: gender,
+    dob: dob,
+    email: email,
+    occupation:'',
+    relationshipStatus: '',
+    favDrink: '',
+    picture: ''
+
+
+})
+.then(function(docRef) {
+    console.log("Document written with ID: ", docRef.id);
+})
+.catch(function(error) {
+    console.error("Error adding document: ", error);
+});
+/*
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
     const userData: User = {
+
       uid: user.uid,
-      email: user.email,
       displayName: user.displayName,
       photoURL: user.photoURL,
-      emailVerified: user.emailVerified
+      email: user.email,
+      emailVerified: user.emailVerified  */
+/*
+      fName: user.fName,
+      lName:user.lName,
+      dob:user.dob,
+      sex:user.sex,
+      maritalStatus:user.maritalStatus,
+      favDrink: user.favDrink,
+      occupation: user.occupation,
     }
+
     return userRef.set(userData, {
       merge: true
     })
+      */
   }
 
   // Sign out

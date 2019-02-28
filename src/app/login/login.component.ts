@@ -4,6 +4,7 @@ import {AuthService} from '../../assets/auth.service';
 import {AngularFireAuth} from '@angular/fire/auth';
 import {auth} from 'firebase/app';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { ViewChild, ElementRef} from '@angular/core';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -14,15 +15,24 @@ export class LoginComponent implements OnInit {
   private sub: any;
   private new: boolean = false;
 
+
   loginForm = new FormGroup({
    email: new FormControl(''),
    password: new FormControl(''),
  });
+
+
  signupForm = new FormGroup({
+   firstName: new FormControl(),
+   lastName: new FormControl(),
+   dob: new FormControl(),
    email: new FormControl(''),
    password: new FormControl(''),
    confirmPassword: new FormControl(''),
  });
+
+   gender: string ='';
+
  forgottenEmail: string;
   constructor(private route: Router, private af: AngularFireAuth, private auth: AuthService) {
     var that = this;
@@ -62,7 +72,32 @@ export class LoginComponent implements OnInit {
   }
   signup = function(){
     console.log(this.signupForm);
-    if(this.signupForm.password === this.signupForm.confirmPassword)this.auth.SignUp(this.signupForm.value.email, this.signupForm.value.password)
+
+
+
+/*&& this.signupForm.value.email != '' && this.signupForm.value.password != ''
+&& this.signupForm.value.confirmPassword != '' && this.signupForm.value.firstName != ''
+&& this.signupForm.value.lastName != '' &&  this.signupForm.value.dob != ''
+&& this.gender != ''*/
+
+
+
+    if(this.signupForm.value.password === this.signupForm.value.confirmPassword){
+
+
+                     this.auth.SignUp(this.signupForm.value.email,
+                     this.signupForm.value.password,
+                     this.signupForm.value.firstName,
+                     this.signupForm.value.lastName,
+                     this.signupForm.value.dob,
+                     this.gender) //
+
+
+                               }
+                   else{
+                     window.alert('Passwords do not match');
+                       }
+
   }
   forgotPassword = function(){
     this.auth.ForgotPassword(this.forgottenEmail);

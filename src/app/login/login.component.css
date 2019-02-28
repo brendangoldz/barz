@@ -2,7 +2,7 @@
   text-align: center;
 }
 .login_form, .signup_form{
-  width: 33%;
+  width: 25%;
   margin: 0 auto;
 }
 .providers{
@@ -21,4 +21,13 @@
   background-size: cover;
   margin-right: 0.5vw;
   padding: .6rem;
+}
+input[type=radio] {
+
+ width: 2.2vw;
+ height: 2.2vw;
+ text-align: left;
+}
+form.signup_form{
+  width: 25vw;
 }
