@@ -6,7 +6,7 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import {MatRadioModule} from '@angular/material/radio';
-
+import { AngularFireDatabaseModule } from '@angular/fire/database';
 // import {FirebaseUIModule} from 'firebaseui-angular';
 // import * as firebase from 'firebase/app';
 // import * as firebaseui from 'firebaseui';
