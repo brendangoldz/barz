@@ -14,7 +14,7 @@ import { ViewChild, ElementRef} from '@angular/core';
 export class LoginComponent implements OnInit {
   private currentUser: firebase.User = null;
   private sub: any;
-  private new: boolean = false;
+  new: boolean = false;
 
 
   loginForm = new FormGroup({
@@ -26,7 +26,6 @@ export class LoginComponent implements OnInit {
  signupForm = new FormGroup({
    firstName: new FormControl(),
    lastName: new FormControl(),
-   dob: new FormControl(),
    email: new FormControl(''),
    password: new FormControl(''),
    confirmPassword: new FormControl(''),
@@ -104,13 +103,5 @@ export class LoginComponent implements OnInit {
   }
   forgotPassword = function(){
     this.auth.ForgotPassword(this.forgottenEmail);
-  }
-  newAccount = function(){
-    if(!this.new){
-      this.new = true;
-    }
-    else{
-      this.new = false;
-    }
   }
 }

@@ -3,8 +3,9 @@ import { User } from "./user";
 
 import { auth } from 'firebase/app';
 import { AngularFireAuth } from "@angular/fire/auth";
-import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { Router } from "@angular/router";
+import {Observable} from 'rxjs';
 import * as firebase from 'firebase';
 
 @Injectable({
@@ -13,7 +14,7 @@ import * as firebase from 'firebase';
 
 export class AuthService {
   userData: any; // Save logged in user data
-
+  collection: AngularFirestoreCollection<any[]>;
 
   constructor(
     public afs: AngularFirestore,   // Inject Firestore service
@@ -55,6 +56,7 @@ export class AuthService {
       .then((result) => {
         /* Call the SendVerificaitonMail() function when new user sign
         up and returns promise */
+        console.log(result)
         this.SendVerificationMail();
         this.SetUserData(email, firstName, lastName, dob, gender); //result.user
       }).catch((error) => {
@@ -98,7 +100,7 @@ export class AuthService {
 
     return this.afAuth.auth.signInWithPopup(provider)
     .then((result) => {
-      
+
        this.ngZone.run(() => {
           this.router.navigate(['main']);
         })
@@ -160,7 +162,6 @@ export class AuthService {
     })
       */
   }
-
   // Sign out
   SignOut() {
     return this.afAuth.auth.signOut().then(() => {

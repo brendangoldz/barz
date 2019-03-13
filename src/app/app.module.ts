@@ -14,8 +14,8 @@ import {MatRadioModule} from '@angular/material/radio';
 // - https://github.com/RaphaelJenni/FirebaseUI-Angular/issues/76
 // the plugin exposes the two libraries as well. You can use those:
 import {FirebaseUIModule, firebase, firebaseui} from 'firebaseui-angular';
-import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
 
+import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
 
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
@@ -54,7 +54,8 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
     MatProgressBarModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
-    AngularFirestoreModule,
+    AngularFirestoreModule.enablePersistence(),
+    AngularFireDatabaseModule,
     ToastrModule,
     FirebaseUIModule.forRoot(firebaseUiAuthConfig),
     FormsModule,

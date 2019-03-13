@@ -1,24 +1,190 @@
+.container
+{
+
+  vertical-align: middle;
+}
+
 .text
 {
-  margin-top: 20vh;
-  padding: 5vh;
+  margin-top: 15vh;
+  text-align: center;
 }
 
 pre
 {
-  padding-left: 5vh;
   color: white;
   font-kerning: auto;
+  text-align: left;
 
 }
-.faq
+
+.faq h2
 {
-  padding: 5vh;
+  text-align: center;
+  padding-bottom: 2vh;
+}
+
+.faq p
+{
+  margin: auto;
+  text-align: center;
+  font-size: 22pt;
+  word-wrap: break-word;
+  overflow: hidden;
+}
+
+.deleteP{
+  margin: 0 auto;
+    text-align: center;
+}
+
+.deleteP h2
+{
+
+  margin-top: 2vh;
+
+}
+
+.deleteP button
+{
+  text-decoration: underline;
+  color: black;
+  position: relative;
+  align-items: center;
+}
+
+.user h2
+{
+  text-align: center;
+  margin-top: 2vh;
+
+}
+
+.user p
+{
+  margin: auto;
+  padding-left: 20vh;
+  padding-bottom: 2vh;
+  text-align: left;
+  font-size: 24pt;
+
+}
+
+.notifications{
+  margin:0 auto;
+  text-align: center;
+}
+
+/*Radius*/
+
+
+.radius label
+{
+
   font-size: 22pt;
 }
 
-.deleteP
+.radius
 {
-  margin-top: 15vh;
-  padding: 5vh;
+  text-align: center;
+}
+.slidecontainer
+{
+  column-span: all;
+}
+
+/* Switch */
+
+.switch {
+  position: relative;
+  /* margin-left: 300px; */
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+
+/* Notification Slider*/
+.slider {
+
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+/* Privacy*/
+.privacy p
+{
+  margin-right: 8vw;
+  text-align: center;
+  font-size: 16pt;
+
+}
+/* Terms of Use*/
+.terms
+{
+  vertical-align: middle;
+  text-align: center;
+}
+
+
+/* Bar Radius Slider Bar*/
+
+
+/* Footer*/
+footer
+{
+  font-family: serif;
+  font-size: 22pt;
+  text-align: center;
+  text-decoration: underline;
 }
