@@ -1,3 +1,33 @@
-.login{
+.login, .signup{
   text-align: center;
+}
+.login_form, .signup_form{
+  width: 25%;
+  margin: 0 auto;
+}
+.providers{
+  width: 25%;
+  margin: 0 auto;
+}
+.providers button{
+  font-size: 1rem;
+  color: black;
+  background: white;
+}
+
+.google{
+  background-image: url("../../assets/gmail.png");
+  background-position: center;
+  background-size: cover;
+  margin-right: 0.5vw;
+  padding: .6rem;
+}
+input[type=radio] {
+
+ width: 2.2vw;
+ height: 2.2vw;
+ text-align: left;
+}
+form.signup_form{
+  width: 25vw;
 }

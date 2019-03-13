@@ -1,76 +1,77 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
   <a class="navbar-brand" href="#">BARZ</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse"
-  data-target="#navbarNav"
-  aria-controls="navbarNav"
-  aria-expanded="false"
-  aria-label="Toggle navigation">
-  <span class="navbar-toggler-icon"></span>
-</button>
-<div class="collapse navbar-collapse" id="navbarNav">
-  <ul class="navbar-nav">
-    <li class="nav-item active">
-      <a class="nav-link" href="/#/main">Home <span class="sr-only">(current)
-      </span></a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="/#/friends">Friends</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="/#/profile">Profile</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="/#/settings">Settings</a>
-    </li>
-  </ul>
-  <form>
-    <li class="nav-item logout">
-      <button class="btn btn-outline-danger my-2 my-sm-0 logout" type="submit"
-      (click)="logout()">Logout</button>
-    </li>
-  </form>
-</div>
+                                  data-target="#navbarNav"
+                                  aria-controls="navbarNav"
+                                  aria-expanded="false"
+                                  aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item active">
+        <a class="nav-link" href="/#/main">Home <span class="sr-only">(current)
+        </span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/#/friends">Friends</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/#/profile">Profile</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/#/settings">Settings</a>
+      </li>
+
+    </ul>
+    <form>
+      <li class="nav-item logout">
+        <button class="btn btn-outline-danger my-2 my-sm-0 logout" type="submit"
+                                    (click)="logout()">Logout</button>
+      </li>
+    </form>
+
+  </div>
 </nav>
 <div class="body col-md-12">
   <div *ngFor="let r of restaurants; let i = index" class="vote_section">
+
     <li>
       <!--<button type="button" class="btn btn-primary" data-toggle="modal"
-      data-target="#exampleModalCenter">
-      Launch demo modal
-    </button>  -->
-    <h3 class="rest_name"> <a href="javscript:0;" data-toggle="modal"
-      role="button" data-target="#myModal">
-      {{r.name}}<i class="fas fa-info-circle
-      fa-xs" ></i></a>
-    </h3>
-    <a href="javascript:0;" (tap)="vote(i)">
-      <button class="btn btn-default vote">VOTE</button></a>
+                                            data-target="#exampleModalCenter">
+  Launch demo modal
+</button>  -->
+        <h3 class="rest_name"> <a href="javscript:0;" data-toggle="modal"
+                                        role="button" data-target="#myModal" (click)="info(i)">
+                                        {{r.name}}<i class="fas fa-info-circle
+                                        fa-xs" ></i></a></h3>
+        <a href="javascript:0;" (tap)="vote(i)">
+          <button class="btn btn-default vote">VOTE</button></a>
       <mat-progress-bar [mode]="mode" [color]="color" [value]="r.votes">
       </mat-progress-bar>
-      <h5>{{r.votes}}</h5>
-      <hr>
-      <div id="myModal" class="modal" tabindex="-1" role="dialog"
-      aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h3 id="myModalLabel">{{r.name}}</h3>
-            <button type="button" class="close" data-dismiss="modal"
-            aria-hidden="true">×</button>
-          </div>
-          <div class="modal-body">
-            <p>MAP FOR BAR</p>
-            <p>HOURS FOR BAR</p>
-            <p>WEBSITE FOR BAR</p>
-          </div>
-          <div class="modal-footer">
-            <button class="btn" data-dismiss="modal" aria-hidden="true">
-              Close</button>
-              <button class="btn btn-primary">Save changes</button>
+        <h5>{{r.votes}}</h5>
+        <hr>
+        <div id="myModal" class="modal" tabindex="-1" role="dialog"
+                            aria-labelledby="myModalLabel" aria-hidden="true" *ngIf="restaurant">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h3 id="myModalLabel">{{restaurant.name}}</h3>
+                <button type="button" class="close" data-dismiss="modal"
+                            aria-hidden="true">×</button>
+              </div>
+              <div class="modal-body">
+                <p>{{restaurant.coords.latitude}}, {{restaurant.coords.longitude}}</p>
+                <p *ngFor="let hours of restaurant.hours">{{hours}}</p>
+                <p>{{restaurant.website}}</p>
+              </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">
+                    Close</button>
+              </div>
             </div>
           </div>
-        </div>
       </div>
-    </li>
+  </li>
   </div>
 </div>
