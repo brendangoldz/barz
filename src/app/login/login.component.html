@@ -18,11 +18,13 @@
       </div>
       <input type="password" class="form-control" formControlName="password" placeholder="Password" aria-label="Password" aria-describedby="basic-addon2">
     </div>
+    <input type="submit" class="btn btn-danger">
+    <br>
     <a href="javscript:0;" data-toggle="modal" role="button" data-target="#signup_info">Need an account? Click here.</a>
     <br>
     <a href="javscript:0;" data-toggle="modal" role="button" data-target="#enter_email">Forgot password? Click here.</a>
-    <br>
-    <input type="submit" class="btn btn-danger">
+
+
 
   </form>
   <div id="enter_email" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -106,9 +108,14 @@
                 <br>
                 <span class="input-group-text" id="basic-addon1"><i class="fa fa-mars"></i></span>
               </div>
-              <input type="radio" class="form-control" [(ngModel)]="gender" name="gender" value = "male" aria-label="First Name" > Male
-              <input type="radio" class="form-control" [(ngModel)]="gender" name="gender" value = "female" aria-label="First Name"> Female
-             <input type="radio" class="form-control"  [(ngModel)]="gender" name="gender" value = "other" aria-label="First Name"> Other
+
+
+
+
+              <input type="radio" class="form-control" [(ngModel)]="gender" formControlName="gender" value = "male" aria-label="First Name" > Male
+              <input type="radio" class="form-control" [(ngModel)]="gender" formControlName="gender" value = "female" aria-label="First Name"> Female
+             <input type="radio" class="form-control"  [(ngModel)]="gender" formControlName="gender" value = "other" aria-label="First Name"> Other
+
             </div>
 
 

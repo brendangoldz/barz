@@ -1,9 +1,13 @@
 export interface User{
-  uid: string,
-  displayName:string,
-  photoURL: string,
+  firstName: string,
+  lastName: string,
+  gender: string,
+  dob: string,
   email: string,
-  emailVerified: true
+  occupation:string,
+  relationshipStatus: string,
+  favDrink: string,
+  picture: string
   //displayName: string,
 
 

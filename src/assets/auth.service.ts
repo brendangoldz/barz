@@ -1,5 +1,6 @@
 import { Injectable, NgZone } from '@angular/core';
 import { User } from "./user";
+
 import { auth } from 'firebase/app';
 import { AngularFireAuth } from "@angular/fire/auth";
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
@@ -89,12 +90,15 @@ export class AuthService {
   // Sign in with Google
   GoogleAuth() {
     return this.AuthLogin(new auth.GoogleAuthProvider());
+
   }
 
   // Auth logic to run auth providers
   AuthLogin(provider) {
+
     return this.afAuth.auth.signInWithPopup(provider)
     .then((result) => {
+      
        this.ngZone.run(() => {
           this.router.navigate(['main']);
         })
@@ -109,11 +113,11 @@ export class AuthService {
   provider in Firestore database using AngularFirestore + AngularFirestoreDocument service */
   SetUserData(email, firstName, lastName, dob, gender) { //user
 
-
+  var us = firebase.auth().currentUser['uid'];
   var db = firebase.firestore();
+  db.collection("users").doc(us).set({
 
-  db.collection("users").add({
-
+    uid: us,
     firstName: firstName,
     lastName: lastName,
     gender: gender,
@@ -127,7 +131,7 @@ export class AuthService {
 
 })
 .then(function(docRef) {
-    console.log("Document written with ID: ", docRef.id);
+    console.log("Document written with ID: ", docRef);
 })
 .catch(function(error) {
     console.error("Error adding document: ", error);
