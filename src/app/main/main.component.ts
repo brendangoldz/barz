@@ -34,6 +34,7 @@ console.log(this.restaurants);
     var arr = [];
     var db = firebase.firestore();
     var doc = db.collection("bars").get().then((snap)=>{
+      console.log(snap);
       console.log("Snapshot", snap)
       snap.forEach((doc)=>{
         console.log(doc.id, " => ", doc.data());
@@ -50,13 +51,46 @@ console.log(this.restaurants);
     if(this.voted){
       this.restaurants[this.prevVoteInd].votes--;
       this.restaurants[i].votes++;
+      var db = firebase.firestore();
+      var doc = db.collection("bars").get().then((snap)=>{
+        var votes = snap.docs[this.prevVoteInd].data().votes;
+        if(votes>0){
+          votes = votes - 1;
+          db.collection("bars").doc(snap.docs[this.prevVoteInd].id).set({
+            votes: votes
+          }, {merge:true})
+        }
+        else{
+          votes = 0;
+          db.collection("bars").doc(snap.docs[this.prevVoteInd].id).set({
+            votes: votes
+          }, {merge:true})
+        }
+
+
+      });
       this.prevVoteInd = i;
+
     }
     else{
       this.voted = true;
       this.restaurants[i].votes++;
       this.prevVoteInd = i;
+      var that = this;
+      var db = firebase.firestore();
+      var doc = db.collection("bars").get().then((snap)=>{
+        console.log(snap);
+        console.log("Snapshot", snap)
+        console.log(snap.docs[i].id);
+        var votes = snap.docs[i].data().votes;
+        votes =+ 1;
+        db.collection("bars").doc(snap.docs[i].id).set({
+          votes: votes
+        }, {merge:true})
+
+      });
     }
+
   }
   logout = function(){
     this.af.auth.signOut().then(() => {
