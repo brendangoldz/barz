@@ -9,7 +9,7 @@ import {FirebaseuiAngularLibraryService} from 'firebaseui-angular';
   styleUrls: ['./settings.component.css']
 })
 export class SettingsComponent implements OnInit {
-
+  range: number = 0;
   constructor(private fb:FirebaseuiAngularLibraryService, private af: AngularFireAuth, private router: Router) {
 
   }

@@ -42,7 +42,7 @@
   Launch demo modal
 </button>  -->
         <h3 class="rest_name"> <a href="javscript:0;" data-toggle="modal"
-                                        role="button" data-target="#myModal">
+                                        role="button" data-target="#myModal" (click)="info(i)">
                                         {{r.name}}<i class="fas fa-info-circle
                                         fa-xs" ></i></a></h3>
         <a href="javascript:0;" (tap)="vote(i)">
@@ -52,18 +52,18 @@
         <h5>{{r.votes}}</h5>
         <hr>
         <div id="myModal" class="modal" tabindex="-1" role="dialog"
-                            aria-labelledby="myModalLabel" aria-hidden="true">
+                            aria-labelledby="myModalLabel" aria-hidden="true" *ngIf="restaurant">
           <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
               <div class="modal-header">
-                <h3 id="myModalLabel">{{r.name}}</h3>
+                <h3 id="myModalLabel">{{restaurant.name}}</h3>
                 <button type="button" class="close" data-dismiss="modal"
                             aria-hidden="true">×</button>
               </div>
               <div class="modal-body">
-                <p>MAP FOR BAR</p>
-                <p>HOURS FOR BAR</p>
-                <p>WEBSITE FOR BAR</p>
+                <p>{{restaurant.coords.latitude}}, {{restaurant.coords.longitude}}</p>
+                <p *ngFor="let hours of restaurant.hours">{{hours}}</p>
+                <p>{{restaurant.website}}</p>
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">

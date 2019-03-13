@@ -5,6 +5,7 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFireDatabaseModule } from '@angular/fire/database';
 // import {FirebaseUIModule} from 'firebaseui-angular';
 // import * as firebase from 'firebase/app';
 // import * as firebaseui from 'firebaseui';
@@ -52,7 +53,8 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
     MatProgressBarModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
-    AngularFirestoreModule,
+    AngularFirestoreModule.enablePersistence(),
+    AngularFireDatabaseModule,
     ToastrModule,
     FirebaseUIModule.forRoot(firebaseUiAuthConfig),
     FormsModule,
