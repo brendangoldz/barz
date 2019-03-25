@@ -61,9 +61,11 @@
                             aria-hidden="true">×</button>
               </div>
               <div class="modal-body">
-                <p>{{restaurant.coords.latitude}}, {{restaurant.coords.longitude}}</p>
+                <agm-map  [zoom]= "15" [latitude]="restaurant.coords.latitude" [longitude]="restaurant.coords.longitude">
+                  <agm-marker [latitude]="restaurant.coords.latitude" [longitude]="restaurant.coords.longitude"></agm-marker>
+                </agm-map>
                 <p *ngFor="let hours of restaurant.hours">{{hours}}</p>
-                <p>{{restaurant.website}}</p>
+                <a href="{{restaurant.website}}">{{restaurant.website}}</a>
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">

@@ -50,3 +50,7 @@ mat-progress-bar{
   margin-top: 5vh;
 padding: 1rem;
 }
+
+agm-map {
+  height: 30vh;
+}

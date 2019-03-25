@@ -5,6 +5,7 @@ import {AngularFireAuth} from '@angular/fire/auth';
 import {FirebaseuiAngularLibraryService} from 'firebaseui-angular';
 import {AuthService} from '../../assets/auth.service';
 
+
 import * as firebase from 'firebase';
 declare var $: any;
 @Component({
@@ -12,7 +13,8 @@ declare var $: any;
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.css']
 })
-export class MainComponent implements OnInit {
+export class MainComponent implements OnInit
+{
   restaurants: Array<any> = new Array<any>();
   restaurant: any;
   voted: boolean;
@@ -21,51 +23,52 @@ export class MainComponent implements OnInit {
   varaible: Object;
   private color = "primary";
   private mode = "determinate";
-  constructor(private fb:FirebaseuiAngularLibraryService, private af: AngularFireAuth, private router: Router, private auth_service: AuthService) {
+  constructor(private fb:FirebaseuiAngularLibraryService, private af: AngularFireAuth, private router: Router, private auth_service: AuthService)
+  {
     this.getBarData();
 
   }
+    ngOnInit()
+    {
+  console.log(this.restaurants);
+    }
+    getBarData = function(){
+      var that = this;
+      var arr = [];
+      var db = firebase.firestore();
+      var doc = db.collection("bars").get().then((snap)=>{
+        console.log("Snapshot", snap)
+        snap.forEach((doc)=>{
+          console.log(doc.id, " => ", doc.data());
+          that.restaurants.push(doc.data());
+        })
 
-  ngOnInit() {
-console.log(this.restaurants);
-  }
-  getBarData = function(){
-    var that = this;
-    var arr = [];
-    var db = firebase.firestore();
-    var doc = db.collection("bars").get().then((snap)=>{
-      console.log("Snapshot", snap)
-      snap.forEach((doc)=>{
-        console.log(doc.id, " => ", doc.data());
-        that.restaurants.push(doc.data());
-      })
-
+      });
+    }
+    vote = function(i){
+      console.log('Tapped: ', $(event.target));
+      if(this.prevEl) this.prevEl.css("background-position", "right bottom");
+      $(event.target).css("background-position", "left bottom");
+      this.prevEl = $(event.target);
+      if(this.voted){
+        this.restaurants[this.prevVoteInd].votes--;
+        this.restaurants[i].votes++;
+        this.prevVoteInd = i;
+      }
+      else{
+        this.voted = true;
+        this.restaurants[i].votes++;
+        this.prevVoteInd = i;
+      }
+    }
+    logout = function(){
+      this.af.auth.signOut().then(() => {
+        console.log("Logging out");
+       this.router.navigate(['/','login']);
     });
-  }
-  vote = function(i){
-    console.log('Tapped: ', $(event.target));
-    if(this.prevEl) this.prevEl.css("background-position", "right bottom");
-    $(event.target).css("background-position", "left bottom");
-    this.prevEl = $(event.target);
-    if(this.voted){
-      this.restaurants[this.prevVoteInd].votes--;
-      this.restaurants[i].votes++;
-      this.prevVoteInd = i;
     }
-    else{
-      this.voted = true;
-      this.restaurants[i].votes++;
-      this.prevVoteInd = i;
+    info = function(i){
+      console.log("Getting Info For: ", this.restaurants[i]);
+      this.restaurant = this.restaurants[i];
     }
-  }
-  logout = function(){
-    this.af.auth.signOut().then(() => {
-      console.log("Logging out");
-     this.router.navigate(['/','login']);
-  });
-  }
-  info = function(i){
-    console.log("Getting Info For: ", this.restaurants[i]);
-    this.restaurant = this.restaurants[i];
-  }
 }
