@@ -3,7 +3,7 @@
    Barz
    <hr>
 </h2>
-<div class="col-md-4 providers">
+<div class="col-md-6 providers">
    <button class="btn" (click)="loginWithGoogle()"><img class="google">Login with Google</button>
    <hr>
 </div>
@@ -77,6 +77,13 @@
                   </div>
                   <input type="password" class="form-control" formControlName="confirmPassword" placeholder="Confirm Password" aria-label="Password" aria-describedby="basic-addon3">
                </div>
+               <div class="input-group mb-3">
+                 <input type="checkbox" id="tos" class="tos form-control" formControlName="tos">
+                 <label for="tos" class="tos-label">By checking this box I agree to the <a href="tos">Terms of Service</a> and <a href="pp">Privacy Policy</a></label>
+
+                  <input type="password" class="form-control" formControlName="confirmPassword" placeholder="Confirm Password" aria-label="Password" aria-describedby="basic-addon3">
+               </div>
+
                <br>
                </form>
             </div>

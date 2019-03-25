@@ -19,7 +19,9 @@ updateForm = new FormGroup({
   firstName: new FormControl(),
   lastName: new FormControl(),
   dob: new FormControl(),
-  gender: new FormControl(''),
+  gender: new FormControl(),
+  gender1: new FormControl(),
+  gender2: new FormControl(),
   occupation: new FormControl(),
   favDrink: new FormControl(),
   relationshipStatus: new FormControl()
@@ -34,7 +36,7 @@ updateForm = new FormGroup({
   ngOnInit() {
 
 
-  //this.gender1 = 'Male'
+    // this.updateForm['firstName'].setValue(this.userData['firstName']);
 
   }
 
@@ -47,9 +49,6 @@ updateForm = new FormGroup({
   }
 
   updateData = function(){
-
-
-
     var us = firebase.auth().currentUser['uid'];
     var db = firebase.firestore();
     db.collection("users").doc(us).set({
@@ -104,6 +103,17 @@ updateForm = new FormGroup({
   }).catch((e)=>console.log(e))
 
   }
+  populateForm = function(){
+    if(this.userData){
+      this.updateForm.patchValue({firstName: this.userData['firstName']})
+      this.updateForm.patchValue({lastName: this.userData['lastName']})
+      this.updateForm.patchValue({dob: this.userData['dob']})
+      this.updateForm.patchValue({occupation: this.userData['occupation']})
+      this.updateForm.patchValue({favDrink: this.userData['favDrink']})
+      this.updateForm.patchValue({relationshipStatus: this.userData['relationshipStatus']})
+        this.updateForm.patchValue({gender: this.userData['gender']})
+  }
+}
 
 
 

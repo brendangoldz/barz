@@ -30,6 +30,7 @@ export class LoginComponent implements OnInit {
    password: new FormControl(''),
    confirmPassword: new FormControl(''),
    gender: new FormControl(''),
+   tos:  new FormControl('')
  });
 
 
@@ -83,7 +84,7 @@ export class LoginComponent implements OnInit {
 
 
 
-    if(this.signupForm.value.password === this.signupForm.value.confirmPassword){
+    if(this.signupForm.value.password === this.signupForm.value.confirmPassword && this.signupForm.value.tos != false){
 
 
 
@@ -97,7 +98,7 @@ export class LoginComponent implements OnInit {
 
                                }
                    else{
-                     window.alert('Passwords do not match');
+                     window.alert('Passwords do not match or you have not accepted the ToS');
                        }
 
   }

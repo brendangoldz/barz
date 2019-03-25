@@ -32,8 +32,11 @@
     </form>
 
   </div>
+
 </nav>
+
 <div class="body col-md-12">
+  <button (click)="clearVotes()" class="btn btn-primary clear">Clear Vote</button>
   <div *ngFor="let r of restaurants; let i = index" class="vote_section">
 
     <li>
@@ -63,7 +66,7 @@
               <div class="modal-body">
                 <p>{{restaurant.coords.latitude}}, {{restaurant.coords.longitude}}</p>
                 <p *ngFor="let hours of restaurant.hours">{{hours}}</p>
-                <p>{{restaurant.website}}</p>
+                <a href="{{restaurant.website}}">{{restaurant.website}}</a>
               </div>
               <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">

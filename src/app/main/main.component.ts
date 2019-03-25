@@ -60,7 +60,7 @@ console.log(this.restaurants);
             votes: votes
           }, {merge:true})
         }
-        else{
+        else if(votes<=0){
           votes = 0;
           db.collection("bars").doc(snap.docs[this.prevVoteInd].id).set({
             votes: votes
@@ -91,6 +91,31 @@ console.log(this.restaurants);
       });
     }
 
+  }
+  clearVotes = function(){
+    var db = firebase.firestore();
+    var doc = db.collection("bars").get().then((snap)=>{
+      var votes = snap.docs[this.prevVoteInd].data().votes;
+      console.log("Current Amount of Votes:", votes);
+      if(votes>0){
+        this.restaurants[this.prevVoteInd].votes--;
+        votes = votes - 1;
+        db.collection("bars").doc(snap.docs[this.prevVoteInd].id).set({
+          votes: votes
+        }, {merge:true})
+      }
+      else if(votes<=0){
+        this.restaurants[this.prevVoteInd].votes = 0;
+        votes = 0;
+        db.collection("bars").doc(snap.docs[this.prevVoteInd].id).set({
+          votes: votes
+        }, {merge:true})
+      }
+      if(this.prevEl) this.prevEl.css("background-position", "right bottom");
+      // $(event.target).css("background-position", "left bottom");
+      if($(event.target)) this.prevEl = $(event.target);
+      this.prevVoteInd = 0;
+    });
   }
   logout = function(){
     this.af.auth.signOut().then(() => {

@@ -59,7 +59,8 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
     ToastrModule,
     FirebaseUIModule.forRoot(firebaseUiAuthConfig),
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatRadioModule
   ],
   exports: [MatProgressBarModule],
   bootstrap: [AppComponent]

@@ -50,3 +50,12 @@ mat-progress-bar{
   margin-top: 5vh;
 padding: 1rem;
 }
+.clear{
+  background: #f8f9fa;
+  color: black;
+  position: fixed;
+  top: 10vh;
+width: 20vw;
+  z-index: 999;
+  border: 0;
+}
