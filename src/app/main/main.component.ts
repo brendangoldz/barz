@@ -27,48 +27,107 @@ export class MainComponent implements OnInit
   {
     this.getBarData();
 
+  
+
+  ngOnInit() {
+console.log(this.restaurants);
   }
-    ngOnInit()
-    {
-  console.log(this.restaurants);
-    }
-    getBarData = function(){
-      var that = this;
-      var arr = [];
+  getBarData = function(){
+    var that = this;
+    var arr = [];
+    var db = firebase.firestore();
+    var doc = db.collection("bars").get().then((snap)=>{
+      console.log(snap);
+      console.log("Snapshot", snap)
+      snap.forEach((doc)=>{
+        console.log(doc.id, " => ", doc.data());
+        that.restaurants.push(doc.data());
+      })
+
+    });
+  }
+  vote = function(i){
+    console.log('Tapped: ', $(event.target));
+    if(this.prevEl) this.prevEl.css("background-position", "right bottom");
+    $(event.target).css("background-position", "left bottom");
+    this.prevEl = $(event.target);
+    if(this.voted){
+      this.restaurants[this.prevVoteInd].votes--;
+      this.restaurants[i].votes++;
       var db = firebase.firestore();
       var doc = db.collection("bars").get().then((snap)=>{
+        var votes = snap.docs[this.prevVoteInd].data().votes;
+        if(votes>0){
+          votes = votes - 1;
+          db.collection("bars").doc(snap.docs[this.prevVoteInd].id).set({
+            votes: votes
+          }, {merge:true})
+        }
+        else if(votes<=0){
+          votes = 0;
+          db.collection("bars").doc(snap.docs[this.prevVoteInd].id).set({
+            votes: votes
+          }, {merge:true})
+        }
+
+
+      });
+      this.prevVoteInd = i;
+
+    }
+    else{
+      this.voted = true;
+      this.restaurants[i].votes++;
+      this.prevVoteInd = i;
+      var that = this;
+      var db = firebase.firestore();
+      var doc = db.collection("bars").get().then((snap)=>{
+        console.log(snap);
         console.log("Snapshot", snap)
-        snap.forEach((doc)=>{
-          console.log(doc.id, " => ", doc.data());
-          that.restaurants.push(doc.data());
-        })
+        console.log(snap.docs[i].id);
+        var votes = snap.docs[i].data().votes;
+        votes =+ 1;
+        db.collection("bars").doc(snap.docs[i].id).set({
+          votes: votes
+        }, {merge:true})
 
       });
     }
-    vote = function(i){
-      console.log('Tapped: ', $(event.target));
-      if(this.prevEl) this.prevEl.css("background-position", "right bottom");
-      $(event.target).css("background-position", "left bottom");
-      this.prevEl = $(event.target);
-      if(this.voted){
+
+  }
+  clearVotes = function(){
+    var db = firebase.firestore();
+    var doc = db.collection("bars").get().then((snap)=>{
+      var votes = snap.docs[this.prevVoteInd].data().votes;
+      console.log("Current Amount of Votes:", votes);
+      if(votes>0){
         this.restaurants[this.prevVoteInd].votes--;
-        this.restaurants[i].votes++;
-        this.prevVoteInd = i;
+        votes = votes - 1;
+        db.collection("bars").doc(snap.docs[this.prevVoteInd].id).set({
+          votes: votes
+        }, {merge:true})
       }
-      else{
-        this.voted = true;
-        this.restaurants[i].votes++;
-        this.prevVoteInd = i;
+      else if(votes<=0){
+        this.restaurants[this.prevVoteInd].votes = 0;
+        votes = 0;
+        db.collection("bars").doc(snap.docs[this.prevVoteInd].id).set({
+          votes: votes
+        }, {merge:true})
       }
-    }
-    logout = function(){
-      this.af.auth.signOut().then(() => {
-        console.log("Logging out");
-       this.router.navigate(['/','login']);
+      if(this.prevEl) this.prevEl.css("background-position", "right bottom");
+      // $(event.target).css("background-position", "left bottom");
+      if($(event.target)) this.prevEl = $(event.target);
+      this.prevVoteInd = 0;
     });
-    }
-    info = function(i){
-      console.log("Getting Info For: ", this.restaurants[i]);
-      this.restaurant = this.restaurants[i];
-    }
+  }
+  logout = function(){
+    this.af.auth.signOut().then(() => {
+      console.log("Logging out");
+     this.router.navigate(['/','login']);
+  });
+  }
+  info = function(i){
+    console.log("Getting Info For: ", this.restaurants[i]);
+    this.restaurant = this.restaurants[i];
+  }
 }

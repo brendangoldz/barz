@@ -1,5 +1,6 @@
 import { Injectable, NgZone } from '@angular/core';
 import { User } from "./user";
+
 import { auth } from 'firebase/app';
 import { AngularFireAuth } from "@angular/fire/auth";
 import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from '@angular/fire/firestore';
@@ -91,12 +92,15 @@ export class AuthService {
   // Sign in with Google
   GoogleAuth() {
     return this.AuthLogin(new auth.GoogleAuthProvider());
+
   }
 
   // Auth logic to run auth providers
   AuthLogin(provider) {
+
     return this.afAuth.auth.signInWithPopup(provider)
     .then((result) => {
+
        this.ngZone.run(() => {
           this.router.navigate(['main']);
         })
@@ -110,24 +114,30 @@ export class AuthService {
   sign up with username/password and sign in with social auth
   provider in Firestore database using AngularFirestore + AngularFirestoreDocument service */
   SetUserData(email, firstName, lastName, dob, gender) { //user
-    var db = firebase.firestore();
-    db.collection("users").add({
-      firstName: firstName,
-      lastName: lastName,
-      gender: gender,
-      dob: dob,
-      email: email,
-      occupation:'',
-      relationshipStatus: '',
-      favDrink: '',
-      picture: ''
-    })
-    .then(function(docRef) {
-      console.log("Document written with ID: ", docRef.id);
-    })
-    .catch(function(error) {
-      console.error("Error adding document: ", error);
-    });
+
+  var us = firebase.auth().currentUser['uid'];
+  var db = firebase.firestore();
+  db.collection("users").doc(us).set({
+
+    uid: us,
+    firstName: firstName,
+    lastName: lastName,
+    gender: gender,
+    dob: dob,
+    email: email,
+    occupation:'',
+    relationshipStatus: '',
+    favDrink: '',
+    picture: ''
+
+
+})
+.then(function(docRef) {
+    console.log("Document written with ID: ", docRef);
+})
+.catch(function(error) {
+    console.error("Error adding document: ", error);
+});
 /*
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
     const userData: User = {

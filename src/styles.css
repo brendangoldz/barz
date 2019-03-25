@@ -1,6 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 @import '@angular/material/prebuilt-themes/deeppurple-amber.css';
 @import '~firebaseui/dist/firebaseui.css';
+
 @font-face {
   font-family: "Qualio";
  src: url("./assets/Qualio.otf");

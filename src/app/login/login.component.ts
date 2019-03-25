@@ -5,6 +5,7 @@ import {AngularFireAuth} from '@angular/fire/auth';
 import {auth} from 'firebase/app';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ViewChild, ElementRef} from '@angular/core';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -28,9 +29,11 @@ export class LoginComponent implements OnInit {
    email: new FormControl(''),
    password: new FormControl(''),
    confirmPassword: new FormControl(''),
+   gender: new FormControl(''),
+   tos:  new FormControl('')
  });
 
-   gender: string ='';
+
 
  forgottenEmail: string;
   constructor(private route: Router, private af: AngularFireAuth, private auth: AuthService) {
@@ -81,7 +84,8 @@ export class LoginComponent implements OnInit {
 
 
 
-    if(this.signupForm.value.password === this.signupForm.value.confirmPassword){
+    if(this.signupForm.value.password === this.signupForm.value.confirmPassword && this.signupForm.value.tos != false){
+
 
 
                      this.auth.SignUp(this.signupForm.value.email,
@@ -94,7 +98,7 @@ export class LoginComponent implements OnInit {
 
                                }
                    else{
-                     window.alert('Passwords do not match');
+                     window.alert('Passwords do not match or you have not accepted the ToS');
                        }
 
   }

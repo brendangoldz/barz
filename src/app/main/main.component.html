@@ -32,8 +32,11 @@
     </form>
 
   </div>
+
 </nav>
+
 <div class="body col-md-12">
+  <button (click)="clearVotes()" class="btn btn-primary clear">Clear Vote</button>
   <div *ngFor="let r of restaurants; let i = index" class="vote_section">
 
     <li>
