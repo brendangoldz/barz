@@ -2,7 +2,17 @@
   --voted-color: #49f95e;
   --voted-secondary-color: #11671b;
 }
-
+@media (max-width: 900px) {
+  .clear{
+    background: #f8f9fa;
+    color: black;
+    position: fixed;
+    top: 10vh;
+  width: 50vw;
+    z-index: 999;
+    border: 0;
+  }
+}
 .body li{
   list-style: none;
   width: 80vw;

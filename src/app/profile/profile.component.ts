@@ -19,6 +19,7 @@ element: HTMLImageElement; /* Defining element */
 updateForm = new FormGroup({
   firstName: new FormControl(),
   lastName: new FormControl(),
+  bio: new FormControl(),
   dob: new FormControl(),
   gender: new FormControl(),
   occupation: new FormControl(),
@@ -34,9 +35,8 @@ updateForm = new FormGroup({
 
   ngOnInit() {
   var that = this;
-
-    const inputElement = (<HTMLInputElement>document.getElementById('profile_pic'));
-    inputElement.addEventListener("change", function(files){
+  const inputElement = (<HTMLInputElement>document.getElementById('profile_pic'));
+  inputElement.addEventListener("change", function(files){
       that.fileList = this.files; /* now you can work with the file list */
       // that.uploadPicture(fileList[0])
     }, false);
@@ -54,7 +54,8 @@ updateForm = new FormGroup({
 
   updateData = function(){
     var us = firebase.auth().currentUser['uid'];
-    var pic_name = "profile."+(this.fileList[0].type).toString().split('/')[1]
+    if(this.fileList != undefined){
+      var pic_name = "profile."+(this.fileList[0].type).toString().split('/')[1]
     var that = this;
     console.log(pic_name)
     var storageRef = firebase.storage().ref(this.userId + '/profilePicture/' +  pic_name);
@@ -64,7 +65,6 @@ updateForm = new FormGroup({
         that.pictureUrl = url;
         var db = firebase.firestore();
         db.collection("users").doc(us).set({
-
           uid: us,
           firstName: this.updateForm.value.firstName,
           lastName: this.updateForm.value.lastName,
@@ -73,8 +73,8 @@ updateForm = new FormGroup({
           occupation:this.updateForm.value.occupation,
           relationshipStatus: this.updateForm.value.relationshipStatus,
           favDrink: this.updateForm.value.favDrink,
-          photoURL: that.pictureUrl
-
+          photoURL: that.pictureUrl,
+          bio: this.updateForm.value.bio
         }, {merge:true}).then(function(docRef) {
             console.log("Document written with ID: ", docRef);
         })
@@ -82,8 +82,28 @@ updateForm = new FormGroup({
             console.error("Error adding document: ", error);
         });
       });
-
     });
+    }
+    else{
+      var db = firebase.firestore();
+      db.collection("users").doc(this.userId).set({
+        uid: us,
+        firstName: this.updateForm.value.firstName,
+        lastName: this.updateForm.value.lastName,
+        gender: this.updateForm.value.gender,
+        dob: this.updateForm.value.dob,
+        occupation:this.updateForm.value.occupation,
+        relationshipStatus: this.updateForm.value.relationshipStatus,
+        favDrink: this.updateForm.value.favDrink,
+        bio: this.updateForm.value.bio
+      }, {merge:true}).then(function(docRef) {
+          console.log("Document written with ID: ", docRef);
+      })
+      .catch(function(error) {
+          console.error("Error adding document: ", error);
+      });
+    }
+    this.getProfileData();
   }
 
 
@@ -109,6 +129,7 @@ updateForm = new FormGroup({
       if(this.userData){
         this.updateForm.patchValue({firstName: this.userData['firstName']})
         this.updateForm.patchValue({lastName: this.userData['lastName']})
+        this.updateForm.patchValue({bio: this.userData['bio']})
         this.updateForm.patchValue({dob: this.userData['dob']})
         this.updateForm.patchValue({occupation: this.userData['occupation']})
         this.updateForm.patchValue({favDrink: this.userData['favDrink']})
