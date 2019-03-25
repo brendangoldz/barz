@@ -28,50 +28,7 @@ float: right;
   letter-spacing: 0.25rem;
   color: #F25757;
 }
-[id^=checkbox-3-]+label {
-    background-color: #FFF;
-    border: 1px solid #C1CACA;
-    box-shadow: 0 1px 2px rgba(0,0,0,.05),inset 0 -15px 10px -12px rgba(0,0,0,.05);
-    padding: 9px;
-    border-radius: 1000px;
-    display: inline-block;
-    position: relative;
-    margin-right: 30px
-}
-
-[id^=checkbox-3-]+label:active {
-    box-shadow: 0 1px 2px rgba(0,0,0,.05),inset 0 1px 3px rgba(0,0,0,.2)
-}
-
-[id^=checkbox-3-]:checked+label {
-    background-color: #ECF2F7;
-    border: 1px solid #92A1AC;
-    box-shadow: 0 1px 2px rgba(0,0,0,.05);
-    color: #243441;
-}
-
-[id^=checkbox-3-]:checked+label:before {
-    content: ' ';
-    border-radius: 100px;
-    position: absolute;
-    background: #253C4B;
-    opacity: .8;
-    display: none;
-    box-shadow: inset 0 15px 23px -10px rgba(187,230,240,.3),0 2px 2px rgba(0,0,0,.1);
-    top: 3px;
-    left: 3px;
-    width: 12px;
-    height: 12px
-}
-
-[id^=checkbox-3-]:checked+label:before {
-    content: ' ';
-    display: block
-}
-
-#checkbox-3-2:checked+label:before {
-    top: 4px;
-    left: 4px;
-    width: 20px;
-    height: 20px
+.genders label{
+  padding: .5rem;
+      margin: 0 auto;
 }

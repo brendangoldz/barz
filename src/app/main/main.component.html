@@ -67,7 +67,14 @@
                 <agm-map  [zoom]= "15" [latitude]="restaurant.coords.latitude" [longitude]="restaurant.coords.longitude">
                   <agm-marker [latitude]="restaurant.coords.latitude" [longitude]="restaurant.coords.longitude"></agm-marker>
                 </agm-map>
-                <p *ngFor="let hours of restaurant.hours">{{hours}}</p>
+                <span><h5>SUNDAY:</h5>{{restaurant.hours[0]}}</span>
+                <span><h5>MONDAY:</h5>{{restaurant.hours[1]}}</span>
+                <span><h5>TUESDAY:</h5>{{restaurant.hours[2]}}</span>
+                <span><h5>WEDNESDAY:</h5>{{restaurant.hours[3]}}</span>
+                <span><h5>THURSDAY:</h5>{{restaurant.hours[4]}}</span>
+                <span><h5>FRIDAY:</h5>{{restaurant.hours[5]}}</span>
+                <span><h5>SATURDAY:</h5>{{restaurant.hours[6]}}</span>
+                <br>
                 <a href="{{restaurant.website}}">{{restaurant.website}}</a>
               </div>
               <div class="modal-footer">

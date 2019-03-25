@@ -32,7 +32,7 @@
 </span>
   <div class="row" *ngIf="userData">
     <div class="profile_pic">
-      <img src='./assets/friend.png'>
+      <img src='{{userData.photoURL}}' id="pro_pic">
       </div>
     </div>
     <div class="row">
@@ -66,6 +66,14 @@
               <div class="input-group mb-3">
                 <div class="input-group-prepend">
                   <br>
+                  <span class="input-group-text" id="basic-addon1"><i class="fas fa-image"></i></span>
+                </div>
+                <input type="file" id="profile_pic" class="form-control" accept="image/*" formControlName="profile_pic" aria-describedby="basic-addon1" >
+              </div>
+
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <br>
                   <span class="input-group-text" id="basic-addon1"><i class="fa fa-user"></i></span>
                 </div>
                 <input type="text" class="form-control" formControlName="firstName" placeholder="First Name" aria-label="First Name" aria-describedby="basic-addon1">
@@ -93,14 +101,16 @@
                     <br>
                     <span class="input-group-text" id="basic-addon1"><i class="fa fa-mars"></i></span>
                   </div>
-                  <label for="male">Male</label>
+                  <label for="male">Male
                   <input type="radio" class="form-control checkbox" id="male checkbox-3-2" formControlName="gender" value = "male" aria-label="gender1" >
-                  <label for="female">Female</label>
+                  </label>
+                  <label for="female">Female
                   <input type="radio" class="form-control checkbox" id="female checkbox-3-2" formControlName="gender" value = "female" aria-label="gender2">
-                  <label for="other">Other</label>
+                  </label>
+                  <label for="other">Other
                   <input type="radio" class="form-control checkbox" id="other checkbox-3-2" formControlName="gender" value = "other" aria-label="gender3">
-
-                </div>
+                  </label>
+              </div>
 
                 <div class="input-group mb-3">
                   <div class="input-group-prepend">

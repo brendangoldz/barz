@@ -26,8 +26,8 @@ export class MainComponent implements OnInit
   constructor(private fb:FirebaseuiAngularLibraryService, private af: AngularFireAuth, private router: Router, private auth_service: AuthService)
   {
     this.getBarData();
+}
 
-  
 
   ngOnInit() {
 console.log(this.restaurants);
