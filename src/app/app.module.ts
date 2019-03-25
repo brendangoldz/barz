@@ -63,9 +63,7 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
     FirebaseUIModule.forRoot(firebaseUiAuthConfig),
     FormsModule,
     ReactiveFormsModule,
-    AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyCWRs89apzmjk8JSB4Gy30sqpoMN8zGSm4'
-    }),
+    AgmCoreModule.forRoot(environment.gmap),
     MatRadioModule
   ],
   exports: [MatProgressBarModule],

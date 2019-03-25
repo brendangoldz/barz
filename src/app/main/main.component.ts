@@ -96,6 +96,7 @@ console.log(this.restaurants);
 
   }
   clearVotes = function(){
+    if(this.voted) this.voted = false;
     var db = firebase.firestore();
     var doc = db.collection("bars").get().then((snap)=>{
       var votes = snap.docs[this.prevVoteInd].data().votes;
