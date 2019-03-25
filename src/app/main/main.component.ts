@@ -5,6 +5,7 @@ import {AngularFireAuth} from '@angular/fire/auth';
 import {FirebaseuiAngularLibraryService} from 'firebaseui-angular';
 import {AuthService} from '../../assets/auth.service';
 
+
 import * as firebase from 'firebase';
 declare var $: any;
 @Component({
@@ -12,7 +13,8 @@ declare var $: any;
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.css']
 })
-export class MainComponent implements OnInit {
+export class MainComponent implements OnInit
+{
   restaurants: Array<any> = new Array<any>();
   restaurant: any;
   voted: boolean;
@@ -21,10 +23,11 @@ export class MainComponent implements OnInit {
   varaible: Object;
   private color = "primary";
   private mode = "determinate";
-  constructor(private fb:FirebaseuiAngularLibraryService, private af: AngularFireAuth, private router: Router, private auth_service: AuthService) {
+  constructor(private fb:FirebaseuiAngularLibraryService, private af: AngularFireAuth, private router: Router, private auth_service: AuthService)
+  {
     this.getBarData();
 
-  }
+  
 
   ngOnInit() {
 console.log(this.restaurants);

@@ -14,6 +14,7 @@ import { AngularFireDatabaseModule } from '@angular/fire/database';
 // - https://github.com/RaphaelJenni/FirebaseUI-Angular/issues/76
 // the plugin exposes the two libraries as well. You can use those:
 import {FirebaseUIModule, firebase, firebaseui} from 'firebaseui-angular';
+import { AgmCoreModule } from '@agm/core';
 
 import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
 
@@ -26,6 +27,8 @@ import { SettingsComponent } from './settings/settings.component';
 import { FriendsComponent } from './friends/friends.component';
 import { LoginComponent } from './login/login.component';
 import { ToastrModule } from 'ngx-toastr';
+
+
 const firebaseUiAuthConfig: firebaseui.auth.Config = {
   signInFlow: 'popup',
   signInOptions: [
@@ -60,6 +63,9 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
     FirebaseUIModule.forRoot(firebaseUiAuthConfig),
     FormsModule,
     ReactiveFormsModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyC18ONnL1BkQTEI78TM75NO60cD11N0kxs'
+    }),
     MatRadioModule
   ],
   exports: [MatProgressBarModule],
