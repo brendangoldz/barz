@@ -11,7 +11,7 @@ import * as firebase from 'firebase';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-userData: Object;
+userData: any;
 userId: string;
 pictureUrl: string;
 fileList: any;
@@ -34,8 +34,9 @@ updateForm = new FormGroup({
 
   ngOnInit() {
   var that = this;
-    const inputElement = document.getElementById("profile_pic");
-    inputElement.addEventListener("change", function(){
+
+    const inputElement = (<HTMLInputElement>document.getElementById('profile_pic'));
+    inputElement.addEventListener("change", function(files){
       that.fileList = this.files; /* now you can work with the file list */
       // that.uploadPicture(fileList[0])
     }, false);

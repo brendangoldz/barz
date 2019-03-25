@@ -64,7 +64,7 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
     FormsModule,
     ReactiveFormsModule,
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyC18ONnL1BkQTEI78TM75NO60cD11N0kxs'
+      apiKey: 'AIzaSyCWRs89apzmjk8JSB4Gy30sqpoMN8zGSm4'
     }),
     MatRadioModule
   ],
