@@ -1,7 +1,4 @@
-:root {
-  --voted-color: #49f95e;
-  --voted-secondary-color: #11671b;
-}
+
 @media (max-width: 900px) {
   .clear{
     background: #f8f9fa;
@@ -39,7 +36,8 @@ mat-progress-bar{
 .vote{
   padding: .5rem;
   color: black;
-  background: linear-gradient(to right, #3B8E8A 50%, white 50%);
+  font-size: 1.25rem;
+  background: linear-gradient(to right, #3b8e68 50%, white 50%);
   background-size: 200% 100%;
   background-position: right bottom;
   transition: all .66s ease-in;
@@ -68,8 +66,12 @@ agm-map {
   background: #f8f9fa;
   color: black;
   position: fixed;
-  top: 10vh;
-width: 20vw;
+  top: 95vh;
+width: 30vw;
   z-index: 999;
   border: 0;
+  font-size: 20px;
+  -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: #F25757;
+  letter-spacing: .2rem;
 }

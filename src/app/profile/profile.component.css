@@ -15,9 +15,10 @@
   border-radius: 10px;
   width: 50%;
   box-shadow: 1px 5px 1px 3px rgba(10, 10, 10, .2);
+  font-size: 1.5rem;
 }
 .body img{
-  width: 7rem;
+  width: 10vw;
   height: auto;
   background-color: white;
   border-radius: 60px;

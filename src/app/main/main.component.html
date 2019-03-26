@@ -48,7 +48,7 @@
                                         role="button" data-target="#myModal" (click)="info(i)">
                                         {{r.name}}<i class="fas fa-info-circle
                                         fa-xs" ></i></a></h3>
-        <a href="javascript:0;" (tap)="vote(i)">
+        <a href="javascript:0;" (click)="vote(i)" id="bar{{i}}">
           <button class="btn btn-default vote">VOTE</button></a>
       <mat-progress-bar [mode]="mode" [color]="color" [value]="r.votes">
       </mat-progress-bar>

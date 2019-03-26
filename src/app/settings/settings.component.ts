@@ -27,7 +27,15 @@ export class SettingsComponent implements OnInit
 
   ngOnInit()
   {
-
+    var that = this;
+    this.af.auth.onAuthStateChanged(user=>{
+      if(user){
+        console.log(user);
+      }
+      else{
+        this.logout();
+      }
+    })
   }
   logout = function()
   {
