@@ -41,14 +41,19 @@ export class MainComponent implements OnInit
             if (doc.exists) {
                 if(doc.data().uid == user.uid) that.user= doc.data();
                   console.log("Document data:", doc.data());
-                  for(var i=0;i<that.restaurants.length;i++){
-                    if(that.restaurants[i].bid == that.user.voted){
-                      console.log("found previous voted @ index", i," restaurant", that.restaurants[i].bid );
-
-                      that.doClick(document.getElementById("bar"+i).firstChild);
-                      return;
+                  if(that.user.voted!=""){
+                    for(var i=0;i<that.restaurants.length;i++){
+                      if(that.restaurants[i].bid == that.user.voted){
+                        console.log("found previous voted @ index", i," restaurant", that.restaurants[i].bid );
+                        that.doClick(document.getElementById("bar"+i).firstChild);
+                        return;
+                      }
                     }
                   }
+                  else{
+                    return;
+                  }
+
                   console.log(user);
                   //console.log("Document data dob:",that.userData);
               } else {
@@ -171,17 +176,26 @@ export class MainComponent implements OnInit
   clearVotes = function(){
     if(this.voted) this.voted = false;
     var db = firebase.firestore();
+        var us = firebase.auth().currentUser['uid'];
+    db.collection("users").doc(us).set({
+      voted: ""
+    }, {merge:true}).then(function(docRef) {
+        console.log("Document written with ID: ", docRef);
+    })
+    .catch(function(error) {
+        console.error("Error adding document: ", error);
+    });
     var doc = db.collection("bars").get().then((snap)=>{
       var votes = snap.docs[this.prevVoteInd].data().votes;
       console.log("Current Amount of Votes:", votes);
-      if(votes>0){
+      votes--;
+      if(votes>=0){
         this.restaurants[this.prevVoteInd].votes--;
-        votes = votes - 1;
         db.collection("bars").doc(snap.docs[this.prevVoteInd].id).set({
           votes: votes
         }, {merge:true})
       }
-      else if(votes<=0){
+      else if(votes<0){
         this.restaurants[this.prevVoteInd].votes = 0;
         votes = 0;
         db.collection("bars").doc(snap.docs[this.prevVoteInd].id).set({
@@ -190,7 +204,6 @@ export class MainComponent implements OnInit
       }
       if(this.prevEl) this.prevEl.css("background-position", "right bottom");
       // $(event.target).css("background-position", "left bottom");
-      if($(event.target)) this.prevEl = $(event.target);
       this.prevVoteInd = 0;
     });
   }
