@@ -74,32 +74,14 @@ export class LoginComponent implements OnInit {
   }
   signup = function(){
     console.log(this.signupForm);
-
-
-
-/*&& this.signupForm.value.email != '' && this.signupForm.value.password != ''
-&& this.signupForm.value.confirmPassword != '' && this.signupForm.value.firstName != ''
-&& this.signupForm.value.lastName != '' &&  this.signupForm.value.dob != ''
-&& this.gender != ''*/
-
-
-
     if(this.signupForm.value.password === this.signupForm.value.confirmPassword && this.signupForm.value.tos != false){
-
-
-
-                     this.auth.SignUp(this.signupForm.value.email,
-                     this.signupForm.value.password,
-                     this.signupForm.value.firstName,
-                     this.signupForm.value.lastName,
+        this.auth.SignUp(this.signupForm.value.email, this.signupForm.value.password, this.signupForm.value.firstName, this.signupForm.value.lastName,
                      this.signupForm.value.dob,
                      this.gender) //
-
-
-                               }
-                   else{
-                     window.alert('Passwords do not match or you have not accepted the ToS');
-                       }
+    }
+    else{
+       window.alert('Passwords do not match or you have not accepted the ToS');
+    }
 
   }
   forgotPassword = function(){

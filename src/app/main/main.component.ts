@@ -8,6 +8,7 @@ import {AuthService} from '../../assets/auth.service';
 
 import * as firebase from 'firebase';
 declare var $: any;
+declare var google: any;
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
@@ -18,6 +19,12 @@ export class MainComponent implements OnInit
 {
   restaurants: Array<any> = new Array<any>();
   restaurant: any;
+  currentLat: any;
+  currentLong: any;
+  marker: any;
+  location: any;
+  map: any;
+  radius = 5; //MILES
   voted: boolean;
   user: any;
   int: any;
@@ -31,6 +38,11 @@ export class MainComponent implements OnInit
 
 
   ngOnInit() {
+    this.map = new google.maps.Map(document.getElementById('map'), {
+         center: this.marker,
+         zoom: 5,
+       });
+    this.findMe();
     this.getBarData();
     var that = this;
     firebase.auth().onAuthStateChanged(user=>{
@@ -67,10 +79,38 @@ export class MainComponent implements OnInit
         this.logout();
       }
     })
-    this.int = setInterval(()=>{
 
+
+    this.int = setInterval(()=>{
       this.cd.detectChanges();
     }, 1000)
+  }
+  findMe = function() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        console.log(position)
+        this.showPosition(position);
+      });
+    } else {
+      alert("Geolocation is not supported by this browser.");
+    }
+  }
+
+showPosition = function(position) {
+    this.currentLat = position.coords.latitude;
+    this.currentLong = position.coords.longitude;
+
+    this.location = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+    if (!this.marker) {
+      this.marker = new google.maps.Marker({
+        map: this.map,
+        position: location
+      });
+    }
+    else {
+      this.marker.setPosition(this.location);
+    }
   }
   getBarData = function(){
     var that = this;
@@ -83,7 +123,12 @@ export class MainComponent implements OnInit
         console.log(doc.id, " => ", doc.data());
         that.restaurants.push(doc.data());
       })
-
+    if(this.location) var temp = that.restaurants.filter(that.filterBars)
+    else{
+      this.findMe();
+      temp = that.restaurants.filter(that.filterBars)
+    }
+      console.log(temp);
     });
   }
   ngOnDestroy(){
@@ -217,6 +262,33 @@ export class MainComponent implements OnInit
     console.log("Getting Info For: ", this.restaurants[i]);
     this.restaurant = this.restaurants[i];
   }
+
+  filterBars = function(val){
+    //LAT & LONG COMING IN FROM RESTAURANT
+    // Unit: meters (Converted from miles)
+    var circleRadius = 5 * 1609.344;
+    if(!this.location){
+      this.findMe();
+    }
+    console.log(this.location)
+     var circle = new google.maps.Circle({
+           clickable: false,
+           radius: circleRadius,
+           center: this.location
+       });
+       console.log(val);
+       //CIRCLE CREATED FOR RADIUS OF SEARCH
+       // console.log("myLocation", this.location);
+    var pos = new google.maps.LatLng(parseFloat(val.coords.latitude), parseFloat(val.coords.longitude));
+    var pt2 = new google.maps.Marker({ position: pos,  map: this.map});
+    var bounds = circle.getBounds();
+    //CHECK IF REST COORDS INSIDE BOUNDS OF CIRCLE
+    if (bounds.contains(pt2.getPosition())){
+      return true;
+    }
+    return false;
+  }
+
    doClick(n)
    {
     let e = new MouseEvent('click',{
@@ -226,4 +298,5 @@ export class MainComponent implements OnInit
     })
     n.dispatchEvent(e);
   }
+
 }
