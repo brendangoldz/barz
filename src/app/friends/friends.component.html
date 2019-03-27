@@ -27,9 +27,21 @@
 
   </div>
 </nav>
+
 <div class="body col-md-12">
   <h2 class="page_title">Friends<hr></h2>
+  <form class="example" [formGroup]="findUsers" (ngSubmit)="findUsers()">
+    <div class="input-group mb-3">
+      <input type="text" placeholder="Find new friends.." name="search">
+      <div class="input-group-prepend">
+        <br>
+        <span class="input-group-text" id="basic-addon1"><button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button></span>
+      </div>
 
+
+    </div>
+
+  </form>
   <ul class="col-md-12">
     <li>
       <a data-toggle="modal" role="button" data-target="#friend1_mod"><img src='./assets/friend.png'></a>
@@ -151,7 +163,7 @@
               <div class="profile_pic col-md-12">
                 <img src='./assets/friend.png'>
                 <h2 class="name" id="friend1_mod_name">Friend Name5</h2>
-                
+
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
               </div>
             </div>

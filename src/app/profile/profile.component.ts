@@ -43,7 +43,6 @@ updateForm = new FormGroup({
       console.log(user);
       that.userId = user.uid;
       that.getProfileData();
-
     }
     else{
       this.logout();

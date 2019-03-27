@@ -1,12 +1,5 @@
 <div class="login col-md-12" *ngIf="!new">
-<h2>
-   Barz
-   <hr>
-</h2>
-<div class="col-md-6 providers">
-   <button class="btn" (click)="loginWithGoogle()"><img class="google">Login with Google</button>
-   <hr>
-</div>
+
 <form name="login" class="login_form" [formGroup]="loginForm" (ngSubmit)="login()">
 <div class="input-group mb-3">
    <div class="input-group-prepend">
@@ -80,8 +73,6 @@
                <div class="input-group mb-3">
                  <input type="checkbox" id="tos" class="tos form-control" formControlName="tos">
                  <label for="tos" class="tos-label">By checking this box I agree to the <a href="https://app.termly.io/document/terms-of-use-for-website/43c72a34-df8f-4c68-b097-e7938123607e">Terms of Use</a> and <a href="pp">Privacy Policy</a></label>
-
-                  <input type="password" class="form-control" formControlName="confirmPassword" placeholder="Confirm Password" aria-label="Password" aria-describedby="basic-addon3">
                </div>
 
                <br>

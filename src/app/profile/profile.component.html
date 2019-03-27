@@ -37,7 +37,7 @@
     </div>
     <div class="row">
     <div class="col-md-12">
-      <h2 class="name">{{userData.firstName}} {{userData.lastName}}</h2>
+      <h2 class="name" *ngIf="userData.firstName && userData.lastName">{{userData.firstName}} {{userData.lastName}}</h2>
       <hr>
       <p class="bio">{{userData.bio}}</p>
       </div>

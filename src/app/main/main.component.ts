@@ -43,7 +43,6 @@ export class MainComponent implements OnInit
          zoom: 5,
        });
     this.findMe();
-    this.getBarData();
     var that = this;
     firebase.auth().onAuthStateChanged(user=>{
       if(user){
@@ -53,20 +52,9 @@ export class MainComponent implements OnInit
             if (doc.exists) {
                 if(doc.data().uid == user.uid) that.user= doc.data();
                   console.log("Document data:", doc.data());
-                  if(that.user.voted!=""){
-                    for(var i=0;i<that.restaurants.length;i++){
-                      if(that.restaurants[i].bid == that.user.voted){
-                        console.log("found previous voted @ index", i," restaurant", that.restaurants[i].bid );
-                        that.doClick(document.getElementById("bar"+i).firstChild);
-                        return;
-                      }
-                    }
-                  }
-                  else{
-                    return;
-                  }
-
                   console.log(user);
+
+                  that.getBarData();
                   //console.log("Document data dob:",that.userData);
               } else {
                   // doc.data() will be undefined in this case
@@ -120,35 +108,33 @@ showPosition = function(position) {
       console.log(snap);
       console.log("Snapshot", snap)
       snap.forEach((doc)=>{
-        console.log(doc.id, " => ", doc.data());
+        // console.log(doc.id, " => ", doc.data());
         that.restaurants.push(doc.data());
         function filter(val){
           var circleRadius = 2 * 1609.344;
-          if(!that.location){
+          if(!that.location || that.location == undefined){
             that.findMe();
+            console.log(that.location)
           }
-          console.log(that.location)
            var circle = new google.maps.Circle({
                  clickable: false,
                  radius: circleRadius,
                  center: that.location
              });
-             console.log(val);
              //CIRCLE CREATED FOR RADIUS OF SEARCH
-             console.log("myLocation", that.location);
+             // console.log("myLocation", that.location);
           var pos = new google.maps.LatLng(parseFloat(val.coords.latitude), parseFloat(val.coords.longitude));
           var pt2 = new google.maps.Marker({ position: pos,  map: that.map});
           var bounds = circle.getBounds();
           //CHECK IF REST COORDS INSIDE BOUNDS OF CIRCLE
-          if (bounds.contains(pt2.getPosition())){
-            return true;
-          }
-          return false;
+            if (bounds.contains(pt2.getPosition())){
+              return true;
+            }
+            return false;
         }
-       console.log(that.restaurants)
       var temp = that.restaurants.filter(filter);
-      console.log(temp)
       that.restaurants = temp;
+      if(that.restaurants.length>2)that.checkVoted();
       })
 
     });
@@ -178,23 +164,25 @@ showPosition = function(position) {
     if(this.prevEl) this.prevEl.css("background-position", "right bottom");
     $(event.target).css("background-position", "left bottom");
     this.prevEl = $(event.target);
+    var bid = this.restaurants[i].bid;
     if(this.voted){
       this.restaurants[this.prevVoteInd].votes--;
       this.restaurants[i].votes++;
 
       var db = firebase.firestore();
       var doc = db.collection("bars").get().then((snap)=>{
+        // console.log(snap.docs[i].data());
         var votes = snap.docs[this.prevVoteInd].data().votes;
         var us = firebase.auth().currentUser['uid'];
         db.collection("users").doc(us).set({
-          voted: snap.docs[this.prevVoteInd].id
+          voted: bid
         }, {merge:true}).then(function(docRef) {
             console.log("Document written with ID: ", docRef);
         })
         .catch(function(error) {
             console.error("Error adding document: ", error);
         });
-        db.collection("bars").doc(snap.docs[i].id).set({
+        db.collection("bars").doc(bid).set({
           votes: votes++
         }, {merge:true})
         if(votes>0){
@@ -218,13 +206,13 @@ showPosition = function(position) {
     else{
       this.voted = true;
       this.restaurants[i].votes++;
-      this.prevVoteInd = i;
+
       var that = this;
       var db = firebase.firestore();
           var us = firebase.auth().currentUser['uid'];
       var doc = db.collection("bars").get().then((snap)=>{
         db.collection("users").doc(us).set({
-          voted: snap.docs[this.prevVoteInd].id
+          voted: bid
         }, {merge:true}).then(function(docRef) {
             console.log("Document written with ID: ", docRef);
         })
@@ -233,11 +221,12 @@ showPosition = function(position) {
         });
         var votes = snap.docs[i].data().votes;
         votes =+ 1;
-        db.collection("bars").doc(snap.docs[i].id).set({
+        db.collection("bars").doc(bid).set({
           votes: votes
         }, {merge:true})
 
       });
+        this.prevVoteInd = i;
     }
 
   }
@@ -285,14 +274,48 @@ showPosition = function(position) {
     console.log("Getting Info For: ", this.restaurants[i]);
     this.restaurant = this.restaurants[i];
   }
+  checkVoted = function(){
+    var user = this.user;
+    console.log(user);
+    var that = this;
+    var db = firebase.firestore();
+    var docRef = db.collection("users").doc(user.uid);
+    docRef.get().then(function(doc) {
+        if (doc.exists) {
+            if(doc.data().uid == user.uid) that.user= doc.data();
+              console.log("Document data:", doc.data());
+              if(user.voted!=""){
+                for(var i=0;i<that.restaurants.length;i++){
+                  console.log("BAR ID ", that.restaurants[i].bid, " @ index ", i ," User Voted: ", that.user.voted);
+                  if(that.restaurants[i].bid == that.user.voted){
+                    console.log("found previous voted @ index", i," restaurant", that.restaurants[i].bid );
+                    // that.doClick(document.getElementById("bar"+i));
+                    that.doClick(document.getElementById("bar"+i).firstChild);
 
+                    break;
+                  }
+                }
+              }
+              else{
+                console.log("User Did Not Vote ", that.user.voted)
+                return;
+              }
+
+              console.log(user);
+              //console.log("Document data dob:",that.userData);
+          } else {
+              // doc.data() will be undefined in this case
+              console.log("No such document!");
+          }
+    }).catch((e)=>console.log(e))
+  }
 
 
    doClick(n)
    {
     let e = new MouseEvent('click',{
       bubbles: true,
-      cancelable:true,
+      cancelable:false,
       view: window
     })
     n.dispatchEvent(e);

@@ -16,6 +16,9 @@ export class FriendsComponent implements OnInit {
 
   ngOnInit() {
   }
+  findUsers = function(){
+    console.log("Finding Users");
+  }
   logout = function(){
     this.af.auth.signOut().then(() => {
       console.log("Logging out");
