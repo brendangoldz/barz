@@ -67,11 +67,9 @@ agm-map {
   color: black;
   position: fixed;
   top: 95vh;
-width: 30vw;
+  width: 30vw;
   z-index: 999;
   border: 0;
   font-size: 20px;
-  -webkit-text-stroke-width: 1px;
-    -webkit-text-stroke-color: #F25757;
   letter-spacing: .2rem;
 }

@@ -36,11 +36,13 @@ export class LoginComponent implements OnInit {
 
 
  forgottenEmail: string;
-  constructor(private route: Router, private af: AngularFireAuth, private auth: AuthService) {
+  constructor(private route: Router, private af: AngularFireAuth, private auth: AuthService, private router: Router) {
     var that = this;
 
     this.sub = this.af.authState.subscribe(user => {
           if (user) {
+
+            this.router.navigate(['/', 'main'])
             console.log("User in authState:", user);
           } else {
             return;

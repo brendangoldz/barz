@@ -105,7 +105,7 @@ showPosition = function(position) {
     if (!this.marker) {
       this.marker = new google.maps.Marker({
         map: this.map,
-        position: location
+        position: this.location
       });
     }
     else {
@@ -116,20 +116,43 @@ showPosition = function(position) {
     var that = this;
     var arr = [];
     var db = firebase.firestore();
-    var doc = db.collection("bars").get().then((snap)=>{
+    var doc = db.collection("bars").orderBy("votes", "desc").get().then((snap)=>{
       console.log(snap);
       console.log("Snapshot", snap)
       snap.forEach((doc)=>{
         console.log(doc.id, " => ", doc.data());
         that.restaurants.push(doc.data());
+        function filter(val){
+          var circleRadius = 2 * 1609.344;
+          if(!that.location){
+            that.findMe();
+          }
+          console.log(that.location)
+           var circle = new google.maps.Circle({
+                 clickable: false,
+                 radius: circleRadius,
+                 center: that.location
+             });
+             console.log(val);
+             //CIRCLE CREATED FOR RADIUS OF SEARCH
+             console.log("myLocation", that.location);
+          var pos = new google.maps.LatLng(parseFloat(val.coords.latitude), parseFloat(val.coords.longitude));
+          var pt2 = new google.maps.Marker({ position: pos,  map: that.map});
+          var bounds = circle.getBounds();
+          //CHECK IF REST COORDS INSIDE BOUNDS OF CIRCLE
+          if (bounds.contains(pt2.getPosition())){
+            return true;
+          }
+          return false;
+        }
+       console.log(that.restaurants)
+      var temp = that.restaurants.filter(filter);
+      console.log(temp)
+      that.restaurants = temp;
       })
-    if(this.location) var temp = that.restaurants.filter(that.filterBars)
-    else{
-      this.findMe();
-      temp = that.restaurants.filter(that.filterBars)
-    }
-      console.log(temp);
+
     });
+
   }
   ngOnDestroy(){
     clearInterval(this.int);
@@ -263,31 +286,7 @@ showPosition = function(position) {
     this.restaurant = this.restaurants[i];
   }
 
-  filterBars = function(val){
-    //LAT & LONG COMING IN FROM RESTAURANT
-    // Unit: meters (Converted from miles)
-    var circleRadius = 5 * 1609.344;
-    if(!this.location){
-      this.findMe();
-    }
-    console.log(this.location)
-     var circle = new google.maps.Circle({
-           clickable: false,
-           radius: circleRadius,
-           center: this.location
-       });
-       console.log(val);
-       //CIRCLE CREATED FOR RADIUS OF SEARCH
-       // console.log("myLocation", this.location);
-    var pos = new google.maps.LatLng(parseFloat(val.coords.latitude), parseFloat(val.coords.longitude));
-    var pt2 = new google.maps.Marker({ position: pos,  map: this.map});
-    var bounds = circle.getBounds();
-    //CHECK IF REST COORDS INSIDE BOUNDS OF CIRCLE
-    if (bounds.contains(pt2.getPosition())){
-      return true;
-    }
-    return false;
-  }
+
 
    doClick(n)
    {
