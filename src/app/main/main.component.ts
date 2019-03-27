@@ -54,7 +54,6 @@ export class MainComponent implements OnInit
                   console.log("Document data:", doc.data());
                   console.log(user);
 
-                  that.getBarData();
                   //console.log("Document data dob:",that.userData);
               } else {
                   // doc.data() will be undefined in this case
@@ -74,10 +73,13 @@ export class MainComponent implements OnInit
     }, 1000)
   }
   findMe = function() {
+    var that = this;
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
-        console.log(position)
         this.showPosition(position);
+        if(position){
+          that.getBarData();
+        }
       });
     } else {
       alert("Geolocation is not supported by this browser.");
@@ -110,33 +112,46 @@ showPosition = function(position) {
       snap.forEach((doc)=>{
         // console.log(doc.id, " => ", doc.data());
         that.restaurants.push(doc.data());
-        function filter(val){
-          var circleRadius = 2 * 1609.344;
-          if(!that.location || that.location == undefined){
-            that.findMe();
-            console.log(that.location)
-          }
-           var circle = new google.maps.Circle({
-                 clickable: false,
-                 radius: circleRadius,
-                 center: that.location
-             });
-             //CIRCLE CREATED FOR RADIUS OF SEARCH
-             // console.log("myLocation", that.location);
-          var pos = new google.maps.LatLng(parseFloat(val.coords.latitude), parseFloat(val.coords.longitude));
-          var pt2 = new google.maps.Marker({ position: pos,  map: that.map});
-          var bounds = circle.getBounds();
-          //CHECK IF REST COORDS INSIDE BOUNDS OF CIRCLE
+
+
+      })
+      function filter(val){
+        var circleRadius = 2 * 1609.344;
+        if(!that.location || that.location == undefined){
+          that.findMe();
+          console.log(that.location)
+        }
+         var circle = new google.maps.Circle({
+               clickable: false,
+               radius: circleRadius,
+               center: that.location
+           });
+           //CIRCLE CREATED FOR RADIUS OF SEARCH
+           // console.log("myLocation", that.location);
+        var pos = new google.maps.LatLng(parseFloat(val.coords.latitude), parseFloat(val.coords.longitude));
+        var pt2 = new google.maps.Marker({ position: pos,  map: that.map});
+
+        var bounds = circle.getBounds();
+        //CHECK IF REST COORDS INSIDE BOUNDS OF CIRCLE
+        if(bounds== undefined){
+          setTimeout(()=>{
             if (bounds.contains(pt2.getPosition())){
               return true;
             }
             return false;
+          }, 2000)
         }
+        else{
+          if (bounds.contains(pt2.getPosition())){
+            return true;
+          }
+          return false;
+        }
+
+      }
       var temp = that.restaurants.filter(filter);
       that.restaurants = temp;
       if(that.restaurants.length>2)that.checkVoted();
-      })
-
     });
 
   }
@@ -290,8 +305,7 @@ showPosition = function(position) {
                   if(that.restaurants[i].bid == that.user.voted){
                     console.log("found previous voted @ index", i," restaurant", that.restaurants[i].bid );
                     // that.doClick(document.getElementById("bar"+i));
-                    that.doClick(document.getElementById("bar"+i).firstChild);
-
+                      that.doClick(document.getElementById("bar"+i).firstChild);
                     break;
                   }
                 }
