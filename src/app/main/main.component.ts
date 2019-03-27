@@ -60,7 +60,7 @@ export class MainComponent implements OnInit
                   console.log("No such document!");
               }
         }).catch((e)=>console.log(e))
-
+        that.getUserData(user);
       }
       else{
         this.logout();
@@ -112,8 +112,6 @@ showPosition = function(position) {
       snap.forEach((doc)=>{
         // console.log(doc.id, " => ", doc.data());
         that.restaurants.push(doc.data());
-
-
       })
       function filter(val){
         var circleRadius = 2 * 1609.344;
@@ -151,17 +149,39 @@ showPosition = function(position) {
       }
       var temp = that.restaurants.filter(filter);
       that.restaurants = temp;
-      if(that.restaurants.length>2)that.checkVoted();
+      if(that.restaurants.length>2 && that.user)that.checkVoted();
+      else that.findMe() && that.getUserData()
+
     });
 
   }
   ngOnDestroy(){
     clearInterval(this.int);
   }
-  getUserData = function(){
-    var us = firebase.auth().currentUser['uid'];
+  getUserData = function(user?){
+    // var db = firebase.firestore();
+    // var docRef = db.collection("users").doc(user.uid);
+    // docRef.get().then(function(doc) {
+    //     // if (doc.exists) {
+    //     //     if(doc.data().uid == user.uid) that.user= doc.data();
+    //     //       console.log("Document data:", doc.data());
+    //     //       console.log(user);
+    //     //
+    //     //       //console.log("Document data dob:",that.userData);
+    //     //   } else {
+    //     //       // doc.data() will be undefined in this case
+    //     //       console.log("No such document!");
+    //     //   }
+    // }).catch((e)=>console.log(e))
+    var us;
+    if(firebase.auth().currentUser['uid'] != null){
+      us = firebase.auth().currentUser['uid'];
+    }
+    else{
+      us = user.uid || that.user.uid;
+    }
     var db = firebase.firestore();
-    var docRef = db.collection("users").doc(this.userId);
+    var docRef = db.collection("users").doc(us);
     var that = this;
     docRef.get().then(function(doc) {
         if (doc.exists) {
