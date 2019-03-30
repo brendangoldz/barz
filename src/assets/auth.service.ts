@@ -121,6 +121,7 @@ export class AuthService {
   db.collection("users").doc(us).set({
 
     uid: us,
+    displayName: 'firstName + lastName',
     firstName: firstName,
     lastName: lastName,
     gender: gender,
