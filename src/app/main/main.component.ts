@@ -23,6 +23,7 @@ export class MainComponent implements OnInit
   currentLong: any;
   marker: any;
   location: any;
+  loaded: boolean;
   map: any;
   radius = 5; //MILES
   voted: boolean;
@@ -42,11 +43,18 @@ export class MainComponent implements OnInit
          center: this.marker,
          zoom: 5,
        });
-    this.findMe();
+
+   if (navigator.geolocation) {
+     navigator.geolocation.getCurrentPosition((position) => {
+       this.showPosition(position);
+     });
+   } else {
+     alert("Geolocation is not supported by this browser.");
+   }
     var that = this;
+    var db = firebase.firestore();
     firebase.auth().onAuthStateChanged(user=>{
       if(user){
-        var db = firebase.firestore();
         var docRef = db.collection("users").doc(user.uid);
         docRef.get().then(function(doc) {
             if (doc.exists) {
@@ -60,30 +68,65 @@ export class MainComponent implements OnInit
                   console.log("No such document!");
               }
         }).catch((e)=>console.log(e))
-        that.getUserData(user);
+        // that.getUserData(user);
       }
       else{
         this.logout();
       }
     })
+    var that = this;
+    // var arr = [];
+    var doc = db.collection("bars").orderBy("votes", "desc").onSnapshot((snap)=>{
+      this.loaded = false;
+      setTimeout(()=>{
+        that.restaurants = [];
+        snap.forEach((doc)=>{
+          // console.log(doc.id, " => ", doc.data());
+          that.restaurants.push(doc.data());
+        })
+        function filter(val){
+          var circleRadius = 2 * 1609.344;
+          // if(!that.location || that.location == undefined){
+          //   that.findMe();
+          //   console.log(that.location)
+          // }
+           var circle = new google.maps.Circle({
+                 clickable: false,
+                 radius: circleRadius,
+                 center: that.location
+             });
+             //CIRCLE CREATED FOR RADIUS OF SEARCH
+             // console.log("myLocation", that.location);
+          var pos = new google.maps.LatLng(parseFloat(val.coords.latitude), parseFloat(val.coords.longitude));
+          var pt2 = new google.maps.Marker({ position: pos,  map: that.map});
 
+          var bounds = circle.getBounds();
+          //CHECK IF REST COORDS INSIDE BOUNDS OF CIRCLE
+
+            if (bounds.contains(pt2.getPosition())){
+              return true;
+            }
+            return false;
+          
+
+        }
+        var temp = that.restaurants.filter(filter);
+        that.restaurants = temp;
+        if(that.restaurants.length>2 && that.user){
+          that.loaded = true;
+         that.checkVoted();
+        }
+      }, 250)
+      // else that.findMe() && that.getUserData()
+
+    });
 
     this.int = setInterval(()=>{
       this.cd.detectChanges();
     }, 1000)
   }
-  findMe = function() {
-    var that = this;
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        this.showPosition(position);
-        if(position){
-          that.getBarData();
-        }
-      });
-    } else {
-      alert("Geolocation is not supported by this browser.");
-    }
+  ngOnDestroy(){
+    clearInterval(this.int);
   }
 
 showPosition = function(position) {
@@ -102,98 +145,7 @@ showPosition = function(position) {
       this.marker.setPosition(this.location);
     }
   }
-  getBarData = function(){
-    var that = this;
-    var arr = [];
-    var db = firebase.firestore();
-    var doc = db.collection("bars").orderBy("votes", "desc").get().then((snap)=>{
-      console.log(snap);
-      console.log("Snapshot", snap)
-      snap.forEach((doc)=>{
-        // console.log(doc.id, " => ", doc.data());
-        that.restaurants.push(doc.data());
-      })
-      function filter(val){
-        var circleRadius = 2 * 1609.344;
-        if(!that.location || that.location == undefined){
-          that.findMe();
-          console.log(that.location)
-        }
-         var circle = new google.maps.Circle({
-               clickable: false,
-               radius: circleRadius,
-               center: that.location
-           });
-           //CIRCLE CREATED FOR RADIUS OF SEARCH
-           // console.log("myLocation", that.location);
-        var pos = new google.maps.LatLng(parseFloat(val.coords.latitude), parseFloat(val.coords.longitude));
-        var pt2 = new google.maps.Marker({ position: pos,  map: that.map});
 
-        var bounds = circle.getBounds();
-        //CHECK IF REST COORDS INSIDE BOUNDS OF CIRCLE
-        if(bounds== undefined){
-          setTimeout(()=>{
-            if (bounds.contains(pt2.getPosition())){
-              return true;
-            }
-            return false;
-          }, 2000)
-        }
-        else{
-          if (bounds.contains(pt2.getPosition())){
-            return true;
-          }
-          return false;
-        }
-
-      }
-      var temp = that.restaurants.filter(filter);
-      that.restaurants = temp;
-      if(that.restaurants.length>2 && that.user)that.checkVoted();
-      else that.findMe() && that.getUserData()
-
-    });
-
-  }
-  ngOnDestroy(){
-    clearInterval(this.int);
-  }
-  getUserData = function(user?){
-    // var db = firebase.firestore();
-    // var docRef = db.collection("users").doc(user.uid);
-    // docRef.get().then(function(doc) {
-    //     // if (doc.exists) {
-    //     //     if(doc.data().uid == user.uid) that.user= doc.data();
-    //     //       console.log("Document data:", doc.data());
-    //     //       console.log(user);
-    //     //
-    //     //       //console.log("Document data dob:",that.userData);
-    //     //   } else {
-    //     //       // doc.data() will be undefined in this case
-    //     //       console.log("No such document!");
-    //     //   }
-    // }).catch((e)=>console.log(e))
-    var us;
-    if(firebase.auth().currentUser['uid'] != null){
-      us = firebase.auth().currentUser['uid'];
-    }
-    else{
-      us = user.uid || that.user.uid;
-    }
-    var db = firebase.firestore();
-    var docRef = db.collection("users").doc(us);
-    var that = this;
-    docRef.get().then(function(doc) {
-        if (doc.exists) {
-            if(doc.data().uid == us) that.user= doc.data();
-              console.log("Document data:", doc.data());
-              //console.log("Document data dob:",that.userData);
-          } else {
-              // doc.data() will be undefined in this case
-              console.log("No such document!");
-          }
-    }).catch((e)=>console.log(e))
-  }
   vote = function(i){
     console.log('Tapped: ', $(event.target));
     if(this.prevEl) this.prevEl.css("background-position", "right bottom");
