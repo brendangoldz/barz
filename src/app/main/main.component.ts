@@ -43,11 +43,20 @@ export class MainComponent implements OnInit
          center: this.marker,
          zoom: 5,
        });
-
    if (navigator.geolocation) {
-     navigator.geolocation.getCurrentPosition((position) => {
-       this.showPosition(position);
-     });
+     var options = {
+       enableHighAccuracy: true,
+       timeout: 500,
+       maximumAge: 0
+     };
+     navigator.geolocation.getCurrentPosition((pos)=>{
+       var crd = pos.coords;
+       that.showPosition(pos);
+       console.log('Your current position is:');
+       console.log(`Latitude : ${crd.latitude}`);
+       console.log(`Longitude: ${crd.longitude}`);
+       console.log(`More or less ${crd.accuracy} meters.`);
+     }, (err)=>console.warn(`ERROR(${err.code}): ${err.message}`), options);
    } else {
      alert("Geolocation is not supported by this browser.");
    }
@@ -76,8 +85,8 @@ export class MainComponent implements OnInit
     })
     var that = this;
     // var arr = [];
-    var doc = db.collection("bars").orderBy("votes", "desc").onSnapshot((snap)=>{
-      this.loaded = false;
+    var doc = db.collection("bars").onSnapshot((snap)=>{
+      // this.loaded = false;
       setTimeout(()=>{
         that.restaurants = [];
         snap.forEach((doc)=>{
@@ -86,10 +95,6 @@ export class MainComponent implements OnInit
         })
         function filter(val){
           var circleRadius = 2 * 1609.344;
-          // if(!that.location || that.location == undefined){
-          //   that.findMe();
-          //   console.log(that.location)
-          // }
            var circle = new google.maps.Circle({
                  clickable: false,
                  radius: circleRadius,
@@ -102,22 +107,20 @@ export class MainComponent implements OnInit
 
           var bounds = circle.getBounds();
           //CHECK IF REST COORDS INSIDE BOUNDS OF CIRCLE
-
             if (bounds.contains(pt2.getPosition())){
               return true;
             }
-            return false;
-          
-
+            else{
+              return false;
+            }
         }
         var temp = that.restaurants.filter(filter);
         that.restaurants = temp;
-        if(that.restaurants.length>2 && that.user){
+        if(that.restaurants.length>0 && that.user){
           that.loaded = true;
          that.checkVoted();
         }
-      }, 250)
-      // else that.findMe() && that.getUserData()
+      }, 500)
 
     });
 
@@ -147,108 +150,107 @@ showPosition = function(position) {
   }
 
   vote = function(i){
-    console.log('Tapped: ', $(event.target));
-    if(this.prevEl) this.prevEl.css("background-position", "right bottom");
-    $(event.target).css("background-position", "left bottom");
-    this.prevEl = $(event.target);
     var bid = this.restaurants[i].bid;
-    if(this.voted){
-      this.restaurants[this.prevVoteInd].votes--;
-      this.restaurants[i].votes++;
-
-      var db = firebase.firestore();
-      var doc = db.collection("bars").get().then((snap)=>{
-        // console.log(snap.docs[i].data());
-        var votes = snap.docs[this.prevVoteInd].data().votes;
-        var us = firebase.auth().currentUser['uid'];
-        db.collection("users").doc(us).set({
-          voted: bid
-        }, {merge:true}).then(function(docRef) {
-            console.log("Document written with ID: ", docRef);
-        })
-        .catch(function(error) {
-            console.error("Error adding document: ", error);
-        });
-        db.collection("bars").doc(bid).set({
-          votes: votes++
-        }, {merge:true})
-        if(votes>0){
-          votes = votes - 1;
-          db.collection("bars").doc(snap.docs[this.prevVoteInd].id).set({
-            votes: votes
-          }, {merge:true})
-        }
-        else if(votes<=0){
-          votes = 0;
-          db.collection("bars").doc(snap.docs[this.prevVoteInd].id).set({
-            votes: votes
-          }, {merge:true})
-        }
-
-
-      });
-      this.prevVoteInd = i;
-
-    }
-    else{
-      this.voted = true;
-      this.restaurants[i].votes++;
-
-      var that = this;
-      var db = firebase.firestore();
-          var us = firebase.auth().currentUser['uid'];
-      var doc = db.collection("bars").get().then((snap)=>{
-        db.collection("users").doc(us).set({
-          voted: bid
-        }, {merge:true}).then(function(docRef) {
-            console.log("Document written with ID: ", docRef);
-        })
-        .catch(function(error) {
-            console.error("Error adding document: ", error);
-        });
-        var votes = snap.docs[i].data().votes;
-        votes =+ 1;
-        db.collection("bars").doc(bid).set({
-          votes: votes
-        }, {merge:true})
-
-      });
-        this.prevVoteInd = i;
-    }
-
-  }
-  clearVotes = function(){
-    if(this.voted) this.voted = false;
     var db = firebase.firestore();
-        var us = firebase.auth().currentUser['uid'];
+    var us = firebase.auth().currentUser['uid'] || this.user.uid;
+    var new_bar = bid
+    var prev_bar;
+    if(this.user.voted != "") prev_bar = this.user.voted;
+
+    // if(this.prevEl) this.prevEl.css("background-position", "right bottom");
+    // $(event.target).css("background-position", "left bottom");
+
+    //SET BID ONTO USER ATTR 'voted' ALWAYS
     db.collection("users").doc(us).set({
-      voted: ""
+      voted: bid
     }, {merge:true}).then(function(docRef) {
         console.log("Document written with ID: ", docRef);
     })
     .catch(function(error) {
         console.error("Error adding document: ", error);
     });
-    var doc = db.collection("bars").get().then((snap)=>{
-      var votes = snap.docs[this.prevVoteInd].data().votes;
-      console.log("Current Amount of Votes:", votes);
+
+    if(this.voted){
+      //CURRENT BAR VOTED
+      var doc = db.collection("bars").doc(bid)
+      doc.get().then((snap)=>{
+        var votes = snap.data().votes + 1;
+        doc.set({
+          votes: votes
+        }, {merge:true}).then(()=>{
+          console.log("Added Vote to ", bid, " /n Vote Count: ", votes)
+        })
+      });
+        //REDUCE PREV BAR VOTE
+        var prev = db.collection("bars").doc(prev_bar);
+        prev.get().then((snap)=>{
+          var votes = snap.data().votes - 1;
+          if(votes<0){
+            prev.set({
+              votes: 0
+            }, {merge:true}).then(()=>{
+              console.log("Removed Vote from ", prev_bar, " /n Vote Count: ", votes)
+            })
+          }
+          else{
+            prev.set({
+              votes: votes
+            }, {merge:true}).then(()=>{
+              console.log("Removed Vote from ", prev_bar, " /n Vote Count: ", votes)
+            })
+          }
+
+        });
+
+    }
+    else{
+      this.voted = true;
+      //CURRENT BAR VOTED
+      var doc = db.collection("bars").doc(bid)
+      doc.get().then((snap)=>{
+        var votes = snap.data().votes + 1;
+        doc.set({
+          votes: votes
+        }, {merge:true}).then(()=>{
+          console.log("Added Vote to ", bid, " /n Vote Count: ", votes)
+        })
+      });
+    }
+    this.prevVoteInd = i;
+    this.prevEl = $(event.target);
+
+  }
+  clearVotes = function(){
+    if(this.voted) this.voted = false;
+    var db = firebase.firestore();
+    var us = firebase.auth().currentUser['uid'];
+
+    var doc = db.collection("bars").doc(this.user.voted);
+    doc.get().then((snap)=>{
+      var votes = snap.data().votes;
       votes--;
-      if(votes>=0){
-        this.restaurants[this.prevVoteInd].votes--;
-        db.collection("bars").doc(snap.docs[this.prevVoteInd].id).set({
+      if(votes<0){
+        votes = 0;
+        doc.set({
           votes: votes
         }, {merge:true})
       }
-      else if(votes<0){
-        this.restaurants[this.prevVoteInd].votes = 0;
-        votes = 0;
-        db.collection("bars").doc(snap.docs[this.prevVoteInd].id).set({
+      else{
+        doc.set({
           votes: votes
         }, {merge:true})
       }
       if(this.prevEl) this.prevEl.css("background-position", "right bottom");
       // $(event.target).css("background-position", "left bottom");
       this.prevVoteInd = 0;
+    });
+    db.collection("users").doc(us).set({
+        voted: ""
+      }, {merge:true}).then(function(docRef) {
+          console.log("Document written with ID: ", docRef);
+      })
+      .catch(function(error) {
+          console.error("Error adding document: ", error);
     });
   }
   logout = function(){
@@ -271,13 +273,14 @@ showPosition = function(position) {
         if (doc.exists) {
             if(doc.data().uid == user.uid) that.user= doc.data();
               console.log("Document data:", doc.data());
-              if(user.voted!=""){
+              if(user.voted != ""){
                 for(var i=0;i<that.restaurants.length;i++){
                   console.log("BAR ID ", that.restaurants[i].bid, " @ index ", i ," User Voted: ", that.user.voted);
                   if(that.restaurants[i].bid == that.user.voted){
                     console.log("found previous voted @ index", i," restaurant", that.restaurants[i].bid );
                     // that.doClick(document.getElementById("bar"+i));
-                      that.doClick(document.getElementById("bar"+i).firstChild);
+                      var el = document.getElementById("bar"+i).firstChild;
+                      $(el).css("background-position", "left bottom");
                     break;
                   }
                 }
