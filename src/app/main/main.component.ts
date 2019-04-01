@@ -35,10 +35,21 @@ export class MainComponent implements OnInit
   private color = "primary";
   private mode = "determinate";
   constructor(private af: AngularFireAuth, private router: Router, private auth_service: AuthService, private cd: ChangeDetectorRef)
-  {}
+  {
+
+  }
 
 
   ngOnInit() {
+    window.addEventListener('click', function (evt) {
+      if (evt.detail === 3) {
+        console.log("triple click")
+        event.preventDefault();
+        event.stopImmediatePropagation();
+          return false;
+      }
+    });
+    var that = this;
     this.map = new google.maps.Map(document.getElementById('map'), {
          center: this.marker,
          zoom: 5,
@@ -46,8 +57,8 @@ export class MainComponent implements OnInit
    if (navigator.geolocation) {
      var options = {
        enableHighAccuracy: true,
-       timeout: 500,
-       maximumAge: 0
+       timeout: 750,
+       maximumAge: 216000
      };
      navigator.geolocation.getCurrentPosition((pos)=>{
        var crd = pos.coords;
@@ -56,11 +67,33 @@ export class MainComponent implements OnInit
        console.log(`Latitude : ${crd.latitude}`);
        console.log(`Longitude: ${crd.longitude}`);
        console.log(`More or less ${crd.accuracy} meters.`);
-     }, (err)=>console.warn(`ERROR(${err.code}): ${err.message}`), options);
+     }, (err)=>{
+       console.warn(`ERROR(${err.code}): ${err.message}`);
+       function manual(position){
+         that.location = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+         if (!that.marker) {
+           that.marker = new google.maps.Marker({
+             map: that.map,
+             position: that.location
+           });
+         }
+         else {
+           that.marker.setPosition(that.location);
+         }
+       }
+       const watcher = navigator.geolocation.watchPosition(manual);
+       that.location =
+       setTimeout(()=>{
+         navigator.geolocation.clearWatch(watcher);
+       }, 20000)
+     }, options);
+
+
    } else {
      alert("Geolocation is not supported by this browser.");
    }
-    var that = this;
+
     var db = firebase.firestore();
     firebase.auth().onAuthStateChanged(user=>{
       if(user){
@@ -83,8 +116,7 @@ export class MainComponent implements OnInit
         this.logout();
       }
     })
-    var that = this;
-    // var arr = [];
+
     var doc = db.collection("bars").onSnapshot((snap)=>{
       // this.loaded = false;
       setTimeout(()=>{
@@ -133,8 +165,9 @@ export class MainComponent implements OnInit
   }
 
 showPosition = function(position) {
-    this.currentLat = position.coords.latitude;
-    this.currentLong = position.coords.longitude;
+  console.log("Position after navigator found ", position)
+    var currentLat = position.coords.latitude;
+    var currentLong = position.coords.longitude;
 
     this.location = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
@@ -150,6 +183,8 @@ showPosition = function(position) {
   }
 
   vote = function(i){
+
+
     var bid = this.restaurants[i].bid;
     var db = firebase.firestore();
     var us = firebase.auth().currentUser['uid'] || this.user.uid;
@@ -157,8 +192,8 @@ showPosition = function(position) {
     var prev_bar;
     if(this.user.voted != "") prev_bar = this.user.voted;
 
-    // if(this.prevEl) this.prevEl.css("background-position", "right bottom");
-    // $(event.target).css("background-position", "left bottom");
+    if(this.prevEl) this.prevEl.css("background-position", "right bottom");
+    $(event.target).css("background-position", "left bottom");
 
     //SET BID ONTO USER ATTR 'voted' ALWAYS
     db.collection("users").doc(us).set({
@@ -170,7 +205,7 @@ showPosition = function(position) {
         console.error("Error adding document: ", error);
     });
 
-    if(this.voted){
+    if(this.voted && bid != prev_bar){
       //CURRENT BAR VOTED
       var doc = db.collection("bars").doc(bid)
       doc.get().then((snap)=>{
@@ -203,6 +238,9 @@ showPosition = function(position) {
         });
 
     }
+    else if(bid == prev_bar){
+      return;
+    }
     else{
       this.voted = true;
       //CURRENT BAR VOTED
@@ -223,7 +261,7 @@ showPosition = function(position) {
   clearVotes = function(){
     if(this.voted) this.voted = false;
     var db = firebase.firestore();
-    var us = firebase.auth().currentUser['uid'];
+    var us = firebase.auth().currentUser['uid'] || this.user.uid;
 
     var doc = db.collection("bars").doc(this.user.voted);
     doc.get().then((snap)=>{
@@ -279,8 +317,11 @@ showPosition = function(position) {
                   if(that.restaurants[i].bid == that.user.voted){
                     console.log("found previous voted @ index", i," restaurant", that.restaurants[i].bid );
                     // that.doClick(document.getElementById("bar"+i));
+                    that.voted = true;
                       var el = document.getElementById("bar"+i).firstChild;
                       $(el).css("background-position", "left bottom");
+
+                        $(el).attr('disabled', 'disabled');
                     break;
                   }
                 }
