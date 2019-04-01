@@ -62,6 +62,7 @@ updateForm = new FormGroup({
   }
 
   logout = function(){
+    window.localStorage.clear();
     this.af.auth.signOut().then(() => {
       console.log("Logging out");
      this.router.navigate(['/','login']);
