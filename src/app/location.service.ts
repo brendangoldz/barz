@@ -8,18 +8,26 @@ export class LocationService {
   constructor() { }
 
   getLocation(): Observable<any> {
+    var options ={
+      enableHighAccuracy: true,
+      maximumAge: 215000,
+      timeout: 10000
+    }
+    function location(observer){
+      if(window.navigator && window.navigator.geolocation) {
+          window.navigator.geolocation.getCurrentPosition(
+              (position) => {
+                  observer.next(position);
+                  observer.complete();
+              },
+              (error) => location(observer), options
+          );
+      } else {
+          observer.error('Unsupported Browser');
+      }
+    }
       return Observable.create(observer => {
-          if(window.navigator && window.navigator.geolocation) {
-              window.navigator.geolocation.getCurrentPosition(
-                  (position) => {
-                      observer.next(position);
-                      observer.complete();
-                  },
-                  (error) => observer.error(error)
-              );
-          } else {
-              observer.error('Unsupported Browser');
-          }
+          location(observer);
       });
   }
 }

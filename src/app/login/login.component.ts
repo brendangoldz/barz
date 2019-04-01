@@ -5,7 +5,7 @@ import {AngularFireAuth} from '@angular/fire/auth';
 import {auth} from 'firebase/app';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ViewChild, ElementRef} from '@angular/core';
-
+declare var $: any;
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -33,15 +33,13 @@ export class LoginComponent implements OnInit {
    tos:  new FormControl('')
  });
 
-
-
  forgottenEmail: string;
+
   constructor(private route: Router, private af: AngularFireAuth, private auth: AuthService, private router: Router) {
     var that = this;
 
     this.sub = this.af.authState.subscribe(user => {
           if (user) {
-
             this.router.navigate(['/', 'main'])
             console.log("User in authState:", user);
           } else {
@@ -50,7 +48,6 @@ export class LoginComponent implements OnInit {
       });
   }
   ngOnInit() {
-
   }
   ngOnDestroy(){
     this.sub.unsubscribe();
