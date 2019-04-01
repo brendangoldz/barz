@@ -40,7 +40,6 @@ export class MainComponent implements OnInit
   constructor(private af: AngularFireAuth, private lo: LocationService, private router: Router, private auth_service: AuthService, private cd: ChangeDetectorRef)
   {
 
-    // TODO: CREATE OBSERVABLE IN LOCATION SERVICE AND SUBSCRIBE TO THAT EVENT
   }
 
 
@@ -67,7 +66,7 @@ export class MainComponent implements OnInit
                    if(doc.data().uid == user.uid) that.user= doc.data();
                      console.log("Document data:", doc.data());
                      console.log(user);
-
+                     if(that.loaded && that.restaurants.length>0) that.checkVoted();
                      //console.log("Document data dob:",that.userData);
                  } else {
                      // doc.data() will be undefined in this case
@@ -79,50 +78,46 @@ export class MainComponent implements OnInit
          }
      });
     var db = firebase.firestore();
-    this.sub2 = this.lo.getLocation().subscribe(res=>{
-      console.log(res);
-        that.currentLat = res.coords.latitude;
-        that.currentLong = res.coords.longitude;
-        that.showPosition();
-        var doc = db.collection("bars").onSnapshot((snap)=>{
-          // this.loaded = false;
-          setTimeout(()=>{
+    var doc = db.collection("bars").onSnapshot((snap)=>{
+          // this.loaded = false
             that.restaurants = [];
             snap.forEach((doc)=>{
               // console.log(doc.id, " => ", doc.data());
               that.restaurants.push(doc.data());
             })
+          that.sub2 = that.lo.getLocation().subscribe(res=>{
+              console.log(res);
+                this.currentLat = res.coords.latitude;
+                this.currentLong = res.coords.longitude;
+                that.location = new google.maps.LatLng(this.currentLat, this.currentLong);
             function filter(val){
-              var circleRadius = 2 * (1609.344);
+              var circleRadius = 5 * 1609.344;
                var circle = new google.maps.Circle({
                      clickable: false,
                      radius: circleRadius,
-                     center: that.location
+                     center: new google.maps.LatLng(res.coords.latitude, res.coords.longitude)
                  });
                  //CIRCLE CREATED FOR RADIUS OF SEARCH
-                 // console.log("myLocation", that.location);
+                 console.log("myLocation", that.location);
               var pos = new google.maps.LatLng(parseFloat(val.coords.latitude), parseFloat(val.coords.longitude));
               var pt2 = new google.maps.Marker({ position: pos,  map: that.map});
 
               var bounds = circle.getBounds();
               //CHECK IF REST COORDS INSIDE BOUNDS OF CIRCLE
-                if (bounds.contains(pt2.getPosition())){
-                  return true;
-                }
-                else{
-                  return false;
-                }
+              return bounds.contains(pos);
+
+            }
+            console.log("Before filter: ", that.restaurants)
+            if(that.restaurants.length>0 && that.location){
+
             }
             var temp = that.restaurants.filter(filter);
             that.restaurants = temp;
-            if(that.restaurants.length>0 && that.user){
+              console.log("Filtered Array ", temp)
               that.loaded = true;
-             that.checkVoted();
-            }
-          }, 750)
-
+         })
         });
-      })
+
 
 
     this.int = setInterval(()=>{
