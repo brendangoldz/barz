@@ -39,6 +39,7 @@ export class SettingsComponent implements OnInit
   }
   logout = function()
   {
+    window.localStorage.clear();
     this.af.auth.signOut().then(() =>
     {
       console.log("Logging out");

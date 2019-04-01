@@ -4,6 +4,7 @@ import { HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-br
 import {AngularFireAuth} from '@angular/fire/auth';
 import {FirebaseuiAngularLibraryService} from 'firebaseui-angular';
 import {AuthService} from '../../assets/auth.service';
+import {LocationService} from '../location.service';
 
 
 import * as firebase from 'firebase';
@@ -25,18 +26,21 @@ export class MainComponent implements OnInit
   location: any;
   loaded: boolean;
   map: any;
+  lo_offset: any;
   radius = 5; //MILES
   voted: boolean;
   user: any;
   int: any;
   prevVoteInd: any;
   prevEl: any;
-  varaible: Object;
+  sub: any;
+  sub2: any;
   private color = "primary";
   private mode = "determinate";
-  constructor(private af: AngularFireAuth, private router: Router, private auth_service: AuthService, private cd: ChangeDetectorRef)
+  constructor(private af: AngularFireAuth, private lo: LocationService, private router: Router, private auth_service: AuthService, private cd: ChangeDetectorRef)
   {
 
+    // TODO: CREATE OBSERVABLE IN LOCATION SERVICE AND SUBSCRIBE TO THAT EVENT
   }
 
 
@@ -54,107 +58,72 @@ export class MainComponent implements OnInit
          center: this.marker,
          zoom: 5,
        });
-   if (navigator.geolocation) {
-     var options = {
-       enableHighAccuracy: true,
-       timeout: 750,
-       maximumAge: 216000
-     };
-     navigator.geolocation.getCurrentPosition((pos)=>{
-       var crd = pos.coords;
-       that.showPosition(pos);
-       console.log('Your current position is:');
-       console.log(`Latitude : ${crd.latitude}`);
-       console.log(`Longitude: ${crd.longitude}`);
-       console.log(`More or less ${crd.accuracy} meters.`);
-     }, (err)=>{
-       console.warn(`ERROR(${err.code}): ${err.message}`);
-       function manual(position){
-         that.location = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
-         if (!that.marker) {
-           that.marker = new google.maps.Marker({
-             map: that.map,
-             position: that.location
-           });
+   this.sub = this.af.authState.subscribe(user => {
+         if (user) {
+           var docRef = db.collection("users").doc(user.uid);
+           docRef.get().then(function(doc) {
+               if (doc.exists) {
+                   if(doc.data().uid == user.uid) that.user= doc.data();
+                     console.log("Document data:", doc.data());
+                     console.log(user);
+
+                     //console.log("Document data dob:",that.userData);
+                 } else {
+                     // doc.data() will be undefined in this case
+                     console.log("No such document!");
+                 }
+           }).catch((e)=>console.log(e))
+         } else {
+           this.logout();
          }
-         else {
-           that.marker.setPosition(that.location);
-         }
-       }
-       const watcher = navigator.geolocation.watchPosition(manual);
-       that.location =
-       setTimeout(()=>{
-         navigator.geolocation.clearWatch(watcher);
-       }, 20000)
-     }, options);
-
-
-   } else {
-     alert("Geolocation is not supported by this browser.");
-   }
-
+     });
     var db = firebase.firestore();
-    firebase.auth().onAuthStateChanged(user=>{
-      if(user){
-        var docRef = db.collection("users").doc(user.uid);
-        docRef.get().then(function(doc) {
-            if (doc.exists) {
-                if(doc.data().uid == user.uid) that.user= doc.data();
-                  console.log("Document data:", doc.data());
-                  console.log(user);
+    this.sub2 = this.lo.getLocation().subscribe(res=>{
+      console.log(res);
+        that.currentLat = res.coords.latitude;
+        that.currentLong = res.coords.longitude;
+        that.showPosition();
+        var doc = db.collection("bars").onSnapshot((snap)=>{
+          // this.loaded = false;
+          setTimeout(()=>{
+            that.restaurants = [];
+            snap.forEach((doc)=>{
+              // console.log(doc.id, " => ", doc.data());
+              that.restaurants.push(doc.data());
+            })
+            function filter(val){
+              var circleRadius = 2 * (1609.344);
+               var circle = new google.maps.Circle({
+                     clickable: false,
+                     radius: circleRadius,
+                     center: that.location
+                 });
+                 //CIRCLE CREATED FOR RADIUS OF SEARCH
+                 // console.log("myLocation", that.location);
+              var pos = new google.maps.LatLng(parseFloat(val.coords.latitude), parseFloat(val.coords.longitude));
+              var pt2 = new google.maps.Marker({ position: pos,  map: that.map});
 
-                  //console.log("Document data dob:",that.userData);
-              } else {
-                  // doc.data() will be undefined in this case
-                  console.log("No such document!");
-              }
-        }).catch((e)=>console.log(e))
-        // that.getUserData(user);
-      }
-      else{
-        this.logout();
-      }
-    })
-
-    var doc = db.collection("bars").onSnapshot((snap)=>{
-      // this.loaded = false;
-      setTimeout(()=>{
-        that.restaurants = [];
-        snap.forEach((doc)=>{
-          // console.log(doc.id, " => ", doc.data());
-          that.restaurants.push(doc.data());
-        })
-        function filter(val){
-          var circleRadius = 2 * 1609.344;
-           var circle = new google.maps.Circle({
-                 clickable: false,
-                 radius: circleRadius,
-                 center: that.location
-             });
-             //CIRCLE CREATED FOR RADIUS OF SEARCH
-             // console.log("myLocation", that.location);
-          var pos = new google.maps.LatLng(parseFloat(val.coords.latitude), parseFloat(val.coords.longitude));
-          var pt2 = new google.maps.Marker({ position: pos,  map: that.map});
-
-          var bounds = circle.getBounds();
-          //CHECK IF REST COORDS INSIDE BOUNDS OF CIRCLE
-            if (bounds.contains(pt2.getPosition())){
-              return true;
+              var bounds = circle.getBounds();
+              //CHECK IF REST COORDS INSIDE BOUNDS OF CIRCLE
+                if (bounds.contains(pt2.getPosition())){
+                  return true;
+                }
+                else{
+                  return false;
+                }
             }
-            else{
-              return false;
+            var temp = that.restaurants.filter(filter);
+            that.restaurants = temp;
+            if(that.restaurants.length>0 && that.user){
+              that.loaded = true;
+             that.checkVoted();
             }
-        }
-        var temp = that.restaurants.filter(filter);
-        that.restaurants = temp;
-        if(that.restaurants.length>0 && that.user){
-          that.loaded = true;
-         that.checkVoted();
-        }
-      }, 500)
+          }, 750)
 
-    });
+        });
+      })
+
 
     this.int = setInterval(()=>{
       this.cd.detectChanges();
@@ -162,14 +131,14 @@ export class MainComponent implements OnInit
   }
   ngOnDestroy(){
     clearInterval(this.int);
+    this.sub.unsubscribe();
+    this.sub2.unsubscribe();
   }
 
-showPosition = function(position) {
+showPosition = function(position?) {
   console.log("Position after navigator found ", position)
-    var currentLat = position.coords.latitude;
-    var currentLong = position.coords.longitude;
 
-    this.location = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+    this.location = new google.maps.LatLng(this.currentLat, this.currentLong);
 
     if (!this.marker) {
       this.marker = new google.maps.Marker({
@@ -183,8 +152,6 @@ showPosition = function(position) {
   }
 
   vote = function(i){
-
-
     var bid = this.restaurants[i].bid;
     var db = firebase.firestore();
     var us = firebase.auth().currentUser['uid'] || this.user.uid;
@@ -292,6 +259,7 @@ showPosition = function(position) {
     });
   }
   logout = function(){
+    window.localStorage.clear();
     this.af.auth.signOut().then(() => {
       console.log("Logging out");
      this.router.navigate(['/','login']);
