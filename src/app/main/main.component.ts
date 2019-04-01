@@ -23,6 +23,7 @@ export class MainComponent implements OnInit
   currentLong: any;
   marker: any;
   location: any;
+  loaded: boolean;
   map: any;
   radius = 5; //MILES
   voted: boolean;
@@ -34,19 +35,68 @@ export class MainComponent implements OnInit
   private color = "primary";
   private mode = "determinate";
   constructor(private af: AngularFireAuth, private router: Router, private auth_service: AuthService, private cd: ChangeDetectorRef)
-  {}
+  {
+
+  }
 
 
   ngOnInit() {
+    window.addEventListener('click', function (evt) {
+      if (evt.detail === 3) {
+        console.log("triple click")
+        event.preventDefault();
+        event.stopImmediatePropagation();
+          return false;
+      }
+    });
+    var that = this;
     this.map = new google.maps.Map(document.getElementById('map'), {
          center: this.marker,
          zoom: 5,
        });
-    this.findMe();
-    var that = this;
+   if (navigator.geolocation) {
+     var options = {
+       enableHighAccuracy: true,
+       timeout: 750,
+       maximumAge: 216000
+     };
+     navigator.geolocation.getCurrentPosition((pos)=>{
+       var crd = pos.coords;
+       that.showPosition(pos);
+       console.log('Your current position is:');
+       console.log(`Latitude : ${crd.latitude}`);
+       console.log(`Longitude: ${crd.longitude}`);
+       console.log(`More or less ${crd.accuracy} meters.`);
+     }, (err)=>{
+       console.warn(`ERROR(${err.code}): ${err.message}`);
+       function manual(position){
+         that.location = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+         if (!that.marker) {
+           that.marker = new google.maps.Marker({
+             map: that.map,
+             position: that.location
+           });
+         }
+         else {
+           that.marker.setPosition(that.location);
+         }
+       }
+       const watcher = navigator.geolocation.watchPosition(manual);
+       that.location =
+       setTimeout(()=>{
+         navigator.geolocation.clearWatch(watcher);
+       }, 20000)
+     }, options);
+
+
+   } else {
+     alert("Geolocation is not supported by this browser.");
+   }
+
+    var db = firebase.firestore();
     firebase.auth().onAuthStateChanged(user=>{
       if(user){
-        var db = firebase.firestore();
         var docRef = db.collection("users").doc(user.uid);
         docRef.get().then(function(doc) {
             if (doc.exists) {
@@ -60,35 +110,64 @@ export class MainComponent implements OnInit
                   console.log("No such document!");
               }
         }).catch((e)=>console.log(e))
-        that.getUserData(user);
+        // that.getUserData(user);
       }
       else{
         this.logout();
       }
     })
 
+    var doc = db.collection("bars").onSnapshot((snap)=>{
+      // this.loaded = false;
+      setTimeout(()=>{
+        that.restaurants = [];
+        snap.forEach((doc)=>{
+          // console.log(doc.id, " => ", doc.data());
+          that.restaurants.push(doc.data());
+        })
+        function filter(val){
+          var circleRadius = 2 * 1609.344;
+           var circle = new google.maps.Circle({
+                 clickable: false,
+                 radius: circleRadius,
+                 center: that.location
+             });
+             //CIRCLE CREATED FOR RADIUS OF SEARCH
+             // console.log("myLocation", that.location);
+          var pos = new google.maps.LatLng(parseFloat(val.coords.latitude), parseFloat(val.coords.longitude));
+          var pt2 = new google.maps.Marker({ position: pos,  map: that.map});
+
+          var bounds = circle.getBounds();
+          //CHECK IF REST COORDS INSIDE BOUNDS OF CIRCLE
+            if (bounds.contains(pt2.getPosition())){
+              return true;
+            }
+            else{
+              return false;
+            }
+        }
+        var temp = that.restaurants.filter(filter);
+        that.restaurants = temp;
+        if(that.restaurants.length>0 && that.user){
+          that.loaded = true;
+         that.checkVoted();
+        }
+      }, 500)
+
+    });
 
     this.int = setInterval(()=>{
       this.cd.detectChanges();
     }, 1000)
   }
-  findMe = function() {
-    var that = this;
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        this.showPosition(position);
-        if(position){
-          that.getBarData();
-        }
-      });
-    } else {
-      alert("Geolocation is not supported by this browser.");
-    }
+  ngOnDestroy(){
+    clearInterval(this.int);
   }
 
 showPosition = function(position) {
-    this.currentLat = position.coords.latitude;
-    this.currentLong = position.coords.longitude;
+  console.log("Position after navigator found ", position)
+    var currentLat = position.coords.latitude;
+    var currentLong = position.coords.longitude;
 
     this.location = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
@@ -102,201 +181,114 @@ showPosition = function(position) {
       this.marker.setPosition(this.location);
     }
   }
-  getBarData = function(){
-    var that = this;
-    var arr = [];
-    var db = firebase.firestore();
-    var doc = db.collection("bars").orderBy("votes", "desc").get().then((snap)=>{
-      console.log(snap);
-      console.log("Snapshot", snap)
-      snap.forEach((doc)=>{
-        // console.log(doc.id, " => ", doc.data());
-        that.restaurants.push(doc.data());
-      })
-      function filter(val){
-        var circleRadius = 2 * 1609.344;
-        if(!that.location || that.location == undefined){
-          that.findMe();
-          console.log(that.location)
-        }
-         var circle = new google.maps.Circle({
-               clickable: false,
-               radius: circleRadius,
-               center: that.location
-           });
-           //CIRCLE CREATED FOR RADIUS OF SEARCH
-           // console.log("myLocation", that.location);
-        var pos = new google.maps.LatLng(parseFloat(val.coords.latitude), parseFloat(val.coords.longitude));
-        var pt2 = new google.maps.Marker({ position: pos,  map: that.map});
 
-        var bounds = circle.getBounds();
-        //CHECK IF REST COORDS INSIDE BOUNDS OF CIRCLE
-        if(bounds== undefined){
-          setTimeout(()=>{
-            if (bounds.contains(pt2.getPosition())){
-              return true;
-            }
-            return false;
-          }, 2000)
-        }
-        else{
-          if (bounds.contains(pt2.getPosition())){
-            return true;
-          }
-          return false;
-        }
-
-      }
-      var temp = that.restaurants.filter(filter);
-      that.restaurants = temp;
-      if(that.restaurants.length>2 && that.user)that.checkVoted();
-      else that.findMe() && that.getUserData()
-
-    });
-
-  }
-  ngOnDestroy(){
-    clearInterval(this.int);
-  }
-  getUserData = function(user?){
-    // var db = firebase.firestore();
-    // var docRef = db.collection("users").doc(user.uid);
-    // docRef.get().then(function(doc) {
-    //     // if (doc.exists) {
-    //     //     if(doc.data().uid == user.uid) that.user= doc.data();
-    //     //       console.log("Document data:", doc.data());
-    //     //       console.log(user);
-    //     //
-    //     //       //console.log("Document data dob:",that.userData);
-    //     //   } else {
-    //     //       // doc.data() will be undefined in this case
-    //     //       console.log("No such document!");
-    //     //   }
-    // }).catch((e)=>console.log(e))
-    var us;
-    if(firebase.auth().currentUser['uid'] != null){
-      us = firebase.auth().currentUser['uid'];
-    }
-    else{
-      us = user.uid || that.user.uid;
-    }
-    var db = firebase.firestore();
-    var docRef = db.collection("users").doc(us);
-    var that = this;
-    docRef.get().then(function(doc) {
-        if (doc.exists) {
-            if(doc.data().uid == us) that.user= doc.data();
-              console.log("Document data:", doc.data());
-              //console.log("Document data dob:",that.userData);
-          } else {
-              // doc.data() will be undefined in this case
-              console.log("No such document!");
-          }
-    }).catch((e)=>console.log(e))
-  }
   vote = function(i){
-    console.log('Tapped: ', $(event.target));
+
+
+    var bid = this.restaurants[i].bid;
+    var db = firebase.firestore();
+    var us = firebase.auth().currentUser['uid'] || this.user.uid;
+    var new_bar = bid
+    var prev_bar;
+    if(this.user.voted != "") prev_bar = this.user.voted;
+
     if(this.prevEl) this.prevEl.css("background-position", "right bottom");
     $(event.target).css("background-position", "left bottom");
-    this.prevEl = $(event.target);
-    var bid = this.restaurants[i].bid;
-    if(this.voted){
-      this.restaurants[this.prevVoteInd].votes--;
-      this.restaurants[i].votes++;
 
-      var db = firebase.firestore();
-      var doc = db.collection("bars").get().then((snap)=>{
-        // console.log(snap.docs[i].data());
-        var votes = snap.docs[this.prevVoteInd].data().votes;
-        var us = firebase.auth().currentUser['uid'];
-        db.collection("users").doc(us).set({
-          voted: bid
-        }, {merge:true}).then(function(docRef) {
-            console.log("Document written with ID: ", docRef);
-        })
-        .catch(function(error) {
-            console.error("Error adding document: ", error);
-        });
-        db.collection("bars").doc(bid).set({
-          votes: votes++
-        }, {merge:true})
-        if(votes>0){
-          votes = votes - 1;
-          db.collection("bars").doc(snap.docs[this.prevVoteInd].id).set({
-            votes: votes
-          }, {merge:true})
-        }
-        else if(votes<=0){
-          votes = 0;
-          db.collection("bars").doc(snap.docs[this.prevVoteInd].id).set({
-            votes: votes
-          }, {merge:true})
-        }
-
-
-      });
-      this.prevVoteInd = i;
-
-    }
-    else{
-      this.voted = true;
-      this.restaurants[i].votes++;
-
-      var that = this;
-      var db = firebase.firestore();
-          var us = firebase.auth().currentUser['uid'];
-      var doc = db.collection("bars").get().then((snap)=>{
-        db.collection("users").doc(us).set({
-          voted: bid
-        }, {merge:true}).then(function(docRef) {
-            console.log("Document written with ID: ", docRef);
-        })
-        .catch(function(error) {
-            console.error("Error adding document: ", error);
-        });
-        var votes = snap.docs[i].data().votes;
-        votes =+ 1;
-        db.collection("bars").doc(bid).set({
-          votes: votes
-        }, {merge:true})
-
-      });
-        this.prevVoteInd = i;
-    }
-
-  }
-  clearVotes = function(){
-    if(this.voted) this.voted = false;
-    var db = firebase.firestore();
-        var us = firebase.auth().currentUser['uid'];
+    //SET BID ONTO USER ATTR 'voted' ALWAYS
     db.collection("users").doc(us).set({
-      voted: ""
+      voted: bid
     }, {merge:true}).then(function(docRef) {
         console.log("Document written with ID: ", docRef);
     })
     .catch(function(error) {
         console.error("Error adding document: ", error);
     });
-    var doc = db.collection("bars").get().then((snap)=>{
-      var votes = snap.docs[this.prevVoteInd].data().votes;
-      console.log("Current Amount of Votes:", votes);
+
+    if(this.voted && bid != prev_bar){
+      //CURRENT BAR VOTED
+      var doc = db.collection("bars").doc(bid)
+      doc.get().then((snap)=>{
+        var votes = snap.data().votes + 1;
+        doc.set({
+          votes: votes
+        }, {merge:true}).then(()=>{
+          console.log("Added Vote to ", bid, " /n Vote Count: ", votes)
+        })
+      });
+        //REDUCE PREV BAR VOTE
+        var prev = db.collection("bars").doc(prev_bar);
+        prev.get().then((snap)=>{
+          var votes = snap.data().votes - 1;
+          if(votes<0){
+            prev.set({
+              votes: 0
+            }, {merge:true}).then(()=>{
+              console.log("Removed Vote from ", prev_bar, " /n Vote Count: ", votes)
+            })
+          }
+          else{
+            prev.set({
+              votes: votes
+            }, {merge:true}).then(()=>{
+              console.log("Removed Vote from ", prev_bar, " /n Vote Count: ", votes)
+            })
+          }
+
+        });
+
+    }
+    else if(bid == prev_bar){
+      return;
+    }
+    else{
+      this.voted = true;
+      //CURRENT BAR VOTED
+      var doc = db.collection("bars").doc(bid)
+      doc.get().then((snap)=>{
+        var votes = snap.data().votes + 1;
+        doc.set({
+          votes: votes
+        }, {merge:true}).then(()=>{
+          console.log("Added Vote to ", bid, " /n Vote Count: ", votes)
+        })
+      });
+    }
+    this.prevVoteInd = i;
+    this.prevEl = $(event.target);
+
+  }
+  clearVotes = function(){
+    if(this.voted) this.voted = false;
+    var db = firebase.firestore();
+    var us = firebase.auth().currentUser['uid'] || this.user.uid;
+
+    var doc = db.collection("bars").doc(this.user.voted);
+    doc.get().then((snap)=>{
+      var votes = snap.data().votes;
       votes--;
-      if(votes>=0){
-        this.restaurants[this.prevVoteInd].votes--;
-        db.collection("bars").doc(snap.docs[this.prevVoteInd].id).set({
+      if(votes<0){
+        votes = 0;
+        doc.set({
           votes: votes
         }, {merge:true})
       }
-      else if(votes<0){
-        this.restaurants[this.prevVoteInd].votes = 0;
-        votes = 0;
-        db.collection("bars").doc(snap.docs[this.prevVoteInd].id).set({
+      else{
+        doc.set({
           votes: votes
         }, {merge:true})
       }
       if(this.prevEl) this.prevEl.css("background-position", "right bottom");
       // $(event.target).css("background-position", "left bottom");
       this.prevVoteInd = 0;
+    });
+    db.collection("users").doc(us).set({
+        voted: ""
+      }, {merge:true}).then(function(docRef) {
+          console.log("Document written with ID: ", docRef);
+      })
+      .catch(function(error) {
+          console.error("Error adding document: ", error);
     });
   }
   logout = function(){
@@ -319,13 +311,17 @@ showPosition = function(position) {
         if (doc.exists) {
             if(doc.data().uid == user.uid) that.user= doc.data();
               console.log("Document data:", doc.data());
-              if(user.voted!=""){
+              if(user.voted != ""){
                 for(var i=0;i<that.restaurants.length;i++){
                   console.log("BAR ID ", that.restaurants[i].bid, " @ index ", i ," User Voted: ", that.user.voted);
                   if(that.restaurants[i].bid == that.user.voted){
                     console.log("found previous voted @ index", i," restaurant", that.restaurants[i].bid );
                     // that.doClick(document.getElementById("bar"+i));
-                      that.doClick(document.getElementById("bar"+i).firstChild);
+                    that.voted = true;
+                      var el = document.getElementById("bar"+i).firstChild;
+                      $(el).css("background-position", "left bottom");
+
+                        $(el).attr('disabled', 'disabled');
                     break;
                   }
                 }

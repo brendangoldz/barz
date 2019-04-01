@@ -187,11 +187,14 @@
                    <br>
                    <span class="input-group-text" id="basic-addon1"><button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button></span>
                  </div>
+               </div>
+               <div *ngFor="let results of searchResults">
+                 <ul>
+                   <li><p>{{results.firstName}} {{results.lastName}}</p></li>
+                 </ul>
+               </div>
 
 
-           </div>
-
-              <p>{{userData.firstName}} {{userData.lastName}}</p>
 
              </form>
 

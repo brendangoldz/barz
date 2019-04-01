@@ -25,7 +25,7 @@ export class FriendsComponent implements OnInit {
 
 
 
-userData: any;
+  searchResults: any;
   searchFriendsForm = new FormGroup({
     searchField: new FormControl(''),
   });
@@ -45,7 +45,7 @@ userData: any;
   searchFriends = function(){
     console.log(this.searchFriendsForm.value.searchField);
 
-    this.getProfileData();
+    this.getProfileData(this.searchFriendsForm.value.searchField);
 
 
   }
@@ -60,26 +60,22 @@ userData: any;
   });
   }
 
-  getProfileData = function(){
+  getProfileData = function(searchText){
     var that = this;
     var db = firebase.firestore();
     var us = firebase.auth().currentUser['uid'];
 
 
-
-
-
-
-
-    db.collection("users").where("firstName", "==",this.searchFriendsForm.value.searchField )
+    db.collection("users").where("displayName", "array-contains", searchText).orderBy("displayName")
         .get()
         .then(function(querySnapshot) {
             querySnapshot.forEach(function(doc) {
                 // doc.data() is never undefined for query doc snapshots
-                that.userData= doc.data();
-                console.log(that.userData);
-
-
+                if(doc.exists){
+                  console.log(doc.data())
+                  that.searchResults.push(doc.data())
+                  console.log(that.searchResults);
+                }
 
             });
         })
