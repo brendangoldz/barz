@@ -18,18 +18,27 @@ admin.initializeApp({
 export const dump_votes = functions.https.onRequest((message) => {
     console.log("This job is run every day!", message);
     const db = admin.firestore();
-    const bars = db.collection('bars').get().then((snapshot)=>{
+    const bars = db.collection('bars');
+    const users = db.collection('users')
+    // tslint:disable-next-line:no-unsafe-any
+    bars.get().then((snapshot)=>{
       snapshot.forEach((doc)=>{
-        console.log(doc.id, " => ", doc.data());
-        doc.data().votes = 0;
+        // console.log(doc.id, " => ", doc.data());
+        // tslint:disable-next-line:no-unsafe-any
+        bars.doc(doc.id).set({
+          votes: 0
+        }, {merge: true}).then(()=>console.log("Dumped ", doc.id)).catch((err)=>console.log(err))
       })
-    })
-    console.log("Bars Cleared", bars);
-    const users = db.collection('users').get().then((snapshot)=>{
+    }).catch((err)=>console.log(err));
+    // tslint:disable-next-line:no-unsafe-any
+    users.get().then((snapshot)=>{
       snapshot.forEach((doc)=>{
-        console.log(doc.id, " => ", doc.data());
-        doc.data().voted = "";
+        // console.log(doc.id, " => ", doc.data());
+        // tslint:disable-next-line:no-unsafe-any
+        users.doc(doc.id).set({
+          voted: ""
+        }, {merge: true}).then(()=>console.log("Dumped ", doc.id)).catch((err)=>console.log(err))
       })
-    })
-    console.log("Users Cleared", users);
+    }).catch((err)=>console.log(err));
+    return true;
   });
