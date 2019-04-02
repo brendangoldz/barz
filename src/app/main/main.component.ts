@@ -53,10 +53,13 @@ export class MainComponent implements OnInit
       }
     });
     var that = this;
+    var db = firebase.firestore();
+
     this.map = new google.maps.Map(document.getElementById('map'), {
          center: this.marker,
          zoom: 5,
        });
+
 
    this.sub = this.af.authState.subscribe(user => {
          if (user) {
@@ -76,8 +79,7 @@ export class MainComponent implements OnInit
          } else {
            this.logout();
          }
-     });
-    var db = firebase.firestore();
+
     var doc = db.collection("bars").onSnapshot((snap)=>{
           // this.loaded = false
             that.restaurants = [];
@@ -91,14 +93,15 @@ export class MainComponent implements OnInit
                 this.currentLong = res.coords.longitude;
                 that.location = new google.maps.LatLng(this.currentLat, this.currentLong);
             function filter(val){
-              var circleRadius = 5 * 1609.344;
+              console.log("Getting radius ", that.user.radius)
+              var circleRadius = that.user.radius * 1609.344 || 10 * 1609.344;
                var circle = new google.maps.Circle({
                      clickable: false,
                      radius: circleRadius,
                      center: new google.maps.LatLng(res.coords.latitude, res.coords.longitude)
                  });
                  //CIRCLE CREATED FOR RADIUS OF SEARCH
-                 console.log("myLocation", that.location);
+                 // console.log("myLocation", that.location);
               var pos = new google.maps.LatLng(parseFloat(val.coords.latitude), parseFloat(val.coords.longitude));
               var pt2 = new google.maps.Marker({ position: pos,  map: that.map});
 
@@ -107,19 +110,17 @@ export class MainComponent implements OnInit
               return bounds.contains(pos);
 
             }
-            console.log("Before filter: ", that.restaurants)
-            if(that.restaurants.length>0 && that.location){
+            setTimeout(()=>{
+              var temp = that.restaurants.filter(filter);
+              that.restaurants = temp;
+                console.log("Filtered Array ", temp)
+                that.loaded = true;
+            },750)
 
-            }
-            var temp = that.restaurants.filter(filter);
-            that.restaurants = temp;
-              console.log("Filtered Array ", temp)
-              that.loaded = true;
+
          })
         });
-
-
-
+      });
     this.int = setInterval(()=>{
       this.cd.detectChanges();
     }, 1000)

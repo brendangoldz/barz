@@ -63,7 +63,6 @@ pre
 .user p
 {
   margin: auto;
-  padding-left: 20vh;
   padding-bottom: 2vh;
   text-align: left;
   font-size: 24pt;
@@ -164,11 +163,12 @@ input:checked + .slider:before {
 /* Privacy*/
 .privacy p
 {
-  margin-right: 8vw;
+  color: black;
   text-align: center;
   font-size: 16pt;
 
 }
+
 /* Terms of Use*/
 .terms
 {

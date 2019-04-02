@@ -1,0 +1,4 @@
+cron:
+- description: Clear "votes" every day at 4:00AM
+  url: /publish/daily-dump
+  schedule: every 24 hours 04:00

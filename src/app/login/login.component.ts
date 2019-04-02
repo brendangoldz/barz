@@ -5,6 +5,7 @@ import {AngularFireAuth} from '@angular/fire/auth';
 import {auth} from 'firebase/app';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ViewChild, ElementRef} from '@angular/core';
+import * as firebase from 'firebase';
 declare var $: any;
 @Component({
   selector: 'app-login',
