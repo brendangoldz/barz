@@ -12,11 +12,11 @@
  }
 }
 .login_form{
-  width: 55vw !important;
+  width: 33vw !important;
   margin: 25vh auto 0;
 }
 .signup_form{
- width: 55vw !important;
+ width: 33vw !important;
  margin: 0 auto;
 }
 .providers{
@@ -42,4 +42,42 @@ form.signup_form{
 }
 .tos-label{
   padding: .5rem;
+}
+.create_btn{
+  background:white;
+}
+.login_btn{
+  width: 10vw;
+  text-align: center;
+}
+.strike {
+    display: block;
+    text-align: center;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.strike > span {
+    position: relative;
+    display: inline-block;
+}
+
+.strike > span:before,
+.strike > span:after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 9999px;
+    height: 1px;
+    background: grey;
+}
+
+.strike > span:before {
+    right: 100%;
+    margin-right: 15px;
+}
+
+.strike > span:after {
+    left: 100%;
+    margin-left: 15px;
 }
