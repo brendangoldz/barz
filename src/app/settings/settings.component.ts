@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import {Router} from '@angular/router';
 import { HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 import {AngularFireAuth} from '@angular/fire/auth';
 import {FirebaseuiAngularLibraryService} from 'firebaseui-angular';
-
+import * as firebase from "firebase";
 
 
 @Component({
@@ -16,8 +16,9 @@ import {FirebaseuiAngularLibraryService} from 'firebaseui-angular';
 
 export class SettingsComponent implements OnInit
 {
-  range: number=10;
-
+  range: number = 10;
+  sub: any;
+  user: any;
   constructor(private fb:FirebaseuiAngularLibraryService,
     private af: AngularFireAuth, private router: Router) {
 
@@ -28,14 +29,28 @@ export class SettingsComponent implements OnInit
   ngOnInit()
   {
     var that = this;
-    this.af.auth.onAuthStateChanged(user=>{
-      if(user){
-        console.log(user);
-      }
-      else{
-        this.logout();
-      }
-    })
+    var db = firebase.firestore();
+    this.sub = this.af.authState.subscribe(user => {
+          if (user) {
+            var docRef = db.collection("users").doc(user.uid);
+            docRef.get().then(function(doc) {
+                if (doc.exists) {
+                    if(doc.data().uid == user.uid) that.user= doc.data();
+                      console.log("Document data:", doc.data());
+                      console.log(user);
+                      that.range = that.user.radius;
+                  } else {
+                      // doc.data() will be undefined in this case
+                      console.log("No such document!");
+                  }
+            }).catch((e)=>console.log(e))
+          } else {
+            this.logout();
+          }
+      });
+  }
+  ngOnDestroy(){
+    this.sub.unsubscribe();
   }
   logout = function()
   {
@@ -45,5 +60,14 @@ export class SettingsComponent implements OnInit
       console.log("Logging out");
       this.router.navigate(['/','login']);
     });
+  }
+  changeRadius = function(val){
+    let db = firebase.firestore();
+    let user = this.user || firebase.auth().currentUser;
+    let that = this;
+    let us = db.collection("users").doc(user.uid);
+    us.set({
+      radius: that.range
+    },{merge:true}).then((res)=>{console.log("Adjusted Range ", that.range)})
   }
 }
