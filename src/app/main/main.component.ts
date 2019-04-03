@@ -22,6 +22,7 @@ export class MainComponent implements OnInit
   restaurant: any;
   currentLat: any;
   currentLong: any;
+  totalVotes: any;
   marker: any;
   location: any;
   loaded: boolean;
@@ -83,8 +84,10 @@ export class MainComponent implements OnInit
     var doc = db.collection("bars").onSnapshot((snap)=>{
           // this.loaded = false
             that.restaurants = [];
+            that.totalVotes = 0;
             snap.forEach((doc)=>{
               // console.log(doc.id, " => ", doc.data());
+
               that.restaurants.push(doc.data());
             })
           that.sub2 = that.lo.getLocation().subscribe(res=>{
@@ -93,8 +96,8 @@ export class MainComponent implements OnInit
                 this.currentLong = res.coords.longitude;
                 that.location = new google.maps.LatLng(this.currentLat, this.currentLong);
             function filter(val){
-              console.log("Getting radius ", that.user.radius)
-              var circleRadius = that.user.radius * 1609.344 || 10 * 1609.344;
+              // console.log("Getting radius ", that.user.radius)
+              var circleRadius = 10 * 1609.344 || that.user.radius * 1609.344;
                var circle = new google.maps.Circle({
                      clickable: false,
                      radius: circleRadius,
@@ -110,12 +113,27 @@ export class MainComponent implements OnInit
               return bounds.contains(pos);
 
             }
+            const timeout = 750;
+            if(that.user == undefined) timeout*1.25;
             setTimeout(()=>{
               var temp = that.restaurants.filter(filter);
+              temp.forEach((val)=>{
+                that.totalVotes += val.votes
+              })
               that.restaurants = temp;
-                console.log("Filtered Array ", temp)
-                that.loaded = true;
-            },750)
+              that.restaurants.forEach((val)=>{
+                console.log("Total Votes: ", that.totalVotes);
+                var norm = (val.votes / that.totalVotes)*100;
+                console.log("Normalized for bar", norm)
+                val.votes = {
+                  votes: val.votes,
+                  normalized: norm
+                }
+              })
+
+              that.loaded = true;
+              if(that.user && that.loaded) that.checkVoted();
+            },timeout);
 
 
          })
@@ -156,7 +174,7 @@ showPosition = function(position?) {
     if(this.user.voted != "") prev_bar = this.user.voted;
 
     if(this.prevEl) this.prevEl.css("background-position", "right bottom");
-    $(event.target).css("background-position", "left bottom");
+    // $(event.target).css("background-position", "left bottom");
 
     //SET BID ONTO USER ATTR 'voted' ALWAYS
     db.collection("users").doc(us).set({
@@ -266,7 +284,7 @@ showPosition = function(position?) {
     this.restaurant = this.restaurants[i];
   }
   checkVoted = function(){
-    var user = this.user;
+    var user = this.user || firebase.auth().currentUser;
     console.log(user);
     var that = this;
     var db = firebase.firestore();
@@ -275,26 +293,18 @@ showPosition = function(position?) {
         if (doc.exists) {
             if(doc.data().uid == user.uid) that.user= doc.data();
               console.log("Document data:", doc.data());
-              if(user.voted != ""){
                 for(var i=0;i<that.restaurants.length;i++){
                   console.log("BAR ID ", that.restaurants[i].bid, " @ index ", i ," User Voted: ", that.user.voted);
                   if(that.restaurants[i].bid == that.user.voted){
                     console.log("found previous voted @ index", i," restaurant", that.restaurants[i].bid );
                     // that.doClick(document.getElementById("bar"+i));
-                    that.voted = true;
-                      var el = document.getElementById("bar"+i).firstChild;
-                      $(el).css("background-position", "left bottom");
-
-                        $(el).attr('disabled', 'disabled');
+                      that.voted = true;
+                      var el = document.getElementById("bar"+i);
+                      $(el.firstChild).css("background-position", "left bottom");
+                      $(el.firstChild).attr('disabled', 'disabled');
                     break;
                   }
                 }
-              }
-              else{
-                console.log("User Did Not Vote ", that.user.voted)
-                return;
-              }
-
               console.log(user);
               //console.log("Document data dob:",that.userData);
           } else {

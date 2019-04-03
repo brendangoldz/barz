@@ -50,9 +50,9 @@
                                         fa-xs" ></i></a></h3>
         <a href="javascript:0;" (click)="vote(i)" id="bar{{i}}">
           <button class="btn btn-default vote">VOTE</button></a>
-      <mat-progress-bar [mode]="mode" [color]="color" [value]="r.votes">
+      <mat-progress-bar [mode]="mode" [color]="color" [value]="r.votes.normalized">
       </mat-progress-bar>
-        <h5>{{r.votes}}</h5>
+        <h5>{{r.votes.votes}}</h5>
         <hr>
         <div id="myModal" class="modal" tabindex="-1" role="dialog"
                             aria-labelledby="myModalLabel" aria-hidden="true" *ngIf="restaurant">
