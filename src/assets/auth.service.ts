@@ -52,15 +52,17 @@ export class AuthService {
   }
 
   // Sign up with email/password
-  SignUp(email, password, firstName, lastName, dob, gender) {
+  SignUp(email, password) {
     return this.afAuth.auth.createUserWithEmailAndPassword(email, password)
       .then((result) => {
         /* Call the SendVerificaitonMail() function when new user sign
         up and returns promise */
         console.log(result);
-        this.SignIn(email, password);
         this.SendVerificationMail();
-        this.SetUserData(email, firstName, lastName, dob, gender); //result.user
+        this.SetUserData(email); //result.user
+        this.router.navigate(['profile']);
+        // this.SignIn(email, password);
+
       }).catch((error) => {
         window.alert(error.message)
       })
@@ -115,33 +117,21 @@ export class AuthService {
   /* Setting up user data when sign in with username/password,
   sign up with username/password and sign in with social auth
   provider in Firestore database using AngularFirestore + AngularFirestoreDocument service */
-  SetUserData(email, firstName, lastName, dob, gender) { //user
+  SetUserData(email) { //user
 
   var us = firebase.auth().currentUser['uid'];
   var db = firebase.firestore();
   db.collection("users").doc(us).set({
-
     uid: us,
-    displayName: 'firstName + lastName',
-    firstName: firstName,
-    lastName: lastName,
-    gender: gender,
-    dob: dob,
-    email: email,
-    occupation:'',
-    relationshipStatus: '',
-    favDrink: '',
-    picture: ''
-
-
-})
-.then(function(docRef) {
-    console.log("Document written with ID: ", docRef);
-})
-.catch(function(error) {
-    console.error("Error adding document: ", error);
-});
-/*
+    email: email
+  })
+  .then(function(docRef) {
+      console.log("Document written with ID: ", docRef);
+  })
+  .catch(function(error) {
+      console.error("Error adding document: ", error);
+  });
+  /*
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
     const userData: User = {
 
