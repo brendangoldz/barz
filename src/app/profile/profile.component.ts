@@ -16,7 +16,7 @@ export class ProfileComponent implements OnInit {
 userData: any;
 userId: string;
 pictureUrl: string;
-fileList: any;
+fileList: any=[];
 int: any;
 requests: any = 0;
 sub: any;
@@ -88,18 +88,20 @@ updateForm = new FormGroup({
   });
   }
   updateData = function(){
-    var us = firebase.auth().currentUser['uid'];
+    var us = this.userData.uid || firebase.auth().currentUser['uid'];
 
-    if(this.fileList != undefined){
+    if(this.fileList[0] != undefined){
       var pic_name = "profile."+(this.fileList[0].type).toString().split('/')[1]
     var that = this;
     console.log(pic_name)
-    var storageRef = firebase.storage().ref(this.userId + '/profilePicture/' +  pic_name);
+    console.log("Uploading Picture ", pic_name, " for user ", us);
+    var storageRef = firebase.storage().ref(us + '/profilePicture/' +  pic_name);
     storageRef.put(this.fileList[0]).then((snap)=>{
        snap.ref.getDownloadURL().then((url)=>{
         console.log("File available at", url);
         that.pictureUrl = url;
         var db = firebase.firestore();
+        console.log("Updating user", us);
         db.collection("users").doc(us).set({
           uid: us,
           firstName: this.updateForm.value.firstName,
@@ -122,16 +124,16 @@ updateForm = new FormGroup({
     }
     else{
       var db = firebase.firestore();
-      db.collection("users").doc(this.userId).set({
+      db.collection("users").doc(us).set({
         uid: us,
-        firstName: this.updateForm.value.firstName,
-        lastName: this.updateForm.value.lastName,
-        gender: this.updateForm.value.gender,
-        dob: this.updateForm.value.dob,
-        occupation:this.updateForm.value.occupation,
-        relationshipStatus: this.updateForm.value.relationshipStatus,
-        favDrink: this.updateForm.value.favDrink,
-        bio: this.updateForm.value.bio
+        firstName: this.updateForm.value.firstName || "",
+        lastName: this.updateForm.value.lastName || "",
+        gender: this.updateForm.value.gender || "",
+        dob: this.updateForm.value.dob || "",
+        occupation:this.updateForm.value.occupation || "",
+        relationshipStatus: this.updateForm.value.relationshipStatus || "",
+        favDrink: this.updateForm.value.favDrink || "",
+        bio: this.updateForm.value.bio || ""
       }, {merge:true}).then(function(docRef) {
           console.log("Document written with ID: ", docRef);
       })
@@ -146,11 +148,11 @@ updateForm = new FormGroup({
   getProfileData = function(){
     var that = this;
     var db = firebase.firestore();
-    var us = firebase.auth().currentUser['uid'];
+    var us = this.userData.uid || firebase.auth().currentUser['uid'];
 
     // this.userId = us;
     console.log(us);
-    var docRef = db.collection("users").doc(this.userId);
+    var docRef = db.collection("users").doc(us);
     docRef.get().then(function(doc) {
         if (doc.exists) {
             if(doc.data().uid == us) that.userData= doc.data();
