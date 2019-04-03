@@ -7,10 +7,7 @@ import {AngularFireAuth} from '@angular/fire/auth';
 import {FirebaseuiAngularLibraryService} from 'firebaseui-angular';
 import {FormGroup, FormControl, Validators} from '@angular/forms';
 import * as firebase from 'firebase';
-
-
-
-
+declare var $: any;
 
 @Component({
   selector: 'app-friends',
@@ -19,16 +16,13 @@ import * as firebase from 'firebase';
 
 })
 
-
-
 export class FriendsComponent implements OnInit {
-
-
-
   searchResults: any;
   searchFriendsForm = new FormGroup({
     searchField: new FormControl(''),
   });
+  reqs: any = [];
+  friends: any = [];
   sub: any;
   user: any;
   requests: any = 0;
@@ -54,9 +48,19 @@ export class FriendsComponent implements OnInit {
                       //console.log("Document data dob:",that.userData)
                       if(doc.data().requests){
                         doc.data().requests.forEach((x)=>{
+                          that.reqs.push(x);
                           that.requests++;
                         })
-                        console.log(that.requests);
+                        if(that.requests>0) that.reqs = that.getData(that.reqs);
+                        console.log("Requests Array", that.reqs)
+                      }
+                      if(doc.data().friends){
+                        doc.data().friends.forEach((x)=>{
+                          console.log(x);
+                          that.friends.push(x);
+                        })
+                        if(that.friends.length>0) that.friends = that.getData(that.friends);
+                        console.log("Friends Array", that.friends)
                       }
                   } else {
                       // doc.data() will be undefined in this case
@@ -67,18 +71,27 @@ export class FriendsComponent implements OnInit {
             this.logout();
           }
      });
+
   }
   ngOnDestroy(){
     this.sub.unsubscribe();
   }
   searchFriends = function(){
     console.log(this.searchFriendsForm.value.searchField);
-    this.getProfileData(this.searchFriendsForm.value.searchField);
+    this.query(this.searchFriendsForm.value.searchField);
   }
 
-
-
-
+  getData = function(arr){
+    console.log(this.reqs);
+    let db = firebase.firestore();
+    var temp = [];
+    arr.forEach((x)=>{
+      db.collection("users").doc(x).get().then((val)=>{
+        temp.push(val.data());
+      })
+    });
+    return temp;
+  }
   logout = function(){
     window.localStorage.clear();
     this.af.auth.signOut().then(() => {
@@ -86,8 +99,17 @@ export class FriendsComponent implements OnInit {
      this.router.navigate(['/','login']);
   });
   }
-
-  getProfileData = function(searchText){
+  // getProfileData = function(){
+  //   if(this.user){
+  //     var us = firebase.auth().currentUser['uid'];
+  //     let db = firebase.firestore();
+  //     var doc = db.collection("users").doc(us);
+  //     doc.get().then((val)=>{
+  //       console.log("Requests", val.requests)
+  //     })
+  //   }
+  // }
+  query = function(searchText){
     var that = this;
     var db = firebase.firestore();
     var us = firebase.auth().currentUser['uid'];
@@ -105,7 +127,6 @@ export class FriendsComponent implements OnInit {
                   that.searchResults = doc.data();
                   console.log(that.searchResults);
                 }
-
             });
         })
         .catch(function(error) {
@@ -116,10 +137,20 @@ export class FriendsComponent implements OnInit {
     var db = firebase.firestore();
     var requestor = db.collection("users").doc(this.user.uid);
     var requestee = db.collection("users").doc(this.searchResults.uid);
+    if(this.user.uid != this.searchResults.uid){
+      requestee.set({
+        requests: [this.user.uid]
+      }, {merge:true}).then(()=>console.log("Assigned Pending Request in Requestee"));
+    }
+    else{
+      $('.request_btn').attr('disabled', 'disabled');
+      console.log("Cant Request Self");
+    }
+  }
+  confirmRequest = function(){
 
-    requestee.set({
-      requests: [this.user.uid]
-    }, {merge:true}).then(()=>console.log("Assigned Pending Request in Requestee"));
+  }
+  declineRequest = function(){
 
   }
 

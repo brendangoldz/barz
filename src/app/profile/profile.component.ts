@@ -65,13 +65,15 @@ updateForm = new FormGroup({
         }
    });
   const inputElement = (<HTMLInputElement>document.getElementById('profile_pic'));
-  inputElement.addEventListener("change", function(files){
-      that.fileList = this.files; /* now you can work with the file list */
-      // that.uploadPicture(fileList[0])
-    }, false);
-    this.int = setInterval(()=>{
-      this.cd.detectChanges();
-    }, 1000)
+  if(inputElement){
+    inputElement.addEventListener("change", function(files){
+        that.fileList = this.files; /* now you can work with the file list */
+        // that.uploadPicture(fileList[0])
+      }, false);
+      this.int = setInterval(()=>{
+        this.cd.detectChanges();
+      }, 1000)
+  }
   }
   ngOnDestroy(){
     this.sub.unsubscribe();

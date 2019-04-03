@@ -1,6 +1,6 @@
 @media only screen and (max-width: 900px) {
   .body{
-    margin-top: 25vh;
+    margin-top: 20vh;
     background-color: #f8f9fa;
     color: black;
     border-radius: 10px;
@@ -9,7 +9,7 @@
   }
 }
 .body{
-  margin-top: 25vh;
+  margin-top: 15vh;
   background-color: #f8f9fa;
   color: black;
   border-radius: 10px;
