@@ -9,7 +9,7 @@
         <a class="nav-link" href="/#/main">Home</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/#/friends">Friends</a>
+        <a class="nav-link" href="/#/friends">Friends<sup *ngIf="requests">{{requests}}</sup></a>
       </li>
       <li class="nav-item active">
         <a class="nav-link" href="/#/profile">Profile<span class="sr-only">(current)</span></a>
@@ -27,17 +27,17 @@
 
   </div>
 </nav>
-<div class="body container">
+<div class="body container" *ngIf="userData">
   <span class="edit"><i class="fas fa-edit" data-toggle="modal" role="button" data-target="#update_profile" (click)="populateForm()"></i> <!--data-toggle = "modal" role = "button" data-target ="#signup_info"-->
 </span>
-  <div class="row" *ngIf="userData">
+  <div class="row">
     <div class="profile_pic">
       <img src='{{userData.photoURL}}' id="pro_pic">
       </div>
     </div>
     <div class="row">
-    <div class="col-md-12">
-      <h2 class="name" *ngIf="userData.firstName && userData.lastName">{{userData.firstName}} {{userData.lastName}}</h2>
+    <div class="col-md-12" *ngIf="userData">
+      <h2 class="name">{{userData.firstName}} {{userData.lastName}}</h2>
       <hr>
       <p class="bio">{{userData.bio}}</p>
       </div>

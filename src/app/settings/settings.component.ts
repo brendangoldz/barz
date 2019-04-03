@@ -17,6 +17,7 @@ import * as firebase from "firebase";
 export class SettingsComponent implements OnInit
 {
   range: number = 10;
+  requests: any = 0;
   sub: any;
   user: any;
   constructor(private fb:FirebaseuiAngularLibraryService,
@@ -39,11 +40,17 @@ export class SettingsComponent implements OnInit
                       console.log("Document data:", doc.data());
                       console.log(user);
                       that.range = that.user.radius;
+                      if(doc.data().requests){
+                        doc.data().requests.forEach((x)=>{
+                          that.requests++;
+                        })
+                        console.log(that.requests);
+                      }
                   } else {
                       // doc.data() will be undefined in this case
                       console.log("No such document!");
                   }
-            }).catch((e)=>console.log(e))
+            }).catch((e)=>{console.log("Error", e)})
           } else {
             this.logout();
           }

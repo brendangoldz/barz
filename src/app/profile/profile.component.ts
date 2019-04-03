@@ -18,6 +18,8 @@ userId: string;
 pictureUrl: string;
 fileList: any;
 int: any;
+requests: any = 0;
+sub: any;
 element: HTMLImageElement; /* Defining element */
 updateForm = new FormGroup({
   firstName: new FormControl(),
@@ -38,16 +40,30 @@ updateForm = new FormGroup({
 
   ngOnInit() {
   var that = this;
-  this.af.auth.onAuthStateChanged(user=>{
-    if(user){
-      console.log(user);
-      that.userId = user.uid;
-      that.getProfileData();
-    }
-    else{
-      this.logout();
-    }
-  })
+  var db = firebase.firestore();
+  this.sub = this.af.authState.subscribe(user => {
+        if (user) {
+          var docRef = db.collection("users").doc(user.uid);
+          docRef.get().then(function(doc) {
+              if (doc.exists) {
+                  if(doc.data().uid == user.uid) that.userData= doc.data();
+                    console.log("Document data:", doc.data());
+                    //console.log("Document data dob:",that.userData)
+                    if(doc.data().requests){
+                      doc.data().requests.forEach((x)=>{
+                        that.requests++;
+                      })
+                      console.log(that.requests);
+                    }
+                } else {
+                    // doc.data() will be undefined in this case
+                    console.log("No such document!");
+                }
+          }).catch((e)=>console.log(e))
+        } else {
+          this.logout();
+        }
+   });
   const inputElement = (<HTMLInputElement>document.getElementById('profile_pic'));
   inputElement.addEventListener("change", function(files){
       that.fileList = this.files; /* now you can work with the file list */
@@ -58,6 +74,7 @@ updateForm = new FormGroup({
     }, 1000)
   }
   ngOnDestroy(){
+    this.sub.unsubscribe();
     clearInterval(this.int);
   }
 

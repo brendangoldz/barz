@@ -22,7 +22,7 @@ export class MainComponent implements OnInit
   restaurant: any;
   currentLat: any;
   currentLong: any;
-  totalVotes: any;
+  totalVotes: any = 0;
   marker: any;
   location: any;
   loaded: boolean;
@@ -36,6 +36,7 @@ export class MainComponent implements OnInit
   prevEl: any;
   sub: any;
   sub2: any;
+  requests: any = 0;
   private color = "primary";
   private mode = "determinate";
   constructor(private af: AngularFireAuth, private lo: LocationService, private router: Router, private auth_service: AuthService, private cd: ChangeDetectorRef)
@@ -71,6 +72,12 @@ export class MainComponent implements OnInit
                      console.log("Document data:", doc.data());
                      console.log(user);
                      if(that.loaded && that.restaurants.length>0) that.checkVoted();
+                     if(doc.data().requests){
+                       doc.data().requests.forEach((x)=>{
+                         that.requests++;
+                       })
+                       console.log(that.requests);
+                     }
                      //console.log("Document data dob:",that.userData);
                  } else {
                      // doc.data() will be undefined in this case
@@ -80,14 +87,13 @@ export class MainComponent implements OnInit
          } else {
            this.logout();
          }
-
+    });
     var doc = db.collection("bars").onSnapshot((snap)=>{
           // this.loaded = false
             that.restaurants = [];
             that.totalVotes = 0;
             snap.forEach((doc)=>{
               // console.log(doc.id, " => ", doc.data());
-
               that.restaurants.push(doc.data());
             })
           that.sub2 = that.lo.getLocation().subscribe(res=>{
@@ -118,27 +124,28 @@ export class MainComponent implements OnInit
             setTimeout(()=>{
               var temp = that.restaurants.filter(filter);
               temp.forEach((val)=>{
-                that.totalVotes += val.votes
+                that.totalVotes = val.votes + that.totalVotes;
               })
               that.restaurants = temp;
-              that.restaurants.forEach((val)=>{
-                console.log("Total Votes: ", that.totalVotes);
-                var norm = (val.votes / that.totalVotes)*100;
-                console.log("Normalized for bar", norm)
-                val.votes = {
-                  votes: val.votes,
-                  normalized: norm
-                }
-              })
-
+              if(that.totalVotes == 0){
+                console.log("Doing Nothing, Total Votes is 0");
+              }
+              else{
+                that.restaurants.forEach((val)=>{
+                  console.log("Total Votes: ", that.totalVotes);
+                  var norm = (val.votes / that.totalVotes)*100;
+                  console.log("Normalized for bar", norm)
+                  val.votes = {
+                    votes: val.votes,
+                    normalized: norm
+                  }
+                })
+              }
               that.loaded = true;
               if(that.user && that.loaded) that.checkVoted();
-            },timeout);
-
-
+            }, timeout);
          })
         });
-      });
     this.int = setInterval(()=>{
       this.cd.detectChanges();
     }, 1000)

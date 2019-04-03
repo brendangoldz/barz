@@ -77,7 +77,7 @@ export class LoginComponent implements OnInit {
     if(this.signupForm.value.password === this.signupForm.value.confirmPassword && this.signupForm.value.tos != false){
         this.auth.SignUp(this.signupForm.value.email, this.signupForm.value.password, this.signupForm.value.firstName, this.signupForm.value.lastName,
                      this.signupForm.value.dob,
-                     this.gender) //
+                     this.gender);
     }
     else{
        window.alert('Passwords do not match or you have not accepted the ToS');
