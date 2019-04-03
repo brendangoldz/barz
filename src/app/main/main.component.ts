@@ -122,8 +122,6 @@ export class MainComponent implements OnInit
               return bounds.contains(pos);
 
             }
-            const timeout = 750;
-            if(that.user == undefined) timeout*1.25;
             setTimeout(()=>{
               var temp = that.restaurants.filter(filter);
               temp.forEach((val)=>{
@@ -146,7 +144,7 @@ export class MainComponent implements OnInit
               }
               that.loaded = true;
               if(that.user && that.loaded) that.checkVoted();
-            }, timeout);
+            }, 1000);
          })
         });
     this.int = setInterval(()=>{
@@ -323,16 +321,4 @@ showPosition = function(position?) {
           }
     }).catch((e)=>console.log(e))
   }
-
-
-   doClick(n)
-   {
-    let e = new MouseEvent('click',{
-      bubbles: true,
-      cancelable:false,
-      view: window
-    })
-    n.dispatchEvent(e);
-  }
-
 }

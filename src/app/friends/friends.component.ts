@@ -150,11 +150,77 @@ export class FriendsComponent implements OnInit {
       console.log("Cant Request Self");
     }
   }
-  confirmRequest = function(){
+  confirmRequest = function(i){
+    var db = firebase.firestore();
+    var user = db.collection("users").doc(this.user.uid);
+    let reqs = [];
+    let friends = [];
+    user.get().then((val)=>{
+      reqs = val.data().requests
+      console.log(reqs)
+      friends = val.data().friends
 
+    console.log("Moving element to friends", reqs[i]);
+    friends.push(reqs[i]);
+    reqs.splice(i, i);
+    this.reqs = reqs;
+    user.set({
+      requests: reqs,
+      friends: friends
+    }, {merge:true}).then(()=>{
+      this.refresh();
+      console.log("Successfully added friend")
+    });
+   });
   }
-  declineRequest = function(){
-
+  declineRequest = function(i){
+    var db = firebase.firestore();
+    var user = db.collection("users").doc(this.user.uid);
+    let reqs = [];
+    user.get().then((val)=>{
+      console.log("index ", i)
+      reqs = val.data().requests
+      console.log("Before decline request", reqs);
+      reqs = reqs.splice(i, i);
+      console.log("After decline request", reqs)
+      this.reqs = reqs;
+      user.set({
+        requests: reqs
+      }, {merge: true}).then(()=>{
+        this.refresh();
+        console.log("Decline friend Request")
+      })
+    });
   }
-
+  refresh = function(){
+    var that = this;
+    var db = firebase.firestore();
+    var docRef = db.collection("users").doc(this.user.uid);
+    docRef.get().then(function(doc) {
+        if (doc.exists) {
+            if(doc.data().uid == this.user.uid) that.user= doc.data();
+              console.log("Document data:", doc.data());
+              //console.log("Document data dob:",that.userData)
+              if(doc.data().requests){
+                doc.data().requests.forEach((x)=>{
+                  that.reqs.push(x);
+                  that.requests++;
+                })
+                if(that.requests>0) that.reqs = that.getData(that.reqs);
+                console.log("Requests Array", that.reqs)
+              }
+              if(doc.data().friends){
+                doc.data().friends.forEach((x)=>{
+                  console.log(x);
+                  that.friends.push(x);
+                })
+                if(that.friends.length>0) that.friends = that.getData(that.friends);
+                console.log("Friends Array", that.friends)
+              }
+          } else {
+              // doc.data() will be undefined in this case
+              console.log("No such document!");
+          }
+    }).catch((e)=>console.log(e))
+  }
 }

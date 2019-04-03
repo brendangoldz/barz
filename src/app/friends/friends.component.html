@@ -33,12 +33,31 @@
   <div class="requests" *ngFor='let r of reqs; let i = index'>
     <ul class="col-md-12" *ngIf='r'>
       <li>
-        <a data-toggle="modal" role="button" data-target="#friend1_mod"><img src='{{r.photoURL}}' onerror="this.src = './assets/friend.png';"></a>
-        <h4>{{r.displayName}}</h4>
-        <span><i class="fas fa-check fa-lg"></i><i class="fa fa-times fa-lg" aria-hidden="true"></i>
+        <a data-toggle="modal" role="button" data-target="#request_modal"><img src='{{r.photoURL}}' onerror="this.src = './assets/friend.png';"></a>
+        <h4>{{r.firstName}} {{r.lastName}}</h4>
+        <span><i class="fas fa-check fa-lg" (click)="confirmRequest(i)"></i><i class="fa fa-times fa-lg" aria-hidden="true" (click)="declineRequest(i)"></i>
   </span>
       </li>
+      <div id="request_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <div class="profile_pic col-md-12">
+                <img src='{{r.photoURL}}' onerror="this.src = './assets/friend.png';">
+                <h2 class="name" id="friend{{i}}_mod_name">{{r.firstName}} {{r.lastName}}</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+              </div>
+            </div>
+            <div class="modal-body">
+              <p class="bio">{{r.bio}}</p>
+                <!-- <h5 class="fav-bar">{{f.favBar}}</h5> -->
+                <h5 class="fav-drink">{{r.favDrink}}</h5>
+            </div>
+          </div>
+        </div>
+    </div>
     </ul>
+
   </div>
 
   <h2 class="page_title">Friends<hr></h2>
@@ -46,34 +65,31 @@
 <button class="btn btn-primary" type="submit" name="addFriends" data-toggle="modal" data-target="#add_friends">Add Friends</button>
   <ul class="col-md-12" *ngFor="let f of friends; let i = index">
     <li>
-      <a data-toggle="modal" role="button" data-target="#friend{{i}}_mod"><img src='{{f.photoURL}}' onerror="this.src = './assets/friend.png';"></a>
+      <a data-toggle="modal" role="button" data-target="#friend_modal"><img src='{{f.photoURL}}' onerror="this.src = './assets/friend.png';"></a>
       <h4>{{f.displayName}}</h4>
       <span><i class="fa fa-comments fa-lg" aria-hidden="true"></i><i class="fa fa-times fa-lg" aria-hidden="true"></i>
 </span>
     </li>
     <!--FRIEND ONE PROFILE VIEW MODAL-->
-      <div id="friend{{i}}_mod" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div id="friend_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
           <div class="modal-content">
             <div class="modal-header">
               <div class="profile_pic col-md-12">
                 <img src='{{f.photoURL}}' onerror="this.src = './assets/friend.png';">
-                <h2 class="name" id="friend{{i}}_mod_name">Friend Name1</h2>
+                <h2 class="name" id="friend{{i}}_mod_name">{{f.firstName}} {{f.lastName}}</h2>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
               </div>
             </div>
             <div class="modal-body">
-              <p class="bio">friends bio for their profile</p>
-                <h5 class="fav-bar">Favorite Bar: Bar Choice</h5>
-                <h5 class="fav-drink">Favorite Drink: Drink Name</h5>
+              <p class="bio">{{f.bio}}</p>
+                <!-- <h5 class="fav-bar">{{f.favBar}}</h5> -->
+                <h5 class="fav-drink">{{f.favDrink}}</h5>
             </div>
           </div>
         </div>
     </div>
   </ul>
-
-
-
 
   <div id="add_friends" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
      <div class="modal-dialog modal-dialog-centered" role="document">
