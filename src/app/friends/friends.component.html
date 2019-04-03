@@ -33,7 +33,7 @@
   <div class="requests" *ngFor='let r of reqs; let i = index'>
     <ul class="col-md-12" *ngIf='r'>
       <li>
-        <a data-toggle="modal" role="button" data-target="#friend1_mod"><img src='{{r.photoURL}}'></a>
+        <a data-toggle="modal" role="button" data-target="#friend1_mod"><img src='{{r.photoURL}}' onerror="this.src = './assets/friend.png';"></a>
         <h4>{{r.displayName}}</h4>
         <span><i class="fas fa-check fa-lg"></i><i class="fa fa-times fa-lg" aria-hidden="true"></i>
   </span>
@@ -46,7 +46,7 @@
 <button class="btn btn-primary" type="submit" name="addFriends" data-toggle="modal" data-target="#add_friends">Add Friends</button>
   <ul class="col-md-12" *ngFor="let f of friends; let i = index">
     <li>
-      <a data-toggle="modal" role="button" data-target="#friend{{i}}_mod"><img src='{{f.photoURL}}'></a>
+      <a data-toggle="modal" role="button" data-target="#friend{{i}}_mod"><img src='{{f.photoURL}}' onerror="this.src = './assets/friend.png';"></a>
       <h4>{{f.displayName}}</h4>
       <span><i class="fa fa-comments fa-lg" aria-hidden="true"></i><i class="fa fa-times fa-lg" aria-hidden="true"></i>
 </span>
@@ -57,9 +57,8 @@
           <div class="modal-content">
             <div class="modal-header">
               <div class="profile_pic col-md-12">
-
-                <img src='./assets/friend.png'>
-                <h2 class="name" id="friend1_mod_name">Friend Name1</h2>
+                <img src='{{f.photoURL}}' onerror="this.src = './assets/friend.png';">
+                <h2 class="name" id="friend{{i}}_mod_name">Friend Name1</h2>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
               </div>
             </div>

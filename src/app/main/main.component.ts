@@ -65,6 +65,9 @@ export class MainComponent implements OnInit
 
    this.sub = this.af.authState.subscribe(user => {
          if (user) {
+           if(!user.emailVerified){
+             this.router.navigate(['','verify']);
+           }
            var docRef = db.collection("users").doc(user.uid);
            docRef.get().then(function(doc) {
                if (doc.exists) {
@@ -153,7 +156,7 @@ export class MainComponent implements OnInit
   ngOnDestroy(){
     clearInterval(this.int);
     this.sub.unsubscribe();
-    this.sub2.unsubscribe();
+    // this.sub2.unsubscribe();
   }
 
 showPosition = function(position?) {

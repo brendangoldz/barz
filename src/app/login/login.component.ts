@@ -41,7 +41,12 @@ export class LoginComponent implements OnInit {
 
     this.sub = this.af.authState.subscribe(user => {
           if (user) {
-            this.router.navigate(['/', 'main'])
+            if(!user.emailVerified){
+              this.router.navigate(['','verify']);
+            }
+            else{
+              this.router.navigate(['/', 'main'])
+            }
             console.log("User in authState:", user);
           } else {
             return;

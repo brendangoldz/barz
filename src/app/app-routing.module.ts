@@ -5,6 +5,7 @@ import {FriendsComponent} from './friends/friends.component';
 import {ProfileComponent} from './profile/profile.component';
 import {SettingsComponent} from './settings/settings.component';
 import {LoginComponent} from './login/login.component';
+import {VerifyEmailAddressComponent} from './verify-email-address/verify-email-address.component';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 const routes: Routes = [
   {
@@ -31,6 +32,10 @@ const routes: Routes = [
   {
     path: 'settings',
     component: SettingsComponent
+  },
+  {
+    path: 'verify',
+    component: VerifyEmailAddressComponent
   }
 ];
 

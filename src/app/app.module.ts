@@ -27,6 +27,7 @@ import { SettingsComponent } from './settings/settings.component';
 import { FriendsComponent } from './friends/friends.component';
 import { LoginComponent } from './login/login.component';
 import { ToastrModule } from 'ngx-toastr';
+import { VerifyEmailAddressComponent } from './verify-email-address/verify-email-address.component';
 
 
 
@@ -49,7 +50,8 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
     ProfileComponent,
     SettingsComponent,
     FriendsComponent,
-    LoginComponent
+    LoginComponent,
+    VerifyEmailAddressComponent
   ],
   imports: [
     BrowserModule,

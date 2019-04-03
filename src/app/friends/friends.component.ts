@@ -40,6 +40,9 @@ export class FriendsComponent implements OnInit {
     var db = firebase.firestore();
     this.sub = this.af.authState.subscribe(user => {
           if (user) {
+            if(!user.emailVerified){
+              this.router.navigate(['','verify']);
+            }
             var docRef = db.collection("users").doc(user.uid);
             docRef.get().then(function(doc) {
                 if (doc.exists) {
