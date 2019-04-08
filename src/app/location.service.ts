@@ -10,13 +10,14 @@ export class LocationService {
   getLocation(): Observable<any> {
     var options ={
       enableHighAccuracy: true,
-      maximumAge: 215000,
+      maximumAge: 0,
       timeout: 10000
     }
     function location(observer){
       if(window.navigator && window.navigator.geolocation) {
           window.navigator.geolocation.getCurrentPosition(
               (position) => {
+                  console.log("Has Position", position)
                   observer.next(position);
                   observer.complete();
               },

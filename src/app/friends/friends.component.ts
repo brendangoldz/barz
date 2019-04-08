@@ -102,16 +102,6 @@ export class FriendsComponent implements OnInit {
      this.router.navigate(['/','login']);
   });
   }
-  // getProfileData = function(){
-  //   if(this.user){
-  //     var us = firebase.auth().currentUser['uid'];
-  //     let db = firebase.firestore();
-  //     var doc = db.collection("users").doc(us);
-  //     doc.get().then((val)=>{
-  //       console.log("Requests", val.requests)
-  //     })
-  //   }
-  // }
   query = function(searchText){
     var that = this;
     var db = firebase.firestore();
@@ -151,27 +141,50 @@ export class FriendsComponent implements OnInit {
     }
   }
   confirmRequest = function(i){
+    var that = this;
     var db = firebase.firestore();
-    var user = db.collection("users").doc(this.user.uid);
+    var uid = this.user.uid;
+    var user = db.collection("users").doc(uid);
+    var friend_id;
     let reqs = [];
     let friends = [];
     user.get().then((val)=>{
       reqs = val.data().requests
       console.log(reqs)
-      friends = val.data().friends
+      friends = val.data().friends;
 
-    console.log("Moving element to friends", reqs[i]);
-    friends.push(reqs[i]);
-    reqs.splice(i, i);
-    this.reqs = reqs;
-    user.set({
-      requests: reqs,
-      friends: friends
-    }, {merge:true}).then(()=>{
-      this.refresh();
-      console.log("Successfully added friend")
-    });
+
+      friend_id = reqs[i];
+      friends.push(reqs[i]);
+      console.log("Friends array of current user", friends)
+      reqs.splice(i, 1);
+      that.reqs = reqs;
+      console.log("Request array after splice", that.reqs)
+      user.set({
+        requests: reqs,
+        friends: friends
+      }, {merge:true}).then(()=>{
+        console.log("Successfully added friend")
+      });
+
+      console.log("Getting friend of id ", friend_id)
+      var friend = db.collection("users").doc(friend_id);
+      friend.get().then((val2)=>{
+        let friends2 = val2.data().friends || [];
+        friends2.push(uid);
+        console.log("Friends array ", friends2)
+        friend.set({
+          friends: friends2
+        }, {merge:true}).then(()=>{
+          friends = [];
+          reqs = [];
+          this.refresh();
+          console.log("Successfully added friend")
+        });
+      });
    });
+
+
   }
   declineRequest = function(i){
     var db = firebase.firestore();
@@ -194,11 +207,13 @@ export class FriendsComponent implements OnInit {
   }
   refresh = function(){
     var that = this;
+    this.reqs = [];
+    this.requests = 0;
     var db = firebase.firestore();
     var docRef = db.collection("users").doc(this.user.uid);
     docRef.get().then(function(doc) {
         if (doc.exists) {
-            if(doc.data().uid == this.user.uid) that.user= doc.data();
+            if(doc.data().uid == that.user.uid) that.user= doc.data();
               console.log("Document data:", doc.data());
               //console.log("Document data dob:",that.userData)
               if(doc.data().requests){
