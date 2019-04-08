@@ -18,7 +18,10 @@
   color: #F25757;
 }
 .profile_pic{
-  text-align: center;
+  width: 11vw;
+  height: 20vh;
+  background-color: white;
+  border-radius: 75%;
 }
 .close{
   position: absolute;
