@@ -96,6 +96,7 @@ export class MainComponent implements OnInit
     var doc = db.collection("bars").onSnapshot((snap)=>{
           // this.loaded = false
         if(that.sub2)that.sub2.unsubscribe();
+
         console.log("On Snapshot", snap)
         that.restaurants = [];
         that.totalVotes = 0;
@@ -106,38 +107,31 @@ export class MainComponent implements OnInit
         })
         try{
           that.sub2 = that.lo.getLocation().subscribe(res=>{
-              console.log("get location", res);
-                this.currentLat = res.coords.latitude;
-                this.currentLong = res.coords.longitude;
-                that.location = new google.maps.LatLng(this.currentLat, this.currentLong);
-            function filter(val){
-              // console.log("Getting radius ", that.user.radius)
-              var circleRadius = 10 * 1609.344 || that.user.radius * 1609.344;
-               var circle = new google.maps.Circle({
-                     clickable: false,
-                     radius: circleRadius,
-                     center: new google.maps.LatLng(res.coords.latitude, res.coords.longitude)
-                 });
-                 //CIRCLE CREATED FOR RADIUS OF SEARCH
-                 // console.log("myLocation", that.location);
-              var pos = new google.maps.LatLng(parseFloat(val.coords.latitude), parseFloat(val.coords.longitude));
-              var pt2 = new google.maps.Marker({ position: pos,  map: that.map});
-
-              var bounds = circle.getBounds();
-              //CHECK IF REST COORDS INSIDE BOUNDS OF CIRCLE
-              return bounds.contains(pos);
-
-            }
+          console.log("get location", res);
+            this.currentLat = res.coords.latitude;
+            this.currentLong = res.coords.longitude;
+            that.location = new google.maps.LatLng(this.currentLat, this.currentLong);
             setTimeout(()=>{
               var temp = [];
-              var temp = that.restaurants.filter(filter);
-              console.log("Before filter", temp);
+              var temp = that.restaurants.filter((val)=>{
+                var circleRadius = 10 * 1609.344 || that.user.radius * 1609.344;
+                 var circle = new google.maps.Circle({
+                       clickable: false,
+                       radius: circleRadius,
+                       center: new google.maps.LatLng(res.coords.latitude, res.coords.longitude)
+                   });
+                   //CIRCLE CREATED FOR RADIUS OF SEARCH
+                   // console.log("myLocation", that.location);
+                var pos = new google.maps.LatLng(parseFloat(val.coords.latitude), parseFloat(val.coords.longitude));
+                var pt2 = new google.maps.Marker({ position: pos,  map: that.map});
+
+                var bounds = circle.getBounds();
+                //CHECK IF REST COORDS INSIDE BOUNDS OF CIRCLE
+                return bounds.contains(pos);
+              });
               that.restaurants = temp;
-              console.log("After filter", temp, " total votes ", that.totalVotes);
               that.restaurants.forEach((val)=>{
                 console.log("Total Votes: ", that.totalVotes, " votes for bar ", val.votes);
-                // var norm = (val.votes.votes / that.totalVotes)*100;
-                // console.log("Normalized for bar", norm);
                 let tmp;
                 if(val.votes == 0){
                    tmp = {
@@ -162,9 +156,6 @@ export class MainComponent implements OnInit
          console.log("error ", e)
        }
         });
-    // this.int = setInterval(()=>{
-    //   this.cd.detectChanges();
-    // }, 1000)
   }
   ngOnDestroy(){
     clearInterval(this.int);

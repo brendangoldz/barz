@@ -26,6 +26,9 @@ export class FriendsComponent implements OnInit {
   sub: any;
   user: any;
   requests: any = 0;
+  currentRequest: any;
+  currentFriend: any;
+  notFriends: boolean = true;
   @ViewChild('messagecontainer', { read: ViewContainerRef }) entry: ViewContainerRef;
 
 
@@ -107,18 +110,25 @@ export class FriendsComponent implements OnInit {
     var db = firebase.firestore();
     var us = firebase.auth().currentUser['uid'];
 
-    /*
-    db.orderByChild('displayName').startAt(searchText).endAt(searchText+"\uf8ff").once("value")
-    */
-    db.collection("users").where("email", "==", searchText).orderBy("displayName")
-        .get()
+    db.collection("users").where("email", "==", searchText).get()
         .then(function(querySnapshot) {
             querySnapshot.forEach(function(doc) {
                 // doc.data() is never undefined for query doc snapshots
+
                 if(doc.exists){
-                  console.log(doc.data())
+                  // console.log(doc.data())
                   that.searchResults = doc.data();
-                  console.log(that.searchResults);
+                  that.friends.forEach((x)=>{
+                    console.log("Friends Query Loop ", x, " search results id ", that.searchResults.uid);
+                    if(that.searchResults.uid == x.uid){
+                      console.log("Results contains a users friend");
+                      that.notFriends = false;
+                    }
+                    else{
+                      that.notFriends = true;
+                    }
+                  })
+
                 }
             });
         })
@@ -152,8 +162,6 @@ export class FriendsComponent implements OnInit {
       reqs = val.data().requests
       console.log(reqs)
       friends = val.data().friends;
-
-
       friend_id = reqs[i];
       friends.push(reqs[i]);
       console.log("Friends array of current user", friends)
@@ -237,5 +245,32 @@ export class FriendsComponent implements OnInit {
               console.log("No such document!");
           }
     }).catch((e)=>console.log(e))
+  }
+  getCurrentFriend = function(i){
+    var that = this;
+    var db = firebase.firestore();
+    var user = db.collection("users").doc(this.user.uid);
+    user.get().then((val)=>{
+      let temp = val.data().friends;
+      temp = temp[i];
+      db.collection("users").doc(temp).get().then((val)=>{
+        that.currentFriend = val.data();
+        console.log("Current Friend ", that.currentFriend)
+      })
+    });
+
+  }
+  getCurrentRequest = function(i){
+    var that =this;
+    var db = firebase.firestore();
+    var user = db.collection("users").doc(this.user.uid);
+    user.get().then((val)=>{
+      let temp = val.data().requests;
+      temp = temp[i];
+      db.collection("users").doc(temp).get().then((val)=>{
+        that.currentRequest = val.data();
+        console.log("Current Request ", that.currentRequest)
+      })
+    });
   }
 }
