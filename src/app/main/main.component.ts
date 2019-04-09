@@ -51,6 +51,7 @@ export class MainComponent implements OnInit
         console.log("triple click")
         event.preventDefault();
         event.stopImmediatePropagation();
+        window.location.reload();
           return false;
       }
     });
@@ -91,70 +92,75 @@ export class MainComponent implements OnInit
            this.logout();
          }
     });
+
     var doc = db.collection("bars").onSnapshot((snap)=>{
           // this.loaded = false
-            that.restaurants = [];
-            that.totalVotes = 0;
-            snap.forEach((doc)=>{
-              // console.log(doc.id, " => ", doc.data());
-              that.restaurants.push(doc.data());
-            })
+        if(that.sub2)that.sub2.unsubscribe();
+
+        console.log("On Snapshot", snap)
+        that.restaurants = [];
+        that.totalVotes = 0;
+        snap.forEach((doc)=>{
+          console.log(doc.id, " votes ", doc.data().votes);
+          that.restaurants.push(doc.data());
+          that.totalVotes += doc.data().votes;
+        })
+        try{
           that.sub2 = that.lo.getLocation().subscribe(res=>{
-              console.log(res);
-                this.currentLat = res.coords.latitude;
-                this.currentLong = res.coords.longitude;
-                that.location = new google.maps.LatLng(this.currentLat, this.currentLong);
-            function filter(val){
-              // console.log("Getting radius ", that.user.radius)
-              var circleRadius = 10 * 1609.344 || that.user.radius * 1609.344;
-               var circle = new google.maps.Circle({
-                     clickable: false,
-                     radius: circleRadius,
-                     center: new google.maps.LatLng(res.coords.latitude, res.coords.longitude)
-                 });
-                 //CIRCLE CREATED FOR RADIUS OF SEARCH
-                 // console.log("myLocation", that.location);
-              var pos = new google.maps.LatLng(parseFloat(val.coords.latitude), parseFloat(val.coords.longitude));
-              var pt2 = new google.maps.Marker({ position: pos,  map: that.map});
-
-              var bounds = circle.getBounds();
-              //CHECK IF REST COORDS INSIDE BOUNDS OF CIRCLE
-              return bounds.contains(pos);
-
-            }
+          console.log("get location", res);
+            this.currentLat = res.coords.latitude;
+            this.currentLong = res.coords.longitude;
+            that.location = new google.maps.LatLng(this.currentLat, this.currentLong);
             setTimeout(()=>{
-              var temp = that.restaurants.filter(filter);
-              temp.forEach((val)=>{
-                that.totalVotes = val.votes + that.totalVotes;
-              })
+              var temp = [];
+              var temp = that.restaurants.filter((val)=>{
+                var circleRadius = 10 * 1609.344 || that.user.radius * 1609.344;
+                 var circle = new google.maps.Circle({
+                       clickable: false,
+                       radius: circleRadius,
+                       center: new google.maps.LatLng(res.coords.latitude, res.coords.longitude)
+                   });
+                   //CIRCLE CREATED FOR RADIUS OF SEARCH
+                   // console.log("myLocation", that.location);
+                var pos = new google.maps.LatLng(parseFloat(val.coords.latitude), parseFloat(val.coords.longitude));
+                var pt2 = new google.maps.Marker({ position: pos,  map: that.map});
+
+                var bounds = circle.getBounds();
+                //CHECK IF REST COORDS INSIDE BOUNDS OF CIRCLE
+                return bounds.contains(pos);
+              });
               that.restaurants = temp;
-              if(that.totalVotes == 0){
-                console.log("Doing Nothing, Total Votes is 0");
-              }
-              else{
-                that.restaurants.forEach((val)=>{
-                  console.log("Total Votes: ", that.totalVotes);
-                  var norm = (val.votes / that.totalVotes)*100;
-                  console.log("Normalized for bar", norm)
-                  val.votes = {
-                    votes: val.votes,
-                    normalized: norm
+              that.restaurants.forEach((val)=>{
+                console.log("Total Votes: ", that.totalVotes, " votes for bar ", val.votes);
+                let tmp;
+                if(val.votes == 0){
+                   tmp = {
+                    norm: 0,
+                    votes: val.votes
                   }
-                })
-              }
+                }
+                else{
+                   tmp = {
+                    norm: (val.votes/that.totalVotes)*100,
+                    votes: val.votes
+                  }
+                }
+                console.log("temp", tmp);
+                val.votes = tmp;
+              })
               that.loaded = true;
               if(that.user && that.loaded) that.checkVoted();
-            }, 1000);
+            }, 1500);
          })
+       } catch (e) {
+         console.log("error ", e)
+       }
         });
-    this.int = setInterval(()=>{
-      this.cd.detectChanges();
-    }, 1000)
   }
   ngOnDestroy(){
     clearInterval(this.int);
     this.sub.unsubscribe();
-    // this.sub2.unsubscribe();
+    this.sub2.unsubscribe();
   }
 
 showPosition = function(position?) {
@@ -174,6 +180,7 @@ showPosition = function(position?) {
   }
 
   vote = function(i){
+        $(event.target).attr("disabled", "disabled");
     var bid = this.restaurants[i].bid;
     var db = firebase.firestore();
     var us = firebase.auth().currentUser['uid'] || this.user.uid;
@@ -182,7 +189,7 @@ showPosition = function(position?) {
     if(this.user.voted != "") prev_bar = this.user.voted;
 
     if(this.prevEl) this.prevEl.css("background-position", "right bottom");
-    // $(event.target).css("background-position", "left bottom");
+
 
     //SET BID ONTO USER ATTR 'voted' ALWAYS
     db.collection("users").doc(us).set({
@@ -202,7 +209,7 @@ showPosition = function(position?) {
         doc.set({
           votes: votes
         }, {merge:true}).then(()=>{
-          console.log("Added Vote to ", bid, " /n Vote Count: ", votes)
+          console.log("Added Vote to ", bid, " \n Vote Count: ", votes)
         })
       });
         //REDUCE PREV BAR VOTE

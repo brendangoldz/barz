@@ -33,64 +33,63 @@
   <div class="requests" *ngFor='let r of reqs; let i = index'>
     <ul class="col-md-12" *ngIf='r'>
       <li>
-        <a data-toggle="modal" role="button" data-target="#request_modal"><img src='{{r.photoURL}}' onerror="this.src = './assets/friend.png';"></a>
+        <a data-toggle="modal" role="button" data-target="#request_modal" (click)="getCurrentFriend(i)"><img src='{{r.photoURL}}' onerror="this.src = './assets/friend.png';"></a>
         <h4>{{r.firstName}} {{r.lastName}}</h4>
         <span><i class="fas fa-check fa-lg" (click)="confirmRequest(i)"></i><i class="fa fa-times fa-lg" aria-hidden="true" (click)="declineRequest(i)"></i>
   </span>
       </li>
-      <div id="request_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <div class="profile_pic col-md-12">
-                <img src='{{r.photoURL}}' onerror="this.src = './assets/friend.png';">
-                <h2 class="name" id="friend{{i}}_mod_name">{{r.firstName}} {{r.lastName}}</h2>
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-              </div>
-            </div>
-            <div class="modal-body">
-              <p class="bio">{{r.bio}}</p>
-                <!-- <h5 class="fav-bar">{{f.favBar}}</h5> -->
-                <h5 class="fav-drink">{{r.favDrink}}</h5>
-            </div>
-          </div>
-        </div>
-    </div>
+
     </ul>
 
   </div>
-
+  <div id="request_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" *ngIf="currentRequest">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="profile_pic col-md-12">
+            <img src='{{currentRequest.photoURL}}' onerror="this.src = './assets/friend.png';">
+            <h2 class="name" id="friend{{i}}_mod_name">{{currentRequest.firstName}} {{currentRequest.lastName}}</h2>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          </div>
+        </div>
+        <div class="modal-body">
+          <p class="bio">{{currentRequest.bio}}</p>
+            <!-- <h5 class="fav-bar">{{f.favBar}}</h5> -->
+            <h5 class="fav-drink">{{currentRequest.favDrink}}</h5>
+        </div>
+      </div>
+    </div>
+</div>
   <h2 class="page_title">Friends<hr></h2>
 
 <button class="btn btn-primary" type="submit" name="addFriends" data-toggle="modal" data-target="#add_friends">Add Friends</button>
   <ul class="col-md-12" *ngFor="let f of friends; let i = index">
     <li>
-      <a data-toggle="modal" role="button" data-target="#friend_modal"><img src='{{f.photoURL}}' onerror="this.src = './assets/friend.png';"></a>
+      <a data-toggle="modal" role="button" data-target="#friend_modal" (click)="getCurrentFriend(i)"><img src='{{f.photoURL}}' onerror="this.src = './assets/friend.png';"></a>
       <h4>{{f.displayName}}</h4>
       <span><i class="fa fa-comments fa-lg" aria-hidden="true"></i><i class="fa fa-times fa-lg" aria-hidden="true"></i>
 </span>
     </li>
     <!--FRIEND ONE PROFILE VIEW MODAL-->
-      <div id="friend_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <div class="profile_pic col-md-12">
-                <img src='{{f.photoURL}}' onerror="this.src = './assets/friend.png';">
-                <h2 class="name" id="friend{{i}}_mod_name">{{f.firstName}} {{f.lastName}}</h2>
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-              </div>
-            </div>
-            <div class="modal-body">
-              <p class="bio">{{f.bio}}</p>
-                <!-- <h5 class="fav-bar">{{f.favBar}}</h5> -->
-                <h5 class="fav-drink">{{f.favDrink}}</h5>
-            </div>
+  </ul>
+  <div id="friend_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" *ngIf="currentFriend">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="profile_pic col-md-12">
+            <img src='{{currentFriend.photoURL}}' onerror="this.src = './assets/friend.png';">
+            <h2 class="name" id="friend{{i}}_mod_name">{{currentFriend.firstName}} {{currentFriend.lastName}}</h2>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
           </div>
         </div>
+        <div class="modal-body">
+          <p class="bio">{{currentFriend.bio}}</p>
+            <!-- <h5 class="fav-bar">{{f.favBar}}</h5> -->
+            <h5 class="fav-drink">{{currentFriend.favDrink}}</h5>
+        </div>
+      </div>
     </div>
-  </ul>
-
+  </div>
   <div id="add_friends" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
      <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -98,7 +97,6 @@
               <h2>Add Friends</h2>
            </div>
            <div class="modal-body">
-
              <form class="example" [formGroup]="searchFriendsForm" (ngSubmit)="searchFriends()">
               <div class="input-group mb-3">
                  <input type="text" formControlName="searchField" placeholder="Search by email..." name="search">
@@ -107,18 +105,11 @@
                    <span class="input-group-text" id="basic-addon1"><button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button></span>
                  </div>
                </div>
-               <!-- <div *ngFor="let results of searchResults"> -->
-                 <ul *ngIf="searchResults">
-                   <li><p>{{searchResults.firstName}} {{searchResults.lastName}}</p><button class="btn btn-primary request_btn" (click)="requestFriend()">Add Friend</button></li>
+                 <ul *ngIf="searchResults" class="results">
+                   <li><p>{{searchResults.firstName}} {{searchResults.lastName}}</p><button class="btn btn-primary request_btn" id="request" (click)="requestFriend()" [disabled]="!notFriends">Add Friend</button></li>
                  </ul>
-               <!-- </div> -->
-
-
-
              </form>
-
            </div>
-
            <div class="modal-footer">
              <button class="btn" data-dismiss="modal" aria-hidden="true">
              Close</button>
