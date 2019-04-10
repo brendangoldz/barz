@@ -17,17 +17,24 @@
   box-shadow: 1px 5px 1px 3px rgba(10, 10, 10, .2);
   font-size: 1.5rem;
 }
-.body img{
-  width: 11vw;
-  height: 20vh;
+
+ .body img{
+  width: 5vw;
+  height: 10vh;
   background-color: white;
-  border-radius: 75%;
+  border-top-left-radius: 50% 50%;
+  border-top-right-radius: 50% 50%;
+  border-bottom-right-radius: 50% 50%;
+  border-bottom-left-radius: 50% 50%;
+  vertical-align: middle;
 }
+
 .bio{
   text-align: center;
+  vertical-align: middle;
 }
 .edit i{
-  left: 20vw;
+left: 20vw;
 top: 2vh;
 position: relative;
 float: right;

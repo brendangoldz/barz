@@ -17,11 +17,16 @@
   padding: 1rem;
   color: #F25757;
 }
-.profile_pic{
-  width: 11vw;
-  height: 20vh;
-  background-color: white;
-  border-radius: 75%;
+
+ .profile_pic{
+   width: 5vw;
+   height: 10vh;
+   background-color: white;
+   border-top-left-radius: 50% 50%;
+   border-top-right-radius: 50% 50%;
+   border-bottom-right-radius: 50% 50%;
+   border-bottom-left-radius: 50% 50%;
+   vertical-align: middle;
 }
 .close{
   position: absolute;
