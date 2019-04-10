@@ -129,25 +129,12 @@ export class MainComponent implements OnInit
                 //CHECK IF REST COORDS INSIDE BOUNDS OF CIRCLE
                 return bounds.contains(pos);
               });
-              that.restaurants = temp;
-              that.restaurants.forEach((val)=>{
-                console.log("Total Votes: ", that.totalVotes, " votes for bar ", val.votes);
-                let tmp;
-                if(val.votes == 0){
-                   tmp = {
-                    norm: 0,
-                    votes: val.votes
-                  }
-                }
-                else{
-                   tmp = {
-                    norm: (val.votes/that.totalVotes)*100,
-                    votes: val.votes
-                  }
-                }
-                console.log("temp", tmp);
-                val.votes = tmp;
+
+              console.log("Temp before Normalized ", temp);
+              temp.forEach((val)=>{
+                val.normalized = (val.votes/that.totalVotes)*100 ;
               })
+              that.restaurants = temp;
               that.loaded = true;
               if(that.user && that.loaded) that.checkVoted();
             }, 1500);
