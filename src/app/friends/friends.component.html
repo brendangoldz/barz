@@ -34,7 +34,7 @@
   </h2>
   <div class="requests" *ngFor='let r of reqs; let i = index'>
     <ul class="col-md-12" *ngIf='r'>
-      <li>
+      <li class="request_list">
         <a data-toggle="modal" role="button" data-target="#request_modal" (click)="getCurrentFriend(i)"><img src='{{r.photoURL}}' onerror="this.src = './assets/friend.png';"></a>
         <h4>{{r.firstName}} {{r.lastName}}</h4>
         <span><i class="fas fa-check fa-lg" (click)="confirmRequest(i)"></i><i class="fa fa-times fa-lg" aria-hidden="true" (click)="declineRequest(i)"></i>

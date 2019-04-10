@@ -113,19 +113,20 @@ export class MainComponent implements OnInit {
       })
       try {
         that.sub2 = that.lo.getLocation().subscribe(res => {
-          console.log("get location", res);
           this.currentLat = res.coords.latitude;
           this.currentLong = res.coords.longitude;
           that.location = new google.maps.LatLng(this.currentLat, this.currentLong);
           setTimeout(() => {
             var temp = [];
+            var circleRadius = that.user.radius * 1609.344 || 10 * 1609.344;
             var temp = that.restaurants.filter((val) => {
-              var circleRadius = 10 * 1609.344 || that.user.radius * 1609.344;
               var circle = new google.maps.Circle({
                 clickable: false,
                 radius: circleRadius,
                 center: new google.maps.LatLng(res.coords.latitude, res.coords.longitude)
               });
+              console.log("get radius ", circleRadius);
+
               //CIRCLE CREATED FOR RADIUS OF SEARCH
               // console.log("myLocation", that.location);
               var pos = new google.maps.LatLng(parseFloat(val.coords.latitude), parseFloat(val.coords.longitude));
