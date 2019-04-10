@@ -41,6 +41,11 @@ updateForm = new FormGroup({
   ngOnInit() {
   var that = this;
   var db = firebase.firestore();
+  /**
+   * [subscribe description]
+   * @param  user=>{if(user [description]
+   * @return                [description]
+   */
   this.sub = this.af.authState.subscribe(user => {
         if (user) {
           if(!user.emailVerified){
@@ -82,7 +87,10 @@ updateForm = new FormGroup({
     this.sub.unsubscribe();
     clearInterval(this.int);
   }
-
+  /**
+   * [function description]
+   * @return [description]
+   */
   logout = function(){
     window.localStorage.clear();
     this.af.auth.signOut().then(() => {
@@ -90,6 +98,10 @@ updateForm = new FormGroup({
      this.router.navigate(['/','login']);
   });
   }
+  /**
+   * [function description]
+   * @return [description]
+   */
   updateData = function(){
     var us = this.userData.uid || firebase.auth().currentUser['uid'];
 
@@ -147,7 +159,10 @@ updateForm = new FormGroup({
     this.getProfileData();
   }
 
-
+  /**
+   * [function description]
+   * @return [description]
+   */
   getProfileData = function(){
     var that = this;
     var db = firebase.firestore();
@@ -167,6 +182,10 @@ updateForm = new FormGroup({
           }
     }).catch((e)=>console.log(e))
   }
+  /**
+   * [function description]
+   * @return [description]
+   */
   populateForm = function(){
       if(this.userData){
         this.updateForm.patchValue({firstName: this.userData['firstName']})

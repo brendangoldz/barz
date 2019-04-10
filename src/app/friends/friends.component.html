@@ -29,14 +29,16 @@
 </nav>
 
 <div class="body col-md-12">
-  <h2 class="page_title">Requests<hr></h2>
+  <h2 class="page_title">Requests
+    <hr>
+  </h2>
   <div class="requests" *ngFor='let r of reqs; let i = index'>
     <ul class="col-md-12" *ngIf='r'>
-      <li>
+      <li class="request_list">
         <a data-toggle="modal" role="button" data-target="#request_modal" (click)="getCurrentFriend(i)"><img src='{{r.photoURL}}' onerror="this.src = './assets/friend.png';"></a>
         <h4>{{r.firstName}} {{r.lastName}}</h4>
         <span><i class="fas fa-check fa-lg" (click)="confirmRequest(i)"></i><i class="fa fa-times fa-lg" aria-hidden="true" (click)="declineRequest(i)"></i>
-  </span>
+        </span>
       </li>
 
     </ul>
@@ -54,21 +56,23 @@
         </div>
         <div class="modal-body">
           <p class="bio">{{currentRequest.bio}}</p>
-            <!-- <h5 class="fav-bar">{{f.favBar}}</h5> -->
-            <h5 class="fav-drink">{{currentRequest.favDrink}}</h5>
+          <!-- <h5 class="fav-bar">{{f.favBar}}</h5> -->
+          <h5 class="fav-drink">{{currentRequest.favDrink}}</h5>
         </div>
       </div>
     </div>
-</div>
-  <h2 class="page_title">Friends<hr></h2>
+  </div>
+  <h2 class="page_title">Friends
+    <hr>
+  </h2>
 
-<button class="btn btn-primary" type="submit" name="addFriends" data-toggle="modal" data-target="#add_friends">Add Friends</button>
+  <button class="btn btn-primary" type="submit" name="addFriends" data-toggle="modal" data-target="#add_friends">Add Friends</button>
   <ul class="col-md-12" *ngFor="let f of friends; let i = index">
     <li>
       <a data-toggle="modal" role="button" data-target="#friend_modal" (click)="getCurrentFriend(i)"><img src='{{f.photoURL}}' onerror="this.src = './assets/friend.png';"></a>
       <h4>{{f.displayName}}</h4>
       <span><i class="fa fa-comments fa-lg" aria-hidden="true"></i><i class="fa fa-times fa-lg" aria-hidden="true"></i>
-</span>
+      </span>
     </li>
     <!--FRIEND ONE PROFILE VIEW MODAL-->
   </ul>
@@ -84,38 +88,40 @@
         </div>
         <div class="modal-body">
           <p class="bio">{{currentFriend.bio}}</p>
-            <!-- <h5 class="fav-bar">{{f.favBar}}</h5> -->
-            <h5 class="fav-drink">{{currentFriend.favDrink}}</h5>
+          <!-- <h5 class="fav-bar">{{f.favBar}}</h5> -->
+          <h5 class="fav-drink">{{currentFriend.favDrink}}</h5>
         </div>
       </div>
     </div>
   </div>
   <div id="add_friends" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-     <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-           <div class="modal-header">
-              <h2>Add Friends</h2>
-           </div>
-           <div class="modal-body">
-             <form class="example" [formGroup]="searchFriendsForm" (ngSubmit)="searchFriends()">
-              <div class="input-group mb-3">
-                 <input type="text" formControlName="searchField" placeholder="Search by email..." name="search">
-                <div class="input-group-prepend">
-                   <br>
-                   <span class="input-group-text" id="basic-addon1"><button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button></span>
-                 </div>
-               </div>
-                 <ul *ngIf="searchResults" class="results">
-                   <li><p>{{searchResults.firstName}} {{searchResults.lastName}}</p><button class="btn btn-primary request_btn" id="request" (click)="requestFriend()" [disabled]="!notFriends">Add Friend</button></li>
-                 </ul>
-             </form>
-           </div>
-           <div class="modal-footer">
-             <button class="btn" data-dismiss="modal" aria-hidden="true">
-             Close</button>
-           </div>
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Add Friends</h2>
         </div>
-     </div>
+        <div class="modal-body">
+          <form class="example" [formGroup]="searchFriendsForm" (ngSubmit)="searchFriends()">
+            <div class="input-group mb-3">
+              <input type="text" formControlName="searchField" placeholder="Search by email..." name="search">
+              <div class="input-group-prepend">
+                <br>
+                <span class="input-group-text" id="basic-addon1"><button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button></span>
+              </div>
+            </div>
+            <ul *ngIf="searchResults" class="results">
+              <li>
+                <p>{{searchResults.firstName}} {{searchResults.lastName}}</p><button class="btn btn-primary request_btn" id="request" (click)="requestFriend()" [disabled]="!notFriends">Add Friend</button>
+              </li>
+            </ul>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button class="btn" data-dismiss="modal" aria-hidden="true">
+            Close</button>
+        </div>
+      </div>
+    </div>
   </div>
 
 

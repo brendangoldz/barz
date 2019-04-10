@@ -10,13 +10,16 @@
    width: 55vw !important;
    margin: 0 auto;
  }
+ .login_btn{
+   width: 32vw !important;
+ }
 }
 .login_form{
-  width: 33vw !important;
+  width: 33vw;
   margin: 25vh auto 0;
 }
 .signup_form{
- width: 33vw !important;
+ width: 33vw;
  margin: 0 auto;
 }
 .providers{
