@@ -1,17 +1,13 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
   <a class="navbar-brand" href="/#/main">BARZ</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse"
-                                  data-target="#navbarNav"
-                                  aria-controls="navbarNav"
-                                  aria-expanded="false"
-                                  aria-label="Toggle navigation">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav">
       <li class="nav-item active">
         <a class="nav-link" href="/#/main">Home <span class="sr-only">(current)
-        </span></a>
+          </span></a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="/#/friends">Friends<sup *ngIf="requests">{{requests}}</sup></a>
@@ -26,8 +22,7 @@
     </ul>
     <form>
       <li class="nav-item logout">
-        <button class="btn btn-outline-danger my-2 my-sm-0 logout" type="submit"
-                                    (click)="logout()">Logout</button>
+        <button class="btn btn-outline-danger my-2 my-sm-0 logout" type="submit" (click)="logout()">Logout</button>
       </li>
     </form>
 
@@ -44,47 +39,58 @@
                                             data-target="#exampleModalCenter">
   Launch demo modal
 </button>  -->
-        <h3 class="rest_name"> <a href="javscript:0;" data-toggle="modal"
-                                        role="button" data-target="#myModal" (click)="info(i)">
-                                        {{r.name}}<i class="fas fa-info-circle
-                                        fa-xs" ></i></a></h3>
-        <a href="javascript:0;" (click)="vote(i)" id="bar{{i}}">
-          <button class="btn btn-default vote">VOTE</button></a>
+      <h3 class="rest_name"> <a href="javscript:0;" data-toggle="modal" role="button" data-target="#myModal" (click)="info(i)">
+          {{r.name}}<i class="fas fa-info-circle
+                                        fa-xs"></i></a></h3>
+      <a href="javascript:0;" (click)="vote(i)" id="bar{{i}}">
+        <button class="btn btn-default vote">VOTE</button></a>
       <mat-progress-bar [mode]="mode" [color]="color" [value]="r.normalized">
       </mat-progress-bar>
-        <h5>{{r.votes}} | {{r.normalized}}</h5>
-        <hr>
-        <div id="myModal" class="modal fade" tabindex="-1" role="dialog"
-                            aria-labelledby="myModalLabel" aria-hidden="true" *ngIf="restaurant">
-          <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h3 id="myModalLabel">{{restaurant.name}}</h3>
-                <button type="button" class="close" data-dismiss="modal"
-                            aria-hidden="true">×</button>
-              </div>
-              <div class="modal-body">
-                <agm-map  [zoom]= "15" [latitude]="restaurant.coords.latitude" [longitude]="restaurant.coords.longitude">
-                  <agm-marker [latitude]="restaurant.coords.latitude" [longitude]="restaurant.coords.longitude"></agm-marker>
-                </agm-map>
-                <span><h5>SUNDAY:</h5>{{restaurant.hours[0]}}</span>
-                <span><h5>MONDAY:</h5>{{restaurant.hours[1]}}</span>
-                <span><h5>TUESDAY:</h5>{{restaurant.hours[2]}}</span>
-                <span><h5>WEDNESDAY:</h5>{{restaurant.hours[3]}}</span>
-                <span><h5>THURSDAY:</h5>{{restaurant.hours[4]}}</span>
-                <span><h5>FRIDAY:</h5>{{restaurant.hours[5]}}</span>
-                <span><h5>SATURDAY:</h5>{{restaurant.hours[6]}}</span>
-                <br>
-                <a href="{{restaurant.website}}">{{restaurant.website}}</a>
-              </div>
-              <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">
-                    Close</button>
-              </div>
+      <h5>{{r.votes}}</h5>
+      <hr>
+      <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" *ngIf="restaurant">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h3 id="myModalLabel">{{restaurant.name}}</h3>
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+              <agm-map [zoom]="15" [latitude]="restaurant.coords.latitude" [longitude]="restaurant.coords.longitude">
+                <agm-marker [latitude]="restaurant.coords.latitude" [longitude]="restaurant.coords.longitude"></agm-marker>
+              </agm-map>
+              <span>
+                <h5>SUNDAY:</h5>{{restaurant.hours[0]}}
+              </span>
+              <span>
+                <h5>MONDAY:</h5>{{restaurant.hours[1]}}
+              </span>
+              <span>
+                <h5>TUESDAY:</h5>{{restaurant.hours[2]}}
+              </span>
+              <span>
+                <h5>WEDNESDAY:</h5>{{restaurant.hours[3]}}
+              </span>
+              <span>
+                <h5>THURSDAY:</h5>{{restaurant.hours[4]}}
+              </span>
+              <span>
+                <h5>FRIDAY:</h5>{{restaurant.hours[5]}}
+              </span>
+              <span>
+                <h5>SATURDAY:</h5>{{restaurant.hours[6]}}
+              </span>
+              <br>
+              <a href="{{restaurant.website}}">{{restaurant.website}}</a>
+            </div>
+            <div class="modal-footer">
+              <button class="btn" data-dismiss="modal" aria-hidden="true">
+                Close</button>
             </div>
           </div>
+        </div>
       </div>
-  </li>
+    </li>
   </div>
 </div>
 <div id="map"></div>

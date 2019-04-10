@@ -1,34 +1,37 @@
-import { Injectable} from '@angular/core';
-import {Observable} from 'rxjs';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
 export class LocationService {
 
   constructor() { }
-
+  /**
+   * [getLocation description]
+   * @return [description]
+   */
   getLocation(): Observable<any> {
-    var options ={
+    var options = {
       enableHighAccuracy: true,
       maximumAge: 0,
       timeout: 10000
     }
-    function location(observer){
-      if(window.navigator && window.navigator.geolocation) {
-          window.navigator.geolocation.getCurrentPosition(
-              (position) => {
-                  console.log("Has Position", position)
-                  observer.next(position);
-                  observer.complete();
-              },
-              (error) => location(observer), options
-          );
+    function location(observer) {
+      if (window.navigator && window.navigator.geolocation) {
+        window.navigator.geolocation.getCurrentPosition(
+          (position) => {
+            console.log("Has Position", position)
+            observer.next(position);
+            observer.complete();
+          },
+          (error) => location(observer), options
+        );
       } else {
-          observer.error('Unsupported Browser');
+        observer.error('Unsupported Browser');
       }
     }
-      return Observable.create(observer => {
-          location(observer);
-      });
+    return Observable.create(observer => {
+      location(observer);
+    });
   }
 }

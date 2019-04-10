@@ -1,80 +1,80 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-    <a class="navbar-brand" href="#">BARZ</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link" href="/#/main">Home</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/#/friends">Friends <sup *ngIf="requests">{{requests}}</sup></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/#/profile">Profile</a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="/#/settings">Settings<span class="sr-only">(current)</span>
-				</a>
-            </li>
-        </ul>
-        <form>
-            <li class="nav-item logout">
-                <button class="btn btn-outline-danger my-2 my-sm-0" type="submit" (click)="logout()">Logout
-                </button>
-            </li>
-        </form>
-    </div>
+  <a class="navbar-brand" href="#">BARZ</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" href="/#/main">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/#/friends">Friends <sup *ngIf="requests">{{requests}}</sup></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/#/profile">Profile</a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="/#/settings">Settings<span class="sr-only">(current)</span>
+        </a>
+      </li>
+    </ul>
+    <form>
+      <li class="nav-item logout">
+        <button class="btn btn-outline-danger my-2 my-sm-0" type="submit" (click)="logout()">Logout
+        </button>
+      </li>
+    </form>
+  </div>
 </nav>
 <div class="col-md-8 container">
-    <div class="text">
-        <h1>Welcome to BARZ</h1>
-    </div>
-    <hr>
-    <div class="faq">
-        <h2> FAQs </h2>
-        <p>
-            Press the Vote button to attend bar.
-        </p>
-        <p>
-            Press <i class="fas fa-info-circle fa-xs"></i> icon next to bar to view information about that particular bar.
+  <div class="text">
+    <h1>Welcome to BARZ</h1>
+  </div>
+  <hr>
+  <div class="faq">
+    <h2> FAQs </h2>
+    <p>
+      Press the Vote button to attend bar.
+    </p>
+    <p>
+      Press <i class="fas fa-info-circle fa-xs"></i> icon next to bar to view information about that particular bar.
 
+    </p>
+  </div>
+  <hr>
+  <div class="user">
+    <div class="radius">
+      <h2>Bar Radius</h2>
+      <div class="slidecontainer">
+        <label for="range">Range: {{range}}</label>
+        <input type="range" class="custom-range" #radius [(ngModel)]="range" min="0" max="50" id="range" (change)="changeRadius(radius.value)">
+      </div>
+    </div>
+    <hr>
+    <a href="#privacy" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseExample">
+      <h2>Account Privacy</h2>
+    </a>
+    <div class="privacy collapse" id="privacy">
+      <div class="card card-body">
+        <p>We are the sole owners of the information collected on this site. We only have access to/collect information that you voluntarily give us via email or other direct contact from you. We will not sell or rent this information to anyone,
+          including user's name, address, etc.
         </p>
+        <p>We will use your information to respond to you, regarding the reason you contacted us. We will not share your information with any third party outside of our organization, other than as necessary to fulfill your request, e.g. to ship an
+          order.
+        </p>
+        <p>Unless you ask us not to, we may contact you via email in the future to tell you about specials, new products or services, or changes to this privacy policy.
+        </p>
+      </div>
     </div>
-    <hr>
-    <div class="user">
-        <div class="radius">
-            <h2>Bar Radius</h2>
-            <div class="slidecontainer">
-                <label for="range">Range: {{range}}</label>
-                <input type="range" class="custom-range" #radius [(ngModel)]="range" min="0" max="50" id="range" (change)="changeRadius(radius.value)">
-            </div>
-        </div>
-        <hr>
-        <a href="#privacy" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseExample">
-            <h2>Account Privacy</h2>
-        </a>
-        <div class="privacy collapse" id="privacy">
-            <div class="card card-body">
-                <p>We are the sole owners of the information collected on this site. We only have access to/collect information that you voluntarily give us via email or other direct contact from you. We will not sell or rent this information to anyone,
-                    including user's name, address, etc.
-                </p>
-                <p>We will use your information to respond to you, regarding the reason you contacted us. We will not share your information with any third party outside of our organization, other than as necessary to fulfill your request, e.g. to ship an
-                    order.
-                </p>
-                <p>Unless you ask us not to, we may contact you via email in the future to tell you about specials, new products or services, or changes to this privacy policy.
-                </p>
-            </div>
-        </div>
-    </div>
-    <hr>
-    <div class="terms">
-        <h2>
-            <a href="https://app.termly.io/document/terms-of-use-for-website/43c72a34-df8f-4c68-b097-e7938123607e">Terms of Use</a>
-        </h2>
-    </div>
-    <!-- <hr>
+  </div>
+  <hr>
+  <div class="terms">
+    <h2>
+      <a href="https://app.termly.io/document/terms-of-use-for-website/43c72a34-df8f-4c68-b097-e7938123607e">Terms of Use</a>
+    </h2>
+  </div>
+  <!-- <hr>
     <div class="deleteP col-md-10">
         <h2> Delete Profile </h2>
         <button type="button" class="btn btn-danger" onclick="alert('Account Deleted')">DELETE ACCOUNT
@@ -82,7 +82,7 @@
     </div> -->
 </div>
 <footer>
-    <div class=" footer col-mod-10">
-        <hr>Created by MULabz &copy; 2019
-    </div>
+  <div class=" footer col-mod-10">
+    <hr>Created by MULabz &copy; 2019
+  </div>
 </footer>

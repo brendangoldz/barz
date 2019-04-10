@@ -28,21 +28,22 @@
   </div>
 </nav>
 <div class="body container" *ngIf="userData">
-  <span class="edit"><i class="fas fa-edit" data-toggle="modal" role="button" data-target="#update_profile" (click)="populateForm()"></i> <!--data-toggle = "modal" role = "button" data-target ="#signup_info"-->
-</span>
+  <span class="edit"><i class="fas fa-edit" data-toggle="modal" role="button" data-target="#update_profile" (click)="populateForm()"></i>
+    <!--data-toggle = "modal" role = "button" data-target ="#signup_info"-->
+  </span>
   <div class="row">
     <div class="profile_pic">
       <img src='{{userData.photoURL}}' id="pro_pic" onerror="this.src = './assets/friend.png';">
-      </div>
     </div>
-    <div class="row">
+  </div>
+  <div class="row">
     <div class="col-md-12" *ngIf="userData">
       <h2 class="name">{{userData.firstName}} {{userData.lastName}}</h2>
       <hr>
       <p class="bio">{{userData.bio}}</p>
-      </div>
     </div>
-    <div class="row">
+  </div>
+  <div class="row">
     <div class="col-md-12">
       <h5 class="gender">Gender: <br>{{userData.gender}} </h5>
       <h5 class="occupation">Occupation:<br>{{userData.occupation}} </h5>
@@ -51,113 +52,113 @@
       <h5 class="relationship">Relationship Status: <br>{{userData.relationshipStatus}}</h5>
 
     </div>
-    </div>
+  </div>
 
-    <div id = "update_profile" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h2>Update Profile</h2>
-          </div>
-
-          <div class="modal-body">
-              <form  name="update" class="update_form" [formGroup]="updateForm" (ngSubmit)="updateData()">
-              <h5>Modify desired fields</h5>
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <br>
-                  <span class="input-group-text" id="basic-addon1"><i class="fas fa-image"></i></span>
-                </div>
-                <input type="file" id="profile_pic" class="form-control" accept="image/*" formControlName="profile_pic" aria-describedby="basic-addon1" >
-              </div>
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <br>
-                  <span class="input-group-text" id="basic-addon1"><i class="fas fa-address-card"></i></span>
-                </div>
-                <input type="text" id="bio" class="form-control" formControlName="bio" placeholder="Profile Bio" aria-describedby="basic-addon1" >
-              </div>
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <br>
-                  <span class="input-group-text" id="basic-addon1"><i class="fa fa-user"></i></span>
-                </div>
-                <input type="text" class="form-control" formControlName="firstName" placeholder="First Name" aria-label="First Name" aria-describedby="basic-addon1">
-              </div>
-
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <br>
-                  <span class="input-group-text" id="basic-addon1"><i class="fa fa-user"></i></span>
-                </div>
-                <input type="text" class="form-control" formControlName="lastName" placeholder="Last Name" aria-label="Last Name" aria-describedby="basic-addon1">
-              </div>
-
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-
-                  <br>
-                  <span class="input-group-text" id="basic-addon1"><i class="fa fa-calendar"></i></span>
-                </div>
-                <input type="date" class="form-control" formControlName="dob" placeholder="Date of Birth" aria-label="Date of Birth" aria-describedby="basic-addon1">
-              </div>
-
-              <div class="input-group mb-3 genders">
-                  <div class="input-group-prepend">
-                    <br>
-                    <span class="input-group-text" id="basic-addon1"><i class="fa fa-mars"></i></span>
-                  </div>
-                  <label for="male">Male
-                  <input type="radio" class="form-control checkbox" id="male checkbox-3-2" formControlName="gender" value = "male" aria-label="gender1" >
-                  </label>
-                  <label for="female">Female
-                  <input type="radio" class="form-control checkbox" id="female checkbox-3-2" formControlName="gender" value = "female" aria-label="gender2">
-                  </label>
-                  <label for="other">Other
-                  <input type="radio" class="form-control checkbox" id="other checkbox-3-2" formControlName="gender" value = "other" aria-label="gender3">
-                  </label>
-              </div>
-
-                <div class="input-group mb-3">
-                  <div class="input-group-prepend">
-
-                    <br>
-                    <span class="input-group-text" id="basic-addon1"><i class="fas fa-briefcase"></i></span>
-                  </div>
-                  <input type="text" class="form-control" formControlName="occupation" placeholder="Occupation" aria-label="Occupation" aria-describedby="basic-addon1">
-                </div>
-
-                <div class="input-group mb-3">
-                  <div class="input-group-prepend">
-
-                    <br>
-                    <span class="input-group-text" id="basic-addon1"><i class="fas fa-heart"></i></span>
-                  </div>
-                  <input type="text" class="form-control" formControlName="relationshipStatus" placeholder="Relationship Status" aria-label="Relationship Status" aria-describedby="basic-addon1">
-                </div>
-
-
-                <div class="input-group mb-3">
-                  <div class="input-group-prepend">
-
-                    <br>
-                    <span class="input-group-text" id="basic-addon1"><i class="fas fa-cocktail"></i></span>
-                  </div>
-                  <input type="text" class="form-control" formControlName="favDrink" placeholder="Favorite Drink" aria-label="Favorite Drink" aria-describedby="basic-addon1">
-                </div>
-
-    </form>
-          </div>
-
-          <div class="modal-footer">
-            <button class="btn" data-dismiss="modal" aria-hidden="true">
-                Close</button>
-                <button class="btn btn-danger" data-dismiss="modal"  aria-hidden="true" (click)="updateData()">
-                    Update</button>
-          </div>
-
+  <div id="update_profile" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Update Profile</h2>
         </div>
-      </div>
 
+        <div class="modal-body">
+          <form name="update" class="update_form" [formGroup]="updateForm" (ngSubmit)="updateData()">
+            <h5>Modify desired fields</h5>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <br>
+                <span class="input-group-text" id="basic-addon1"><i class="fas fa-image"></i></span>
+              </div>
+              <input type="file" id="profile_pic" class="form-control" accept="image/*" formControlName="profile_pic" aria-describedby="basic-addon1">
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <br>
+                <span class="input-group-text" id="basic-addon1"><i class="fas fa-address-card"></i></span>
+              </div>
+              <input type="text" id="bio" class="form-control" formControlName="bio" placeholder="Profile Bio" aria-describedby="basic-addon1">
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <br>
+                <span class="input-group-text" id="basic-addon1"><i class="fa fa-user"></i></span>
+              </div>
+              <input type="text" class="form-control" formControlName="firstName" placeholder="First Name" aria-label="First Name" aria-describedby="basic-addon1">
+            </div>
+
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <br>
+                <span class="input-group-text" id="basic-addon1"><i class="fa fa-user"></i></span>
+              </div>
+              <input type="text" class="form-control" formControlName="lastName" placeholder="Last Name" aria-label="Last Name" aria-describedby="basic-addon1">
+            </div>
+
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+
+                <br>
+                <span class="input-group-text" id="basic-addon1"><i class="fa fa-calendar"></i></span>
+              </div>
+              <input type="date" class="form-control" formControlName="dob" placeholder="Date of Birth" aria-label="Date of Birth" aria-describedby="basic-addon1">
+            </div>
+
+            <div class="input-group mb-3 genders">
+              <div class="input-group-prepend">
+                <br>
+                <span class="input-group-text" id="basic-addon1"><i class="fa fa-mars"></i></span>
+              </div>
+              <label for="male">Male
+                <input type="radio" class="form-control checkbox" id="male checkbox-3-2" formControlName="gender" value="male" aria-label="gender1">
+              </label>
+              <label for="female">Female
+                <input type="radio" class="form-control checkbox" id="female checkbox-3-2" formControlName="gender" value="female" aria-label="gender2">
+              </label>
+              <label for="other">Other
+                <input type="radio" class="form-control checkbox" id="other checkbox-3-2" formControlName="gender" value="other" aria-label="gender3">
+              </label>
+            </div>
+
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+
+                <br>
+                <span class="input-group-text" id="basic-addon1"><i class="fas fa-briefcase"></i></span>
+              </div>
+              <input type="text" class="form-control" formControlName="occupation" placeholder="Occupation" aria-label="Occupation" aria-describedby="basic-addon1">
+            </div>
+
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+
+                <br>
+                <span class="input-group-text" id="basic-addon1"><i class="fas fa-heart"></i></span>
+              </div>
+              <input type="text" class="form-control" formControlName="relationshipStatus" placeholder="Relationship Status" aria-label="Relationship Status" aria-describedby="basic-addon1">
+            </div>
+
+
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+
+                <br>
+                <span class="input-group-text" id="basic-addon1"><i class="fas fa-cocktail"></i></span>
+              </div>
+              <input type="text" class="form-control" formControlName="favDrink" placeholder="Favorite Drink" aria-label="Favorite Drink" aria-describedby="basic-addon1">
+            </div>
+
+          </form>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn" data-dismiss="modal" aria-hidden="true">
+            Close</button>
+          <button class="btn btn-danger" data-dismiss="modal" aria-hidden="true" (click)="updateData()">
+            Update</button>
+        </div>
+
+      </div>
     </div>
+
+  </div>
 </div>

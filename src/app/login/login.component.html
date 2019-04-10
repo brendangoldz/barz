@@ -1,93 +1,93 @@
 <div class="login col-md-12" *ngIf="!new">
 
-<form name="login" class="login_form" [formGroup]="loginForm" (ngSubmit)="login()">
-<div class="input-group mb-3">
-   <div class="input-group-prepend">
-      <span class="input-group-text" id="basic-addon1"><i class="fas fa-envelope"></i></span>
-   </div>
-   <input type="email" class="form-control" placeholder="Email" formControlName="email" aria-label="Username" aria-describedby="basic-addon1" required>
-</div>
-<div class="input-group mb-3">
-   <div class="input-group-prepend">
-      <span class="input-group-text" id="basic-addon2"><i class="fas fa-lock"></i></span>
-   </div>
-   <input type="password" class="form-control" formControlName="password" placeholder="Password" aria-label="Password" aria-describedby="basic-addon2">
-</div>
+  <form name="login" class="login_form" [formGroup]="loginForm" (ngSubmit)="login()">
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="basic-addon1"><i class="fas fa-envelope"></i></span>
+      </div>
+      <input type="email" class="form-control" placeholder="Email" formControlName="email" aria-label="Username" aria-describedby="basic-addon1" required>
+    </div>
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="basic-addon2"><i class="fas fa-lock"></i></span>
+      </div>
+      <input type="password" class="form-control" formControlName="password" placeholder="Password" aria-label="Password" aria-describedby="basic-addon2">
+    </div>
 
-<input type="submit" class="btn btn-danger login_btn" value="Login">
-<br>
-<div class="strike">
-   <span>OR</span>
-</div>
-<a href="#signup_form" class="signup_anchor" data-toggle="modal" role="button" data-target="#signup_info"><button class='btn btn-default create_btn'>Click here to Create Account</button></a>
-<br>
-<a href="#forgot_anchor" class="forgot_anchor" data-toggle="modal" role="button" data-target="#enter_email">Forgot password? Click here.</a>
+    <input type="submit" class="btn btn-danger login_btn" value="Login">
+    <br>
+    <div class="strike">
+      <span>OR</span>
+    </div>
+    <a href="#signup_form" class="signup_anchor" data-toggle="modal" role="button" data-target="#signup_info"><button class='btn btn-default create_btn'>Click here to Create Account</button></a>
+    <br>
+    <a href="#forgot_anchor" class="forgot_anchor" data-toggle="modal" role="button" data-target="#enter_email">Forgot password? Click here.</a>
 
-</form>
-   <div id="enter_email" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-         <div class="modal-content">
-            <div class="modal-header">
-               <h2>Password Recovery</h2>
+  </form>
+  <div id="enter_email" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Password Recovery</h2>
+        </div>
+        <div class="modal-body">
+          <h5>Please enter your email below. You will be sent a password reset link.</h5>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <br>
+              <span class="input-group-text" id="basic-addon1"><i class="fas fa-envelope"></i></span>
             </div>
-            <div class="modal-body">
-               <h5>Please enter your email below. You will be sent a password reset link.</h5>
-               <div class="input-group mb-3">
-                  <div class="input-group-prepend">
-                     <br>
-                     <span class="input-group-text" id="basic-addon1"><i class="fas fa-envelope"></i></span>
-                  </div>
-                  <input type="email" class="form-control" placeholder="Email" aria-label="Username" aria-describedby="basic-addon1" required [(ngModel)]="forgottenEmail">
-               </div>
-            </div>
-            <div class="modal-footer">
-               <button class="btn" data-dismiss="modal" aria-hidden="true">
-               Close</button>
-               <button class="btn btn-danger" data-dismiss="modal" aria-hidden="true" (click)="forgotPassword()">
-               Submit</button>
-             </div>
+            <input type="email" class="form-control" placeholder="Email" aria-label="Username" aria-describedby="basic-addon1" required [(ngModel)]="forgottenEmail">
           </div>
         </div>
-  </div>
-   <div id="signup_info" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-         <div class="modal-content">
-            <div class="modal-header">
-               <h2>Sign up</h2>
-            </div>
-            <div class="modal-body">
-               <form name="signup" class="signup_form" [formGroup]="signupForm">
-               <div class="input-group mb-3">
-                  <div class="input-group-prepend">
-                     <span class="input-group-text" id="basic-addon1"><i class="fas fa-envelope"></i></span>
-                  </div>
-                  <input type="email" class="form-control" formControlName="email" placeholder="Email" aria-label="Email" aria-describedby="basic-addon1">
-               </div>
-               <div class="input-group mb-3">
-                  <div class="input-group-prepend">
-                     <span class="input-group-text" id="basic-addon2"><i class="fas fa-lock"></i></span>
-                  </div>
-                  <input type="password" class="form-control" formControlName="password" placeholder="Password" aria-label="Password" aria-describedby="basic-addon2">
-               </div>
-               <div class="input-group mb-3">
-                  <div class="input-group-prepend">
-                     <span class="input-group-text" id="basic-addon3"><i class="fas fa-lock"></i></span>
-                  </div>
-                  <input type="password" class="form-control" formControlName="confirmPassword" placeholder="Confirm Password" aria-label="Password" aria-describedby="basic-addon3">
-               </div>
-               <div class="input-group mb-3">
-                 <input type="checkbox" id="tos" class="tos form-control" formControlName="tos">
-                 <label for="tos" class="tos-label">By checking this box I agree to the <a href="https://app.termly.io/document/terms-of-use-for-website/43c72a34-df8f-4c68-b097-e7938123607e">Terms of Use</a> and <a href="pp">Privacy Policy</a></label>
-               </div>
-
-               <br>
-               </form>
-            </div>
-
-            <div class="modal-footer">
-               <input type="submit" class="btn btn-danger" value="Sign Up" (click)="signup()">
-            </div>
-         </div>
+        <div class="modal-footer">
+          <button class="btn" data-dismiss="modal" aria-hidden="true">
+            Close</button>
+          <button class="btn btn-danger" data-dismiss="modal" aria-hidden="true" (click)="forgotPassword()">
+            Submit</button>
+        </div>
       </div>
-   </div>
-   </div>
+    </div>
+  </div>
+  <div id="signup_info" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Sign up</h2>
+        </div>
+        <div class="modal-body">
+          <form name="signup" class="signup_form" [formGroup]="signupForm">
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1"><i class="fas fa-envelope"></i></span>
+              </div>
+              <input type="email" class="form-control" formControlName="email" placeholder="Email" aria-label="Email" aria-describedby="basic-addon1">
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon2"><i class="fas fa-lock"></i></span>
+              </div>
+              <input type="password" class="form-control" formControlName="password" placeholder="Password" aria-label="Password" aria-describedby="basic-addon2">
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon3"><i class="fas fa-lock"></i></span>
+              </div>
+              <input type="password" class="form-control" formControlName="confirmPassword" placeholder="Confirm Password" aria-label="Password" aria-describedby="basic-addon3">
+            </div>
+            <div class="input-group mb-3">
+              <input type="checkbox" id="tos" class="tos form-control" formControlName="tos">
+              <label for="tos" class="tos-label">By checking this box I agree to the <a href="https://app.termly.io/document/terms-of-use-for-website/43c72a34-df8f-4c68-b097-e7938123607e">Terms of Use</a> and <a href="pp">Privacy Policy</a></label>
+            </div>
+
+            <br>
+          </form>
+        </div>
+
+        <div class="modal-footer">
+          <input type="submit" class="btn btn-danger" value="Sign Up" (click)="signup()">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
