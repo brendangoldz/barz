@@ -1,11 +1,10 @@
-
-@media (max-width: 900px) {
+@media only screen and (max-width: 600px) {
   .clear{
     background: #f8f9fa;
     color: black;
     position: fixed;
-    top: 10vh;
-  width: 50vw;
+    top: 10vh !important;
+  width: 50vw !important;
     z-index: 999;
     border: 0;
   }

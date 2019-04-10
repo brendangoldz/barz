@@ -100,7 +100,7 @@ export class MainComponent implements OnInit {
      * @return        [description]
      */
     var doc = db.collection("bars").onSnapshot((snap) => {
-      // this.loaded = false
+      this.loaded = false
       if (that.sub2) that.sub2.unsubscribe();
 
       console.log("On Snapshot", snap)
@@ -118,7 +118,7 @@ export class MainComponent implements OnInit {
           that.location = new google.maps.LatLng(this.currentLat, this.currentLong);
           setTimeout(() => {
             var temp = [];
-            var circleRadius = that.user.radius * 1609.344 || 10 * 1609.344;
+            var circleRadius = this.user.radius * 1609.344 || 10 * 1609.344;
             var temp = that.restaurants.filter((val) => {
               var circle = new google.maps.Circle({
                 clickable: false,

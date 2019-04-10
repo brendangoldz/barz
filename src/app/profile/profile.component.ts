@@ -46,6 +46,7 @@ updateForm = new FormGroup({
    * @param  user=>{if(user [description]
    * @return                [description]
    */
+
   this.sub = this.af.authState.subscribe(user => {
         if (user) {
           if(!user.emailVerified){
@@ -72,16 +73,7 @@ updateForm = new FormGroup({
           this.logout();
         }
    });
-  const inputElement = (<HTMLInputElement>document.getElementById('profile_pic'));
-  if(inputElement){
-    inputElement.addEventListener("change", function(files){
-        that.fileList = this.files; /* now you can work with the file list */
-        // that.uploadPicture(fileList[0])
-      }, false);
-      this.int = setInterval(()=>{
-        this.cd.detectChanges();
-      }, 1000)
-  }
+
   }
   ngOnDestroy(){
     this.sub.unsubscribe();
@@ -104,9 +96,9 @@ updateForm = new FormGroup({
    */
   updateData = function(){
     var us = this.userData.uid || firebase.auth().currentUser['uid'];
-
+    // console.log("Updating Profile w/ File list ", this.fileList)
     if(this.fileList[0] != undefined){
-      var pic_name = "profile."+(this.fileList[0].type).toString().split('/')[1]
+    var pic_name = "profile."+(this.fileList[0].type).toString().split('/')[1]
     var that = this;
     console.log(pic_name)
     console.log("Uploading Picture ", pic_name, " for user ", us);
@@ -119,16 +111,17 @@ updateForm = new FormGroup({
         console.log("Updating user", us);
         db.collection("users").doc(us).set({
           uid: us,
-          firstName: this.updateForm.value.firstName,
-          lastName: this.updateForm.value.lastName,
-          gender: this.updateForm.value.gender,
-          dob: this.updateForm.value.dob,
-          occupation:this.updateForm.value.occupation,
-          relationshipStatus: this.updateForm.value.relationshipStatus,
-          favDrink: this.updateForm.value.favDrink,
-          photoURL: that.pictureUrl,
-          bio: this.updateForm.value.bio
+          firstName: this.updateForm.value.firstName || "",
+          lastName: this.updateForm.value.lastName || "",
+          gender: this.updateForm.value.gender || "",
+          dob: this.updateForm.value.dob || "",
+          occupation:this.updateForm.value.occupation || "",
+          relationshipStatus: this.updateForm.value.relationshipStatus || "",
+          favDrink: this.updateForm.value.favDrink || "",
+          bio: this.updateForm.value.bio || "",
+          photoURL: that.pictureUrl
         }, {merge:true}).then(function(docRef) {
+          that.getProfileData();
             console.log("Document written with ID: ", docRef);
         })
         .catch(function(error) {
@@ -150,13 +143,14 @@ updateForm = new FormGroup({
         favDrink: this.updateForm.value.favDrink || "",
         bio: this.updateForm.value.bio || ""
       }, {merge:true}).then(function(docRef) {
+        that.getProfileData();
           console.log("Document written with ID: ", docRef);
       })
       .catch(function(error) {
           console.error("Error adding document: ", error);
       });
     }
-    this.getProfileData();
+
   }
 
   /**
@@ -187,6 +181,7 @@ updateForm = new FormGroup({
    * @return [description]
    */
   populateForm = function(){
+    var that = this;
       if(this.userData){
         this.updateForm.patchValue({firstName: this.userData['firstName']})
         this.updateForm.patchValue({lastName: this.userData['lastName']})
@@ -197,5 +192,12 @@ updateForm = new FormGroup({
         this.updateForm.patchValue({relationshipStatus: this.userData['relationshipStatus']})
         this.updateForm.patchValue({gender: this.userData['gender']})
       }
+    const inputElement = (<HTMLInputElement>document.getElementById('profile_pic'));
+    inputElement.addEventListener("change", function(){
+        that.fileList = this.files; /* now you can work with the file list */
+        console.log("Files in change ", this.files)
+        // that.uploadPicture(fileList[0])
+      }, false);
+
   }
 }
