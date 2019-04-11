@@ -259,6 +259,7 @@ export class FriendsComponent implements OnInit {
     var that = this;
     this.reqs = [];
     this.requests = 0;
+    this.friends = [];
     var db = firebase.firestore();
     var docRef = db.collection("users").doc(this.user.uid);
     docRef.get().then(function(doc) {
