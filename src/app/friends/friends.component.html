@@ -81,7 +81,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <div class="profile_pic col-md-12">
-            <img src='{{currentFriend.photoURL}}' onerror="this.src = './assets/friend.png';">
+            <img class="rounded-circle img-fluid" src='{{currentFriend.photoURL}}' onerror="this.src = './assets/friend.png';">
             <h2 class="name" id="friend{{i}}_mod_name">{{currentFriend.firstName}} {{currentFriend.lastName}}</h2>
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
           </div>

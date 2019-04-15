@@ -14,7 +14,7 @@ export class LocationService {
     var options = {
       enableHighAccuracy: true,
       maximumAge: 0,
-      timeout: 10000
+      timeout: 2000
     }
     function location(observer) {
       if (window.navigator && window.navigator.geolocation) {
