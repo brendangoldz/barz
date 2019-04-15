@@ -68,15 +68,18 @@
   </h2>
 
   <button class="btn btn-default add" type="submit" name="addFriends" data-toggle="modal" data-target="#add_friends">Add Friend</button>
-  <ul class="col-md-12 friend_list">
-    <li class="list-inline-item friend_item" *ngFor="let f of friends; let i = index">
-      <a data-toggle="modal" role="button" data-target="#friend_modal" (click)="getCurrentFriend(i)"><img class="profile_pic" src='{{f.photoURL}}' onerror="this.src = './assets/friend.png';"></a>
-      <h4>{{f.firstName}} {{f.lastName}} </h4>
-      <span><i class="fa fa-comments fa-lg" aria-hidden="true"></i><i class="fa fa-times fa-lg" aria-hidden="true"></i>
-      </span>
-    </li>
-    <!--FRIEND ONE PROFILE VIEW MODAL-->
-  </ul>
+  <div class="table">
+    <ul class="col-md-12 friend_list">
+      <li class="list-inline-item friend_item" *ngFor="let f of friends; let i = index">
+        <a data-toggle="modal" role="button" data-target="#friend_modal" (click)="getCurrentFriend(i)"><img class="profile_pic" src='{{f.photoURL}}' onerror="this.src = './assets/friend.png';"></a>
+        <h4>{{f.firstName}} {{f.lastName}} </h4>
+        <span><i class="fa fa-comments fa-lg" aria-hidden="true"></i><i class="fa fa-times fa-lg" aria-hidden="true"></i>
+        </span>
+      </li>
+      <!--FRIEND ONE PROFILE VIEW MODAL-->
+    </ul>
+    </div>
+
   <div id="friend_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" *ngIf="currentFriend">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
@@ -116,8 +119,10 @@
                 <img class="profile_pic" src='{{searchResults.photoURL}}' onerror="this.src = './assets/friend.png';">
                 <h2 class="name">{{searchResults.firstName}} {{searchResults.lastName}}</h2>
                 <p class="bio">{{searchResults.bio}}</p>
-                <button class="btn btn-danger request_btn" id="request" (click)="requestFriend()" [disabled]="!isNotFriends" *ngIf="isNotRequested">Add Friend</button>
-                <button class="btn btn-danger request_btn" id="request" (click)="confirmRequest()" [disabled]="!isNotFriends" *ngIf="!isNotRequested">Confirm Request</button>
+                <button class="btn btn-danger request_btn" id="request" (click)="requestFriend()" [disabled]="!isNotFriends" *ngIf="isNotFriends && isNotRequested && isNotSent">Add Friend</button>
+                <button class="btn btn-danger request_btn" id="request" (click)="confirmRequest()" [disabled]="!isNotFriends" *ngIf="isNotFriends && isNotSent && !isNotRequested">Confirm Request</button>
+                <button class="btn btn-danger request_btn" id="request" [disabled]="!isNotFriends" *ngIf="!isNotFriends && isNotRequested && isNotSent">Already Friends</button>
+                <button class="btn btn-danger request_btn" id="request" [disabled]="true" *ngIf="isNotFriends && isNotRequested && !isNotSent">Request Sent</button>
 
               </li>
             </ul>

@@ -32,6 +32,7 @@ export class FriendsComponent implements OnInit {
   currentFriend: any;
   isNotFriends: boolean = true;
   isNotRequested: boolean = true;
+  isNotSent: boolean = true;
   @ViewChild('messagecontainer', { read: ViewContainerRef }) entry: ViewContainerRef;
 
 
@@ -154,7 +155,6 @@ export class FriendsComponent implements OnInit {
               })
             }
             if(that.reqs){
-              console.log("Checking if user already requested you")
               for(let i =0; i<that.reqs.length;i++){
                 console.log("Request Query loop", that.reqs[i])
                 if (that.searchResults.uid == that.reqs[i].uid) {
@@ -167,7 +167,17 @@ export class FriendsComponent implements OnInit {
                 }
               }
             }
-
+            for(let i =0; i<doc.data().requests.length;i++){
+              console.log("Looping through Query Requests", doc.data().requests[i], " Current ID ", us)
+              if(doc.data().requests[i] === us){
+                console.log("Results already has a request from you!");
+                that.isNotSent = false;
+                let request = document.getElementById("request");
+                console.log("Request Button ", request)
+                // $('#request').attr('disabled', 'disabled');
+                // $('#request').html('Request Sent');
+              }
+            }
 
 
           }
@@ -183,17 +193,18 @@ export class FriendsComponent implements OnInit {
    */
   requestFriend = function() {
     $(event.target).attr("disabled", "disabled");
+    $(event.target).html('Request Sent');
     var db = firebase.firestore();
     var requestor = db.collection("users").doc(this.user.uid);
     var requestee = db.collection("users").doc(this.searchResults.uid);
     //
-    if (this.user.uid != this.searchResults.uid && !this.notRequested) {
+    if (this.user.uid != this.searchResults.uid && this.isNotRequested && this.isNotSent) {
       requestee.set({
         requests: [this.user.uid]
       }, { merge: true }).then(() => console.log("Assigned Pending Request in Requestee"));
     }
-    else if(this.notRequested){
-
+    else if(!this.isNotSent){
+      console.log("User Already Has A Request From You")
       // requestee.set({
       //   requests: [this.user.uid]
       // }, { merge: true }).then(() => console.log("Assigned Pending Request in Requestee"));

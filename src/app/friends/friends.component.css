@@ -79,6 +79,7 @@
   text-align: center;
 }
 .friend_item{
+  color: white;
   display:inline-block;
   width: fit-content;
   max-width: 38vw;
