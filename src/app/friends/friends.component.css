@@ -20,7 +20,7 @@
 
  .profile_pic{
    width: 5vw;
-   height: 10vh;
+   max-height: 15vh;
    background-color: white;
    border-top-left-radius: 50% 50%;
    border-top-right-radius: 50% 50%;
@@ -46,5 +46,9 @@
 }
 .request_list{
   display: inline-block;
-
+}
+.friend_item{
+    display:inline-block !important;
+    vertical-align: top;
+    width: 50%;
 }

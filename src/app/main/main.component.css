@@ -76,6 +76,7 @@ agm-map {
   position: absolute;
   top: 45vh;
   width: 100%;
+  overflow: visible;
   height: 25%;
-  background: url("../../assets/loader1.gif") center no-repeat;
+  background: url("../../assets/loader.gif") center no-repeat;
 }

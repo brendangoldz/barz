@@ -67,9 +67,9 @@
   </h2>
 
   <button class="btn btn-primary" type="submit" name="addFriends" data-toggle="modal" data-target="#add_friends">Add Friends</button>
-  <ul class="col-md-12" *ngFor="let f of friends; let i = index">
-    <li>
-      <a data-toggle="modal" role="button" data-target="#friend_modal" (click)="getCurrentFriend(i)"><img src='{{f.photoURL}}' onerror="this.src = './assets/friend.png';"></a>
+  <ul class="col-md-12">
+    <li class="list-inline-item" *ngFor="let f of friends; let i = index">
+      <a data-toggle="modal" role="button" data-target="#friend_modal" (click)="getCurrentFriend(i)"><img class="img-fluid profile_pic" src='{{f.photoURL}}' onerror="this.src = './assets/friend.png';"></a>
       <h4>{{f.displayName}}</h4>
       <span><i class="fa fa-comments fa-lg" aria-hidden="true"></i><i class="fa fa-times fa-lg" aria-hidden="true"></i>
       </span>
@@ -81,7 +81,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <div class="profile_pic col-md-12">
-            <img class="rounded-circle img-fluid" src='{{currentFriend.photoURL}}' onerror="this.src = './assets/friend.png';">
+            <img class="profile_pic" src='{{currentFriend.photoURL}}' onerror="this.src = './assets/friend.png';">
             <h2 class="name" id="friend{{i}}_mod_name">{{currentFriend.firstName}} {{currentFriend.lastName}}</h2>
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
           </div>
