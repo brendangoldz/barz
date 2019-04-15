@@ -25,8 +25,8 @@ export class LoginComponent implements OnInit {
 
 
   signupForm = new FormGroup({
-    firstName: new FormControl(),
-    lastName: new FormControl(),
+    firstName: new FormControl(''),
+    lastName: new FormControl(''),
     email: new FormControl(''),
     password: new FormControl(''),
     confirmPassword: new FormControl(''),
@@ -98,9 +98,10 @@ export class LoginComponent implements OnInit {
    * @return [description]
    */
   signup = function() {
-    console.log(this.signupForm);
     if (this.signupForm.value.password === this.signupForm.value.confirmPassword && this.signupForm.value.tos != false) {
-      this.auth.SignUp(this.signupForm.value.email, this.signupForm.value.password);
+      // console.log(this.signupForm.value.firstName, this.signupForm.value.lastName);
+
+      this.auth.SignUp(this.signupForm.value.firstName, this.signupForm.value.lastName, this.signupForm.value.email, this.signupForm.value.password);
     }
     else {
       window.alert('Passwords do not match or you have not accepted the ToS');

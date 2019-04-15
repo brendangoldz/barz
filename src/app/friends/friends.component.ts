@@ -30,7 +30,8 @@ export class FriendsComponent implements OnInit {
   requests: any = 0;
   currentRequest: any;
   currentFriend: any;
-  notFriends: boolean = true;
+  isNotFriends: boolean = true;
+  isNotRequested: boolean = true;
   @ViewChild('messagecontainer', { read: ViewContainerRef }) entry: ViewContainerRef;
 
 
@@ -133,25 +134,41 @@ export class FriendsComponent implements OnInit {
     var that = this;
     var db = firebase.firestore();
     var us = firebase.auth().currentUser['uid'];
-
+    searchText = searchText.toString().toLowerCase();
+    console.log("Search Query", searchText);
     db.collection("users").where("email", "==", searchText).get()
       .then(function(querySnapshot) {
         querySnapshot.forEach(function(doc) {
           // doc.data() is never undefined for query doc snapshots
 
           if (doc.exists) {
-            // console.log(doc.data())
+            console.log(doc.data())
             that.searchResults = doc.data();
-            that.friends.forEach((x) => {
-              console.log("Friends Query Loop ", x, " search results id ", that.searchResults.uid);
-              if (that.searchResults.uid == x.uid) {
-                console.log("Results contains a users friend");
-                that.notFriends = false;
+            if(that.friends){
+              that.friends.forEach((x) => {
+                console.log("Friends Query Loop ", x, " search results id ", that.searchResults.uid);
+                if (that.searchResults.uid == x.uid) {
+                  console.log("Results contains a users friend");
+                  that.isNotFriends = false;
+                }
+              })
+            }
+            if(that.reqs){
+              console.log("Checking if user already requested you")
+              for(let i =0; i<that.reqs.length;i++){
+                console.log("Request Query loop", that.reqs[i])
+                if (that.searchResults.uid == that.reqs[i].uid) {
+                  console.log("Results contains a requestor");
+                  // let request = <HTMLButtonElement>document.querySelector("#request");
+                  that.isNotRequested = false;
+
+                  // if(request)request.innerHTML = "Confirm Request";
+                  // else console.log(request)
+                }
               }
-              else {
-                that.notFriends = true;
-              }
-            })
+            }
+
+
 
           }
         });
@@ -165,13 +182,21 @@ export class FriendsComponent implements OnInit {
    * @return [description]
    */
   requestFriend = function() {
+    $(event.target).attr("disabled", "disabled");
     var db = firebase.firestore();
     var requestor = db.collection("users").doc(this.user.uid);
     var requestee = db.collection("users").doc(this.searchResults.uid);
-    if (this.user.uid != this.searchResults.uid) {
+    //
+    if (this.user.uid != this.searchResults.uid && !this.notRequested) {
       requestee.set({
         requests: [this.user.uid]
       }, { merge: true }).then(() => console.log("Assigned Pending Request in Requestee"));
+    }
+    else if(this.notRequested){
+
+      // requestee.set({
+      //   requests: [this.user.uid]
+      // }, { merge: true }).then(() => console.log("Assigned Pending Request in Requestee"));
     }
     else {
       $('.request_btn').attr('disabled', 'disabled');
@@ -184,19 +209,28 @@ export class FriendsComponent implements OnInit {
    * @return   [description]
    */
   confirmRequest = function(i) {
-    var that = this;
-    var db = firebase.firestore();
-    var uid = this.user.uid;
-    var user = db.collection("users").doc(uid);
-    var friend_id;
+    $(event.target).attr("disabled", "disabled");
+    $(event.target).html("Confirmed");
+    const that = this;
+    const db = firebase.firestore();
+    const uid = this.user.uid;
+    const user = db.collection("users").doc(uid);
+    let friend_id;
     let reqs = [];
     let friends = [];
     user.get().then((val) => {
       reqs = val.data().requests
       console.log(reqs)
       friends = val.data().friends;
-      friend_id = reqs[i];
-      friends.push(reqs[i]);
+      if(!that.isNotRequested){
+        friend_id = that.searchResults.uid;
+        friends.push(that.searchResults.uid)
+      }
+      else{
+        friend_id = reqs[i];
+        friends.push(reqs[i]);
+      }
+
       console.log("Friends array of current user", friends)
       reqs.splice(i, 1);
       that.reqs = reqs;
@@ -227,6 +261,7 @@ export class FriendsComponent implements OnInit {
 
 
   }
+
   /**
    * [function description]
    * @param  i [description]

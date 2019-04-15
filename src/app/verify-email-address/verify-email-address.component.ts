@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import {AuthService} from '../../assets/auth.service';
 import {AngularFireAuth} from '@angular/fire/auth';
 import * as firebase from 'firebase';
@@ -21,21 +21,13 @@ export class VerifyEmailAddressComponent implements OnInit {
             if(user.emailVerified){
               this.router.navigate(['main']);
             }
-            var docRef = db.collection("users").doc(user.uid);
-            docRef.get().then(function(doc) {
-                if (doc.exists) {
-                    if(doc.data().uid == user.uid) that.user= doc.data();
-                      console.log("Document data:", doc.data());
-                      //console.log("Document data dob:",that.userData);
-                  } else {
-                      // doc.data() will be undefined in this case
-                      console.log("No such document!");
-                  }
-            }).catch((e)=>console.log(e))
           } else {
             this.logout();
           }
      });
+  }
+  ngOnDestroy(){
+    this.sub.unsubscribe();
   }
   logout = function(){
     window.localStorage.clear();

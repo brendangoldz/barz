@@ -7,6 +7,9 @@
     width: 85% !important;
     box-shadow: 1px 5px 1px 3px rgba(10, 10, 10, .2);
   }
+  .body img{
+    width: 30vw !important;
+  }
 }
 .body{
   margin-top: 15vh;
@@ -19,13 +22,14 @@
 }
 
  .body img{
-  max-height: 15vh;
-  background-color: white;
-  border-top-left-radius: 50% 50%;
-  border-top-right-radius: 50% 50%;
-  border-bottom-right-radius: 50% 50%;
-  border-bottom-left-radius: 50% 50%;
-  vertical-align: middle;
+   width: 8vw;
+   max-height: 15vh;
+   background-color: white;
+   border-top-left-radius: 50% 50% !important;
+   border-top-right-radius: 50% 50% !important;
+   border-bottom-right-radius: 50% 50% !important;
+   border-bottom-left-radius: 50% 50% !important;
+   vertical-align: middle;
 }
 
 .bio{

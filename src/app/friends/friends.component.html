@@ -35,7 +35,7 @@
   <div class="requests" *ngFor='let r of reqs; let i = index'>
     <ul class="col-md-12" *ngIf='r'>
       <li class="request_list">
-        <a data-toggle="modal" role="button" data-target="#request_modal" (click)="getCurrentFriend(i)"><img src='{{r.photoURL}}' onerror="this.src = './assets/friend.png';"></a>
+        <a data-toggle="modal" role="button" data-target="#request_modal" (click)="getCurrentFriend(i)"><img class="profile_pic" src='{{r.photoURL}}' onerror="this.src = './assets/friend.png';"></a>
         <h4>{{r.firstName}} {{r.lastName}}</h4>
         <span><i class="fas fa-check fa-lg" (click)="confirmRequest(i)"></i><i class="fa fa-times fa-lg" aria-hidden="true" (click)="declineRequest(i)"></i>
         </span>
@@ -67,9 +67,9 @@
     <hr>
   </h2>
 
-  <button class="btn btn-primary" type="submit" name="addFriends" data-toggle="modal" data-target="#add_friends">Add Friends</button>
-  <ul class="col-md-12">
-    <li class="list-inline-item" *ngFor="let f of friends; let i = index">
+  <button class="btn btn-default add" type="submit" name="addFriends" data-toggle="modal" data-target="#add_friends">Add Friend</button>
+  <ul class="col-md-12 friend_list">
+    <li class="list-inline-item friend_item" *ngFor="let f of friends; let i = index">
       <a data-toggle="modal" role="button" data-target="#friend_modal" (click)="getCurrentFriend(i)"><img class="profile_pic" src='{{f.photoURL}}' onerror="this.src = './assets/friend.png';"></a>
       <h4>{{f.firstName}} {{f.lastName}} </h4>
       <span><i class="fa fa-comments fa-lg" aria-hidden="true"></i><i class="fa fa-times fa-lg" aria-hidden="true"></i>
@@ -104,16 +104,21 @@
         </div>
         <div class="modal-body">
           <form class="example" [formGroup]="searchFriendsForm" (ngSubmit)="searchFriends()">
-            <div class="input-group mb-3">
-              <input type="text" formControlName="searchField" placeholder="Search by email..." name="search">
+            <div class="input-group mb-3 search_group">
+              <input type="text" class="search_input" formControlName="searchField" placeholder="Search by email..." name="search">
               <div class="input-group-prepend">
                 <br>
-                <span class="input-group-text" id="basic-addon1"><button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button></span>
+                <span class="input-group-text search" id="basic-addon1"><button class="btn btn-primary search" type="submit"><i class="fa fa-search"></i></button></span>
               </div>
             </div>
             <ul *ngIf="searchResults" class="results">
               <li>
-                <p>{{searchResults.firstName}} {{searchResults.lastName}}</p><button class="btn btn-primary request_btn" id="request" (click)="requestFriend()" [disabled]="!notFriends">Add Friend</button>
+                <img class="profile_pic" src='{{searchResults.photoURL}}' onerror="this.src = './assets/friend.png';">
+                <h2 class="name">{{searchResults.firstName}} {{searchResults.lastName}}</h2>
+                <p class="bio">{{searchResults.bio}}</p>
+                <button class="btn btn-danger request_btn" id="request" (click)="requestFriend()" [disabled]="!isNotFriends" *ngIf="isNotRequested">Add Friend</button>
+                <button class="btn btn-danger request_btn" id="request" (click)="confirmRequest()" [disabled]="!isNotFriends" *ngIf="!isNotRequested">Confirm Request</button>
+
               </li>
             </ul>
           </form>

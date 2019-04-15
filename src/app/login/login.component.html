@@ -59,6 +59,21 @@
           <form name="signup" class="signup_form" [formGroup]="signupForm">
             <div class="input-group mb-3">
               <div class="input-group-prepend">
+                <br>
+                <span class="input-group-text" id="basic-addon1"><i class="fa fa-user"></i></span>
+              </div>
+              <input type="text" class="form-control" formControlName="firstName" placeholder="First Name" aria-label="First Name" aria-describedby="basic-addon1">
+            </div>
+
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <br>
+                <span class="input-group-text" id="basic-addon1"><i class="fa fa-user"></i></span>
+              </div>
+              <input type="text" class="form-control" formControlName="lastName" placeholder="Last Name" aria-label="Last Name" aria-describedby="basic-addon1">
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
                 <span class="input-group-text" id="basic-addon1"><i class="fas fa-envelope"></i></span>
               </div>
               <input type="email" class="form-control" formControlName="email" placeholder="Email" aria-label="Email" aria-describedby="basic-addon1">

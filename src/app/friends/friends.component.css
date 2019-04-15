@@ -1,3 +1,12 @@
+@media only screen and (max-width: 600px) {
+  .search_input{
+    background: white;
+    width: 66% !important;
+  }
+  .profile_pic{
+    width:30vw !important;
+  }
+}
 .body{
   margin-top: 15vh;
   text-align: center;
@@ -7,25 +16,21 @@
   display: inline-block;
   padding: 1rem;
 }
-.body img{
-  width: 75px;
-  height: auto;
-  background-color: white;
-  border-radius: 50px;
-}
 .body span i{
   padding: 1rem;
   color: #F25757;
 }
-
+.results{
+  text-align: center;
+}
  .profile_pic{
-   width: 5vw;
+   width: 8vw;
    max-height: 15vh;
    background-color: white;
-   border-top-left-radius: 50% 50%;
-   border-top-right-radius: 50% 50%;
-   border-bottom-right-radius: 50% 50%;
-   border-bottom-left-radius: 50% 50%;
+   border-top-left-radius: 50% 50% !important;
+   border-top-right-radius: 50% 50% !important;
+   border-bottom-right-radius: 50% 50% !important;
+   border-bottom-left-radius: 50% 50% !important;
    vertical-align: middle;
 }
 .close{
@@ -47,8 +52,34 @@
 .request_list{
   display: inline-block;
 }
+.request_btn{
+  background: white;
+  color: #F25757;
+}
 .friend_item{
     display:inline-block !important;
     vertical-align: top;
     width: 50%;
+}
+.add{
+  background: white;
+}
+.search{
+  background: white;
+  border: none;
+}
+.search_input{
+  background: white;
+  width: 70%;
+}
+.search_group{
+  margin-left: 1.5vw;
+}
+.friend_list{
+  text-align: center;
+}
+.friend_item{
+  display:inline-block;
+  width: fit-content;
+  max-width: 38vw;
 }
