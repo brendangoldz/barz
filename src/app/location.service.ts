@@ -1,15 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 @Injectable({
-  providedIn: 'root'
+ providedIn: 'root'
 })
 export class LocationService {
 
-  constructor() { }
-  /**
-   * [getLocation description]
-   * @return [description]
-   */
+ constructor() {}
   getLocation(): Observable<any> {
     var options = {
       enableHighAccuracy: true,
