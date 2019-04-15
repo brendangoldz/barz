@@ -19,8 +19,7 @@
 }
 
  .body img{
-  width: 5vw;
-  height: 10vh;
+  max-height: 15vh;
   background-color: white;
   border-top-left-radius: 50% 50%;
   border-top-right-radius: 50% 50%;

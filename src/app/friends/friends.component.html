@@ -49,12 +49,13 @@
       <div class="modal-content">
         <div class="modal-header">
           <div class="profile_pic col-md-12">
-            <img src='{{currentRequest.photoURL}}' onerror="this.src = './assets/friend.png';">
-            <h2 class="name" id="friend{{i}}_mod_name">{{currentRequest.firstName}} {{currentRequest.lastName}}</h2>
+            <img class="profile_pic" src='{{currentRequest.photoURL}}' onerror="this.src = './assets/friend.png';">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
           </div>
         </div>
         <div class="modal-body">
+          <h2 class="name" id="friend{{i}}_mod_name">{{currentRequest.firstName}} {{currentRequest.lastName}}</h2>
+
           <p class="bio">{{currentRequest.bio}}</p>
           <!-- <h5 class="fav-bar">{{f.favBar}}</h5> -->
           <h5 class="fav-drink">{{currentRequest.favDrink}}</h5>
@@ -69,8 +70,8 @@
   <button class="btn btn-primary" type="submit" name="addFriends" data-toggle="modal" data-target="#add_friends">Add Friends</button>
   <ul class="col-md-12">
     <li class="list-inline-item" *ngFor="let f of friends; let i = index">
-      <a data-toggle="modal" role="button" data-target="#friend_modal" (click)="getCurrentFriend(i)"><img class="img-fluid profile_pic" src='{{f.photoURL}}' onerror="this.src = './assets/friend.png';"></a>
-      <h4>{{f.displayName}}</h4>
+      <a data-toggle="modal" role="button" data-target="#friend_modal" (click)="getCurrentFriend(i)"><img class="profile_pic" src='{{f.photoURL}}' onerror="this.src = './assets/friend.png';"></a>
+      <h4>{{f.firstName}} {{f.lastName}} </h4>
       <span><i class="fa fa-comments fa-lg" aria-hidden="true"></i><i class="fa fa-times fa-lg" aria-hidden="true"></i>
       </span>
     </li>
@@ -82,11 +83,12 @@
         <div class="modal-header">
           <div class="profile_pic col-md-12">
             <img class="profile_pic" src='{{currentFriend.photoURL}}' onerror="this.src = './assets/friend.png';">
-            <h2 class="name" id="friend{{i}}_mod_name">{{currentFriend.firstName}} {{currentFriend.lastName}}</h2>
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
           </div>
         </div>
         <div class="modal-body">
+          <h2 class="name" id="friend{{i}}_mod_name">{{currentFriend.firstName}} {{currentFriend.lastName}}</h2>
+
           <p class="bio">{{currentFriend.bio}}</p>
           <!-- <h5 class="fav-bar">{{f.favBar}}</h5> -->
           <h5 class="fav-drink">{{currentFriend.favDrink}}</h5>
