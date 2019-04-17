@@ -101,7 +101,7 @@ export class MainComponent implements OnInit {
      * @param  "bars" [description]
      * @return        [description]
      */
-    var doc = db.collection("bars").onSnapshot((snap) => {
+    var doc = db.collection("bars").orderBy("votes", "desc").onSnapshot((snap) => {
       this.loaded = false
       if (that.sub2) that.sub2.unsubscribe();
 

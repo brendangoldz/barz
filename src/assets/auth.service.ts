@@ -129,6 +129,8 @@ export class AuthService {
       firstName: firstName || "",
       lastName: lastName || "",
       gender: "",
+      friends: [],
+      requests: [],
       dob: "",
       occupation: "",
       relationshipStatus: "",

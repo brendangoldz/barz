@@ -205,13 +205,13 @@ export class FriendsComponent implements OnInit {
     if (this.user.uid != this.searchResults.uid && this.isNotRequested && this.isNotSent) {
       requestee.set({
         requests: [this.user.uid]
-      }, { merge: true }).then(() => console.log("Assigned Pending Request in Requestee"));
+      }, { merge: true }).then(() =>{
+        console.log("Assigned Pending Request in Requestee");
+        this.refresh();
+      });
     }
     else if(!this.isNotSent){
-      console.log("User Already Has A Request From You")
-      // requestee.set({
-      //   requests: [this.user.uid]
-      // }, { merge: true }).then(() => console.log("Assigned Pending Request in Requestee"));
+      console.log("User Already Has A Request From You");
     }
     else {
       $('.request_btn').attr('disabled', 'disabled');
@@ -340,13 +340,16 @@ export class FriendsComponent implements OnInit {
     }).catch((e) => console.log(e))
   }
   deleteFriend = function(i){
+    console.log("In Delete Friend")
     var db = firebase.firestore();
     var docRef = db.collection("users").doc(this.user.uid);
     let friends = [];
     docRef.get().then((doc)=>{
       friends = doc.data().friends;
       console.log("Friends Before Delete", friends, " deleting friend ", friends[i]);
-      friends.splice(i , 1);
+
+
+      friends.splice(i, 1);
       console.log("Friends After Delete", friends);
       docRef.set({
         friends: friends
