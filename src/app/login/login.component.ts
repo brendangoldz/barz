@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../assets/auth.service';
 import { AngularFireAuth } from '@angular/fire/auth';
@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit {
 
   forgottenEmail: string;
 
-  constructor(private route: Router, private af: AngularFireAuth, private auth: AuthService, private router: Router) {
+  constructor(private zone: NgZone, private route: Router, private af: AngularFireAuth, private auth: AuthService, private router: Router) {
     var that = this;
     /**
      * [subscribe description]
@@ -46,10 +46,15 @@ export class LoginComponent implements OnInit {
     this.sub = this.af.authState.subscribe(user => {
       if (user) {
         if (!user.emailVerified) {
-          this.router.navigate(['', 'verify']);
+          this.zone.run(()=>{
+            this.router.navigate(['verify']);
+          })
+
         }
         else {
-          this.router.navigate(['/', 'main'])
+          this.zone.run(()=>{
+            this.router.navigate(['main']);
+          })
         }
         console.log("User in authState:", user);
       } else {

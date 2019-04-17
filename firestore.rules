@@ -1,8 +1,36 @@
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /{document=**} {
-      allow read, write;
+   match /bars/{document=**} {
+      // Applies to single document read requests
+      allow read: if request.auth != null;
+
+      // Applies to queries and collection read requests
+      allow list: if request.auth != null;
+
+      // Applies to writes to nonexistent documents
+      allow create: if false;
+
+      // Applies to writes to existing documents
+      allow update: if request.auth != null;
+
+      // Applies to delete operations
+      allow delete: if false;
+    }
+    match /users/{userId}{
+      // Applies to single document read requests
+      allow read: if request.auth != null;
+
+      // Applies to queries and collection read requests
+      allow list: if request.auth != null;
+
+      // Applies to writes to nonexistent documents
+      allow create: if request.auth.uid != null;
+
+      // Applies to writes to existing documents
+      allow update: if request.auth != null;
+
+      // Applies to delete operations
+      allow delete: if false;
     }
   }
 }
-//gotta edit the view modifr due to public view, change to private or restricted 

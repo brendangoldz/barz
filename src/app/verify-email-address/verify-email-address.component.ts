@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, NgZone } from '@angular/core';
 import {AuthService} from '../../assets/auth.service';
 import {AngularFireAuth} from '@angular/fire/auth';
 import * as firebase from 'firebase';
@@ -11,7 +11,7 @@ import {Router} from '@angular/router';
 export class VerifyEmailAddressComponent implements OnInit {
   sub: any;
   user: any;
-  constructor(private auth: AuthService, private af: AngularFireAuth, private router: Router) { }
+  constructor(private zone: NgZone, private auth: AuthService, private af: AngularFireAuth, private router: Router) { }
 
   ngOnInit() {
     const that = this;
@@ -19,7 +19,9 @@ export class VerifyEmailAddressComponent implements OnInit {
     this.sub = this.af.authState.subscribe(user => {
           if (user) {
             if(user.emailVerified){
-              this.router.navigate(['main']);
+              this.zone.run(()=>{
+                this.router.navigate(['/', 'main']);
+              })
             }
           } else {
             this.logout();

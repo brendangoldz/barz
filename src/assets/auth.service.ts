@@ -20,7 +20,7 @@ export class AuthService {
     public afs: AngularFirestore,   // Inject Firestore service
     public afAuth: AngularFireAuth, // Inject Firebase auth service
     public router: Router,
-    public ngZone: NgZone // NgZone service to remove outside scope warning
+    public zone: NgZone // zone service to remove outside scope warning
   ) {
     /* Saving user data in localstorage when
     logged in and setting up null when logged out */
@@ -42,7 +42,7 @@ export class AuthService {
 
     return this.afAuth.auth.signInWithEmailAndPassword(email, password)
       .then((result) => {
-        this.ngZone.run(() => {
+        this.zone.run(() => {
           this.router.navigate(['main']);
         });
         //this.SetUserData(result.user); //result.user
@@ -72,7 +72,9 @@ export class AuthService {
   SendVerificationMail() {
     return this.afAuth.auth.currentUser.sendEmailVerification()
       .then(() => {
-        this.router.navigate(['verify']);
+        this.zone.run(()=>{
+          this.router.navigate(['/', 'verify']);
+        })
         console.log("Verify Email");
       })
   }
@@ -105,7 +107,7 @@ export class AuthService {
     return this.afAuth.auth.signInWithPopup(provider)
       .then((result) => {
 
-        this.ngZone.run(() => {
+        this.zone.run(() => {
           this.router.navigate(['main']);
         })
         //this.SetUserData(result.user);
@@ -144,7 +146,9 @@ export class AuthService {
   SignOut() {
     return this.afAuth.auth.signOut().then(() => {
       localStorage.removeItem('user');
-      this.router.navigate(['login']);
+      this.zone.run(()=>{
+        this.router.navigate(['/', 'login']);
+      });
     })
   }
 

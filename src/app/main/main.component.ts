@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, OnDestroy, NgZone, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 import { AngularFireAuth } from '@angular/fire/auth';
@@ -38,7 +38,7 @@ export class MainComponent implements OnInit {
   requests: any = 0;
   private color = "primary";
   private mode = "determinate";
-  constructor(private af: AngularFireAuth, private lo: LocationService, private router: Router, private auth_service: AuthService, private cd: ChangeDetectorRef) {
+  constructor(private zone: NgZone, private af: AngularFireAuth, private lo: LocationService, private router: Router, private auth_service: AuthService, private cd: ChangeDetectorRef) {
 
   }
 
@@ -69,7 +69,9 @@ export class MainComponent implements OnInit {
     this.sub = this.af.authState.subscribe(user => {
       if (user) {
         if (!user.emailVerified) {
-          this.router.navigate(['', 'verify']);
+          this.zone.run(()=>{
+            this.router.navigate(['/', 'verify']);
+          })
         }
         var docRef = db.collection("users").doc(user.uid);
         docRef.get().then(function(doc) {
@@ -110,45 +112,43 @@ export class MainComponent implements OnInit {
         console.log(doc.id, " votes ", doc.data().votes);
         that.restaurants.push(doc.data());
         that.totalVotes += doc.data().votes;
-      })
-      try {
-        that.sub2 = that.lo.getLocation().subscribe(res => {
-          this.currentLat = res.coords.latitude;
-          this.currentLong = res.coords.longitude;
-          that.location = new google.maps.LatLng(this.currentLat, this.currentLong);
-          setTimeout(() => {
-            var temp = [];
-            var circleRadius = this.user.radius * 1609.344 || 10 * 1609.344;
-            var temp = that.restaurants.filter((val) => {
-              var circle = new google.maps.Circle({
-                clickable: false,
-                radius: circleRadius,
-                center: new google.maps.LatLng(res.coords.latitude, res.coords.longitude)
-              });
-              console.log("get radius ", circleRadius);
+      });
+      that.sub2 = that.lo.getLocation().subscribe(res => {
+        // alert("LOCATION: " + res.coords.latitude + res.coords.longitude);
+        this.currentLat = res.coords.latitude;
+        this.currentLong = res.coords.longitude;
+        that.location = new google.maps.LatLng(this.currentLat, this.currentLong);
 
-              //CIRCLE CREATED FOR RADIUS OF SEARCH
-              // console.log("myLocation", that.location);
-              var pos = new google.maps.LatLng(parseFloat(val.coords.latitude), parseFloat(val.coords.longitude));
-              var pt2 = new google.maps.Marker({ position: pos, map: that.map });
-
-              var bounds = circle.getBounds();
-              //CHECK IF REST COORDS INSIDE BOUNDS OF CIRCLE
-              return bounds.contains(pos);
+        setTimeout(() => {
+          var temp = [];
+          var circleRadius = this.user.radius * 1609.344 || 10 * 1609.344;
+          var temp = that.restaurants.filter((val) => {
+            var circle = new google.maps.Circle({
+              clickable: false,
+              radius: circleRadius,
+              center: new google.maps.LatLng(res.coords.latitude, res.coords.longitude)
             });
+            console.log("get radius ", circleRadius);
 
-            console.log("Temp before Normalized ", temp);
-            temp.forEach((val) => {
-              val.normalized = (val.votes / that.totalVotes) * 100;
-            })
-            that.restaurants = temp;
-            that.loaded = true;
-            if (that.user && that.loaded) that.checkVoted();
-          }, 1500);
-        })
-      } catch (e) {
-        console.log("error ", e)
-      }
+            //CIRCLE CREATED FOR RADIUS OF SEARCH
+            // console.log("myLocation", that.location);
+            var pos = new google.maps.LatLng(parseFloat(val.coords.latitude), parseFloat(val.coords.longitude));
+            var pt2 = new google.maps.Marker({ position: pos, map: that.map });
+
+            var bounds = circle.getBounds();
+            //CHECK IF REST COORDS INSIDE BOUNDS OF CIRCLE
+            return bounds.contains(pos);
+          });
+
+          console.log("Temp before Normalized ", temp);
+          temp.forEach((val) => {
+            val.normalized = (val.votes / that.totalVotes) * 100;
+          })
+          that.restaurants = temp;
+          that.loaded = true;
+          if (that.user && that.loaded) that.checkVoted();
+        }, 1500);
+      })
     });
   }
   /**
@@ -306,7 +306,9 @@ export class MainComponent implements OnInit {
     window.localStorage.clear();
     this.af.auth.signOut().then(() => {
       console.log("Logging out");
-      this.router.navigate(['/', 'login']);
+      this.zone.run(()=>{
+        this.router.navigate(['/', 'login']);
+      })
     });
   }
 

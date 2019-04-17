@@ -4,7 +4,10 @@
     width: 66% !important;
   }
   .profile_pic{
-    width:30vw !important;
+    width: 30vw !important;
+    max-width: 30vw !important;
+    height: 30vw !important;
+    max-height: 30vw !important;
   }
 }
 .body{
@@ -24,8 +27,10 @@
   text-align: center;
 }
  .profile_pic{
+   max-width: 8vw;
    width: 8vw;
-   max-height: 15vh;
+   max-height: 15vw;
+   height: 15vh;
    background-color: white;
    border-top-left-radius: 50% 50% !important;
    border-top-right-radius: 50% 50% !important;

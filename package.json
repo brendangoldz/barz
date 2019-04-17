@@ -4,10 +4,17 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "publish": "npm run build && firebase deploy --only hosting",
+    "package.cordova": "ng build --prod --base-href . --output-path ./barzapp/www/",
+    "cordova.build": "npm run package.cordova && cd barzapp && cordova build && cd ../",
+    "plugins": "cd barzapp && cordova plugin add cordova-plugin-firestore && cordova plugin add cordova-plugin-geolocation && cd ../",
+    "platforms": "cd barzapp && cordova platform add ios && cordova platform add android && cordova prepare && cd ../",
+    "cordova.create": "rm -rf barzapp/ && cordova create barzapp com.mu.barzapp Barz && npm run platforms && npm run plugins && npm run cordova.build"
+
   },
   "private": true,
   "dependencies": {

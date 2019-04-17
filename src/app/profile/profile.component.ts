@@ -1,5 +1,5 @@
 import { Component,  ChangeDetectionStrategy,
-         ChangeDetectorRef, OnInit, OnDestroy } from '@angular/core';
+         ChangeDetectorRef, OnInit, OnDestroy, NgZone } from '@angular/core';
 import {Router} from '@angular/router';
 import { HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 import {AngularFireAuth} from '@angular/fire/auth';
@@ -34,7 +34,7 @@ updateForm = new FormGroup({
 });
 
 
-  constructor( private af: AngularFireAuth, private router: Router, private cd: ChangeDetectorRef) {
+  constructor(private zone: NgZone, private af: AngularFireAuth, private router: Router, private cd: ChangeDetectorRef) {
 
   }
 
@@ -50,7 +50,9 @@ updateForm = new FormGroup({
   this.sub = this.af.authState.subscribe(user => {
         if (user) {
           if(!user.emailVerified){
-            this.router.navigate(['verify']);
+            this.zone.run(()=>{
+              this.router.navigate(['verify']);
+            })
           }
           var docRef = db.collection("users").doc(user.uid);
           docRef.get().then(function(doc) {
@@ -87,7 +89,9 @@ updateForm = new FormGroup({
     window.localStorage.clear();
     this.af.auth.signOut().then(() => {
       console.log("Logging out");
-     this.router.navigate(['/','login']);
+      this.zone.run(()=>{
+        this.router.navigate(['/', 'login']);
+      });
   });
   }
   /**
@@ -120,7 +124,7 @@ updateForm = new FormGroup({
           favDrink: this.updateForm.value.favDrink || "",
           bio: this.updateForm.value.bio || "",
           photoURL: that.pictureUrl
-        }, {merge:true}).then(function(docRef) {
+        }, {merge:true}).then((docRef)=>{
           that.getProfileData();
             console.log("Document written with ID: ", docRef);
         })

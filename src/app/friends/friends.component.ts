@@ -1,7 +1,7 @@
 import {
   Component, OnInit, Directive, ViewContainerRef, OnDestroy,
   ViewChild, ComponentFactoryResolver, ComponentRef,
-  ComponentFactory, Input
+  ComponentFactory, Input, NgZone
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
@@ -37,7 +37,7 @@ export class FriendsComponent implements OnInit {
 
 
 
-  constructor(private fb: FirebaseuiAngularLibraryService, private af: AngularFireAuth, private router: Router) {
+  constructor(private fb: FirebaseuiAngularLibraryService, private af: AngularFireAuth, private router: Router, private zone: NgZone) {
 
   }
 
@@ -53,7 +53,9 @@ export class FriendsComponent implements OnInit {
     this.sub = this.af.authState.subscribe(user => {
       if (user) {
         if (!user.emailVerified) {
-          this.router.navigate(['', 'verify']);
+          this.zone.run(()=>{
+            this.router.navigate(['verify']);
+          })
         }
         var docRef = db.collection("users").doc(user.uid);
         docRef.get().then(function(doc) {
@@ -123,7 +125,9 @@ export class FriendsComponent implements OnInit {
     window.localStorage.clear();
     this.af.auth.signOut().then(() => {
       console.log("Logging out");
-      this.router.navigate(['/', 'login']);
+      this.zone.run(()=>{
+        this.router.navigate(['login']);
+      })
     });
   }
   /**
@@ -334,6 +338,25 @@ export class FriendsComponent implements OnInit {
         console.log("No such document!");
       }
     }).catch((e) => console.log(e))
+  }
+  deleteFriend = function(i){
+    var db = firebase.firestore();
+    var docRef = db.collection("users").doc(this.user.uid);
+    let friends = [];
+    docRef.get().then((doc)=>{
+      friends = doc.data().friends;
+      console.log("Friends Before Delete", friends, " deleting friend ", friends[i]);
+      friends.splice(i , 1);
+      console.log("Friends After Delete", friends);
+      docRef.set({
+        friends: friends
+      }, {merge: true}).then(()=>{
+        console.log("Succesfully Deleted User");
+        this.refresh();
+      })
+      console.log(doc.data().friends)
+    });
+
   }
   /**
    * [function description]
