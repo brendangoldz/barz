@@ -340,25 +340,46 @@ export class FriendsComponent implements OnInit {
     }).catch((e) => console.log(e))
   }
   deleteFriend = function(i){
-    console.log("In Delete Friend")
     var db = firebase.firestore();
     var docRef = db.collection("users").doc(this.user.uid);
     let friends = [];
-    docRef.get().then((doc)=>{
-      friends = doc.data().friends;
-      console.log("Friends Before Delete", friends, " deleting friend ", friends[i]);
+    if(confirm('Are you sure you want to delete this friend?')){
 
+      docRef.get().then((doc)=>{
+        friends = doc.data().friends;
+        console.log("Friends Before Delete", friends, " deleting friend ", friends[i]);
+        let del_friend = db.collection("users").doc(friends[i])
+        del_friend.get().then((doc)=>{
+          let f = doc.data().friends;
+          console.log("Deleted Friend Friends List Before Delete ", f);
+          for(var i = 0; i< f.length; i++){
+            if(f[i]==this.user.uid){
+              console.log("Removing you from deleted friends, friends list")
+              f.splice(i,1);
+              console.log("Deleted Friend Friends List After Delete ", f);
+            }
+          }
+          del_friend.set({
+            friends: f
+          }, {merge: true}).then(()=>{
+            console.log("Successfully remove you from deleted friend, friends list")
+          })
+        });
+        friends.splice(i, 1);
+        console.log("Friends After Delete", friends);
+        docRef.set({
+          friends: friends
+        }, {merge: true}).then(()=>{
+          console.log("Succesfully Deleted User");
+          this.refresh();
+        })
 
-      friends.splice(i, 1);
-      console.log("Friends After Delete", friends);
-      docRef.set({
-        friends: friends
-      }, {merge: true}).then(()=>{
-        console.log("Succesfully Deleted User");
-        this.refresh();
-      })
-      console.log(doc.data().friends)
-    });
+        console.log(doc.data().friends)
+      });
+    }
+    else{
+      return;
+    }
 
   }
   /**
