@@ -135,7 +135,8 @@ export class AuthService {
       occupation: "",
       relationshipStatus: "",
       favDrink: "",
-      bio: ""
+      bio: "",
+      radius: 50
     })
       .then(function(docRef) {
         console.log("Document written with ID: ", docRef);

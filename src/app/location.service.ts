@@ -10,7 +10,7 @@ export class LocationService {
     var options = {
       enableHighAccuracy: true,
       maximumAge: 0,
-      timeout: 2000
+      timeout: 1000
     }
     function location(observer) {
       if (window.navigator && window.navigator.geolocation) {
@@ -20,7 +20,10 @@ export class LocationService {
             observer.next(position);
             observer.complete();
           },
-          (error) => location(observer), options
+          (error) =>{
+            console.log("Trying to get location Again")
+              location(observer)
+          }, options
         );
       } else {
         observer.error('Unsupported Browser');

@@ -106,14 +106,14 @@ export class MainComponent implements OnInit {
       if (that.sub2) that.sub2.unsubscribe();
 
       console.log("On Snapshot", snap)
-      that.restaurants = [];
-      that.totalVotes = 0;
+      this.restaurants = [];
+      this.totalVotes = 0;
       snap.forEach((doc) => {
         console.log(doc.id, " votes ", doc.data().votes);
-        that.restaurants.push(doc.data());
-        that.totalVotes += doc.data().votes;
+        this.restaurants.push(doc.data());
+        this.totalVotes += doc.data().votes;
       });
-      that.sub2 = that.lo.getLocation().subscribe(res => {
+      this.sub2 = that.lo.getLocation().subscribe(res => {
         // alert("LOCATION: " + res.coords.latitude + res.coords.longitude);
         this.currentLat = res.coords.latitude;
         this.currentLong = res.coords.longitude;
@@ -146,6 +146,7 @@ export class MainComponent implements OnInit {
           })
           that.restaurants = temp;
           that.loaded = true;
+          if(that.restaurants.length == 0) alert("We currently do not support your location, please send email to brendan@barz.app to request your location")
           if (that.user && that.loaded) that.checkVoted();
         }, 1500);
       })
