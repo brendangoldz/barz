@@ -419,4 +419,7 @@ export class FriendsComponent implements OnInit {
       })
     });
   }
+  message = function(i){
+    alert("Coming Soon!");
+  }
 }

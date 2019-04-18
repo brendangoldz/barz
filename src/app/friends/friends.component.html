@@ -73,7 +73,7 @@
       <li class="list-inline-item friend_item" *ngFor="let f of friends; let i = index">
         <a data-toggle="modal" role="button" data-target="#friend_modal" (click)="getCurrentFriend(i)"><img class="profile_pic" src='{{f.photoURL}}' onerror="this.src = './assets/friend.png';"></a>
         <h4>{{f.firstName}} {{f.lastName}} </h4>
-        <span><i class="fa fa-comments fa-lg" aria-hidden="true"></i><i class="fa fa-times fa-lg" aria-hidden="true" (click)="deleteFriend(i)"></i>
+        <span><i class="fa fa-comments fa-lg" aria-hidden="true" (click)="message(i)"></i><i class="fa fa-times fa-lg" aria-hidden="true" (click)="deleteFriend(i)"></i>
         </span>
       </li>
       <!--FRIEND ONE PROFILE VIEW MODAL-->
