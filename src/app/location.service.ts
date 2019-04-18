@@ -21,8 +21,15 @@ export class LocationService {
             observer.complete();
           },
           (error) =>{
+            let i = 0;
             console.log("Trying to get location Again")
-              location(observer)
+            location(observer)
+            i++;
+            if(i>25){
+              alert("Reloading Page to get location")
+              window.location.reload();
+            }
+
           }, options
         );
       } else {
