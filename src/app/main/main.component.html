@@ -55,10 +55,12 @@
               <h3 id="myModalLabel">{{restaurant.name}}</h3>
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
+              <a href="{{restaurant.website}}">{{restaurant.website}}</a>
             <div class="modal-body">
               <agm-map [zoom]="15" [latitude]="restaurant.coords.latitude" [longitude]="restaurant.coords.longitude">
                 <agm-marker [latitude]="restaurant.coords.latitude" [longitude]="restaurant.coords.longitude"></agm-marker>
               </agm-map>
+              <hr>
               <span>
                 <h5>SUNDAY:</h5>{{restaurant.hours[0]}}
               </span>
@@ -80,8 +82,8 @@
               <span>
                 <h5>SATURDAY:</h5>{{restaurant.hours[6]}}
               </span>
-              <br>
-              <a href="{{restaurant.website}}">{{restaurant.website}}</a>
+              <hr>
+
             </div>
             <div class="modal-footer">
               <button class="btn" data-dismiss="modal" aria-hidden="true">

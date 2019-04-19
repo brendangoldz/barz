@@ -4,7 +4,7 @@
     color: black;
     position: fixed;
     top: 10vh !important;
-  width: 50vw !important;
+    width: 50vw !important;
     z-index: 999;
     border: 0;
   }
