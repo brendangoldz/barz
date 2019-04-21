@@ -31,6 +31,7 @@ export class LoginComponent implements OnInit {
     password: new FormControl(''),
     confirmPassword: new FormControl(''),
     gender: new FormControl(''),
+    age: new FormControl(''),
     tos: new FormControl('')
   });
 
@@ -120,4 +121,25 @@ export class LoginComponent implements OnInit {
   forgotPassword = function() {
     this.auth.ForgotPassword(this.forgottenEmail);
   }
+
+  /**
+   * [getAge description]
+   * @return age
+   */
+   function getAge(dob)
+   {
+     var today = new Date();
+     var birthDate = new Date();
+     var age = today.getFullYear() - birthDate.getFullYear();
+     var m = birthDate.getMonth();
+     if(m<0 || (m==0 && today.getDate() < birthDate.getDate()))
+     {
+       age = age - 1
+     }
+
+     return age;
+
+   }
+
+
 }

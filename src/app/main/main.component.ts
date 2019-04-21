@@ -152,6 +152,7 @@ export class MainComponent implements OnInit {
       })
     });
   }
+  
   /**
    * [ngOnDestroy description]
    * @return [description]
