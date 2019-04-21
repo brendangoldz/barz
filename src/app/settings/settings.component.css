@@ -1,13 +1,14 @@
 .container
 {
-
+  text-align: center;
   vertical-align: middle;
 }
 
 .text
 {
-  margin-top: 15vh;
+  margin-top: 20vh;
   text-align: center;
+  vertical-align: middle;
 }
 
 pre

@@ -13,6 +13,7 @@
 .body{
   margin-top: 15vh;
   text-align: center;
+  vertical-align: middle;
 }
 .body li{
   list-style: none;
@@ -46,9 +47,12 @@
 .page_title{
   letter-spacing: .5rem;
   margin: .5rem;
+  vertical-align: middle;
+  text-align: center;
 }
 .page_title hr{
   width: 20vw;
+
 }
 .name{
   letter-spacing: 0.25rem;
@@ -62,9 +66,9 @@
   color: #F25757;
 }
 .friend_item{
-    display:inline-block !important;
-    vertical-align: top;
-    width: 50%;
+  display:inline-block !important;
+  vertical-align: top;
+  width: 50%;
 }
 .add{
   background: white;

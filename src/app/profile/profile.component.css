@@ -15,11 +15,11 @@
   }
 }
 .body{
-  margin-top: 15vh;
+  margin-top: 17vh;
   background-color: #f8f9fa;
   color: black;
   border-radius: 10px;
-  width: 50%;
+  width: 45%;
   box-shadow: 1px 5px 1px 3px rgba(10, 10, 10, .2);
   font-size: 1.5rem;
 }
