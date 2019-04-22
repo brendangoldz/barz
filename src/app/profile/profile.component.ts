@@ -25,8 +25,6 @@ updateForm = new FormGroup({
   firstName: new FormControl(),
   lastName: new FormControl(),
   bio: new FormControl(),
-  //dob: new FormControl(),
-  age: number,
   gender: new FormControl(),
   occupation: new FormControl(),
   favDrink: new FormControl(),
