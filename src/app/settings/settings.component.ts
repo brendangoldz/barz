@@ -67,8 +67,7 @@ export class SettingsComponent implements OnInit {
     this.sub.unsubscribe();
   }
   /**
-   * [function description]
-   * @return [description]
+   * Logout of App
    */
   logout = function() {
     window.localStorage.clear();
@@ -80,9 +79,8 @@ export class SettingsComponent implements OnInit {
     });
   }
   /**
-   * [function description]
+   * Changing Radius from current user location
    * @param  val [description]
-   * @return     [description]
    */
   changeRadius = function(val) {
     let db = firebase.firestore();

@@ -82,8 +82,7 @@ statuses = ['Single', 'Taken', 'Other']
     clearInterval(this.int);
   }
   /**
-   * [function description]
-   * @return [description]
+   * Logout of App
    */
   logout = function(){
     window.localStorage.clear();
@@ -95,8 +94,7 @@ statuses = ['Single', 'Taken', 'Other']
   });
   }
   /**
-   * [function description]
-   * @return [description]
+   * Updating Profile Data if there are any changes
    */
   updateData = function(){
     var us = this.userData.uid || firebase.auth().currentUser['uid'];
@@ -158,8 +156,7 @@ statuses = ['Single', 'Taken', 'Other']
   }
 
   /**
-   * [function description]
-   * @return [description]
+   * Retrieving Profile Data from firebase
    */
   getProfileData = function(){
     var that = this;
@@ -181,8 +178,7 @@ statuses = ['Single', 'Taken', 'Other']
     }).catch((e)=>console.log(e))
   }
   /**
-   * [function description]
-   * @return [description]
+   * Populating the form from Firebase 
    */
   populateForm = function(){
     var that = this;

@@ -31,6 +31,8 @@ export class VerifyEmailAddressComponent implements OnInit {
   ngOnDestroy(){
     this.sub.unsubscribe();
   }
+
+  //Loging out of App
   logout = function(){
     window.localStorage.clear();
     this.af.auth.signOut().then(() => {
@@ -38,6 +40,10 @@ export class VerifyEmailAddressComponent implements OnInit {
      this.router.navigate(['/','login']);
    });
   }
+
+  /**
+  *Verifying email is associated with account
+  **/
   resendEmail = function(){
     if(this.user) this.auth.SendVerificaitonMail();
     else console.log("User Not Defined")

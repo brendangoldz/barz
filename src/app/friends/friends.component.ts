@@ -239,7 +239,8 @@ export class FriendsComponent implements OnInit {
 
 
   /**
-   * [Confirms the friend request at the index position in the list of pending invitations.]
+   * [Confirms the friend request at the index position in the
+                                                  list of pending invitations.]
    * @param  i [Index of the request]
    */
   confirmRequest = function(i) {
@@ -297,7 +298,8 @@ export class FriendsComponent implements OnInit {
   }
 
   /**
-   * [Declines the friend request at the index position in the list of friend invitations.]
+   * [Declines the friend request at the index position in the
+                                                    list of friend invitations.]
    * @param  i [Index of the request]
    */
   declineRequest = function(i) {
@@ -321,7 +323,8 @@ export class FriendsComponent implements OnInit {
   }
 
   /**
-   * [Once user accepts friend request, friends list refreshes and displays the new freindship]
+   * [Once user accepts friend request, friends list refreshes
+                                                and displays the new freindship]
    */
   refresh = function() {
     var that = this;
@@ -359,9 +362,11 @@ export class FriendsComponent implements OnInit {
   }
 
   /**
-   * [Deletes friend from users friends list. User 1 and user 2 will no longer have each other on their friends list. ]
+   * [Deletes friend from users friends list. User 1 and user 2 will no longer
+                                        have each other on their friends list. ]
    * @param  i [description]
-   * @return     [Return is returning nothing, but is there to cancel delelting a friend]
+   * @return     [Return is returning nothing, but is there to cancel
+                                                            delelting a friend]
    */
   deleteFriend = function(i){
     var db = firebase.firestore();
