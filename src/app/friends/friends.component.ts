@@ -37,7 +37,9 @@ export class FriendsComponent implements OnInit {
 
 
 
-  constructor(private fb: FirebaseuiAngularLibraryService, private af: AngularFireAuth, private router: Router, private zone: NgZone) {
+  constructor(private fb: FirebaseuiAngularLibraryService,
+      private af: AngularFireAuth, private router: Router, private zone: NgZone)
+      {
 
   }
 
@@ -46,7 +48,8 @@ export class FriendsComponent implements OnInit {
     var that = this;
     var db = firebase.firestore();
     /**
-     * Subscription to this method. Saying listen to what's happening here. The two options being is the user logged in or not.
+     * Subscription to this method. Saying listen to what's happening here.
+                            The two options being is the user logged in or not.
      * @param  user=>{if(user [Current user logging into the session]
      */
     this.sub = this.af.authState.subscribe(user => {
@@ -75,7 +78,8 @@ export class FriendsComponent implements OnInit {
                 console.log(x);
                 that.friends.push(x);
               })
-              if (that.friends.length > 0) that.friends = that.getData(that.friends);
+              if (that.friends.length > 0) that.friends =
+                                                    that.getData(that.friends);
               console.log("Friends Array", that.friends)
             }
           } else {
@@ -90,7 +94,8 @@ export class FriendsComponent implements OnInit {
 
   }
   /**
-   * [Destroys subscription. If subscription isn't destroyed, memory will leak out of the webpage.]
+   * [Destroys subscription. If subscription isn't destroyed, memory will
+                                                      leak out of the webpage.]
    * @return [description]
    */
   ngOnDestroy() {
@@ -105,8 +110,9 @@ export class FriendsComponent implements OnInit {
     this.query(this.searchFriendsForm.value.searchField);
   }
   /**
-   * [Getting information on the user from the database. Friends array and requests array. In the subscription of authState, getData gets
-   data off the user and returns the data wherever it is called.
+   * [Getting information on the user from the database. Friends array and
+                requests array. In the subscription of authState, getData gets
+                  data off the user and returns the data wherever it is called.
    * @param  arr [Friends or requests array]
    * @return     [Return the array that was called for]
    */
@@ -159,7 +165,8 @@ export class FriendsComponent implements OnInit {
             that.searchResults = doc.data();
             if(that.friends){
               that.friends.forEach((x) => {
-                console.log("Friends Query Loop ", x, " search results id ", that.searchResults.uid);
+                console.log("Friends Query Loop ", x, " search results id ",
+                                                        that.searchResults.uid);
                 if (that.searchResults.uid == x.uid) {
                   console.log("Results contains a users friend");
                   that.isNotFriends = false;
@@ -171,7 +178,7 @@ export class FriendsComponent implements OnInit {
                 console.log("Request Query loop", that.reqs[i])
                 if (that.searchResults.uid == that.reqs[i].uid) {
                   console.log("Results contains a requestor");
-                  // let request = <HTMLButtonElement>document.querySelector("#request");
+        // let request = <HTMLButtonElement>document.querySelector("#request");
                   that.isNotRequested = false;
 
                   // if(request)request.innerHTML = "Confirm Request";
@@ -180,7 +187,8 @@ export class FriendsComponent implements OnInit {
               }
             }
             for(let i =0; i<doc.data().requests.length;i++){
-              console.log("Looping through Query Requests", doc.data().requests[i], " Current ID ", us)
+              console.log("Looping through Query Requests", doc.data().requests[i],
+                " Current ID ", us)
               if(doc.data().requests[i] === us){
                 console.log("Results already has a request from you!");
                 that.isNotSent = false;
@@ -202,7 +210,8 @@ export class FriendsComponent implements OnInit {
 
 
   /**
-   * [requestFriend calls another user after searching the database via email and sends an invitation to the user to become friends.]
+   * [requestFriend calls another user after searching the database via email
+                        and sends an invitation to the user to become friends.]
    */
   requestFriend = function() {
     $(event.target).attr("disabled", "disabled");
