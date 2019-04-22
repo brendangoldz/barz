@@ -32,7 +32,7 @@ updateForm = new FormGroup({
   relationshipStatus: new FormControl(),
   profile_pic: new FormControl()
 });
-
+statuses = ['Single', 'Taken', 'Other']
 
   constructor(private zone: NgZone, private af: AngularFireAuth, private router: Router, private cd: ChangeDetectorRef) {
 

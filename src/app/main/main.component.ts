@@ -216,9 +216,13 @@ export class MainComponent implements OnInit {
       //CURRENT BAR VOTED
       var doc = db.collection("bars").doc(bid)
       doc.get().then((snap) => {
+        let age = snap.data().avg_age;
         var votes = snap.data().votes + 1;
+        let avg_age = (this.user.age+age)/votes;
+        console.log("Average Age ", avg_age)
         doc.set({
-          votes: votes
+          votes: votes,
+          avg_age: avg_age
         }, { merge: true }).then(() => {
           console.log("Added Vote to ", bid, " \n Vote Count: ", votes)
         })
@@ -226,17 +230,22 @@ export class MainComponent implements OnInit {
       //REDUCE PREV BAR VOTE
       var prev = db.collection("bars").doc(prev_bar);
       prev.get().then((snap) => {
+        let age = snap.data().avg_age;
+
         var votes = snap.data().votes - 1;
-        if (votes < 0) {
+        let avg_age = ((age*snap.data().votes)-this.user.age)/votes;
+        if (votes <= 0) {
           prev.set({
-            votes: 0
+            votes: 0,
+            avg_age: 0
           }, { merge: true }).then(() => {
             console.log("Removed Vote from ", prev_bar, " /n Vote Count: ", votes)
           })
         }
         else {
           prev.set({
-            votes: votes
+            votes: votes,
+            avg_age: avg_age
           }, { merge: true }).then(() => {
             console.log("Removed Vote from ", prev_bar, " /n Vote Count: ", votes)
           })
@@ -276,17 +285,20 @@ export class MainComponent implements OnInit {
 
     var doc = db.collection("bars").doc(this.user.voted);
     doc.get().then((snap) => {
-      var votes = snap.data().votes;
-      votes--;
-      if (votes < 0) {
+      let age = snap.data().avg_age;
+      var votes = snap.data().votes - 1;
+      let avg_age = ((age*snap.data().votes)-this.user.age)/votes;
+      if (votes <= 0) {
         votes = 0;
         doc.set({
-          votes: votes
+          votes: votes,
+          avg_age: 0
         }, { merge: true })
       }
       else {
         doc.set({
-          votes: votes
+          votes: votes,
+          avg_age: avg_age
         }, { merge: true })
       }
       if (this.prevEl) this.prevEl.css("background-position", "right bottom");

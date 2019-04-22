@@ -46,7 +46,7 @@
         <button class="btn btn-default vote">VOTE</button></a>
       <mat-progress-bar [mode]="mode" [color]="color" [value]="r.normalized">
       </mat-progress-bar>
-      <h5>{{r.votes}}</h5>
+      <h5>VOTES: {{r.votes}} <br/> AVERAGE AGE: {{r.avg_age}}</h5>
       <hr>
       <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" *ngIf="restaurant">
         <div class="modal-dialog modal-dialog-centered" role="document">

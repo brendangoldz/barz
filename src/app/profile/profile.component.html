@@ -93,7 +93,7 @@
               </div>
               <input type="text" maxlength="35" class="form-control" formControlName="lastName" placeholder="Last Name" aria-label="Last Name" aria-describedby="basic-addon1">
             </div>
-<!-- 
+<!--
             <div class="input-group mb-3">
               <div class="input-group-prepend">
 
@@ -134,7 +134,12 @@
                 <br>
                 <span class="input-group-text" id="basic-addon1"><i class="fas fa-heart"></i></span>
               </div>
-              <input type="text" maxlength="50" class="form-control" formControlName="relationshipStatus" placeholder="Relationship Status" aria-label="Relationship Status" aria-describedby="basic-addon1">
+              <select class="form-control" name="" formControlName="relationshipStatus" aria-label="Relationship Status" aria-describedby="basic-addon1">
+                <option *ngFor="let status of statuses" [ngValue]="status">
+                  {{status}}
+                </option>
+              </select>
+              <!-- <input type="text" maxlength="50" class="form-control" formControlName="relationshipStatus" placeholder="Relationship Status" aria-label="Relationship Status" aria-describedby="basic-addon1"> -->
             </div>
 
 
