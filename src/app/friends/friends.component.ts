@@ -101,6 +101,7 @@ export class FriendsComponent implements OnInit {
     console.log(this.searchFriendsForm.value.searchField);
     this.query(this.searchFriendsForm.value.searchField);
   }
+  
   /**
    * [function description]
    * @param  arr [description]
