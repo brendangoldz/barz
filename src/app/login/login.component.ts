@@ -75,8 +75,8 @@ export class LoginComponent implements OnInit {
     console.log(event)
   }
   /**
-   * [function description]
-   * @return [description]
+   * Checking to see if user is already subscribed into system
+   * @return if(user==null), then false. If(currentUser==user), then true.
    */
   checkUser = function() {
     if (this.currentUser === null) {
@@ -85,23 +85,20 @@ export class LoginComponent implements OnInit {
     return true;
   }
   /**
-   * [function description]
-   * @return [description]
+   * Logging in using Gmail Account
    */
   loginWithGoogle = function() {
     this.auth.GoogleAuth();
   }
   /**
-   * [function description]
-   * @return [description]
+   * Entering user data to login into system
    */
   login = function() {
     console.log(this.loginForm);
     this.auth.SignIn(this.loginForm.value.email, this.loginForm.value.password);
   }
   /**
-   * [function description]
-   * @return [description]
+   * Subscribing to App by filling out criteria list
    */
   signup = function() {
     if (this.signupForm.value.password === this.signupForm.value.confirmPassword && this.signupForm.value.tos != false) {
@@ -120,17 +117,15 @@ export class LoginComponent implements OnInit {
 
   }
   /**
-   * [function description]
-   * @return [description]
+   * Sending a message to user if password was forgotten
    */
   forgotPassword = function() {
     this.auth.ForgotPassword(this.forgottenEmail);
   }
 
   /**
-   * [getAge description]
+   * Trying to get the age from user in order to complete App requirements 
    * @return age
-<<<<<<< HEAD
    */
   getAge = function(dob)
    {

@@ -166,9 +166,8 @@ export class MainComponent implements OnInit {
   }
 
   /**
-   * [function description]
-   * @param  position [description]
-   * @return          [description]
+   * Show restaurant location on a Google Map API
+   * @param  position Show restaurants location on API
    */
   showPosition = function(position?) {
     console.log("Position after navigator found ", position)
@@ -220,6 +219,7 @@ export class MainComponent implements OnInit {
         var votes = snap.data().votes + 1;
         let avg_age = (this.user.age+age)/votes;
         let demographics = snap.data().demographics;
+        //Splicing data into demographics and relationshipStatus
         console.log("demographics ", demographics)
         if(this.user.gender == 'male'){
           demographics.male++;
@@ -244,8 +244,8 @@ export class MainComponent implements OnInit {
       //REDUCE PREV BAR VOTE
       var prev = db.collection("bars").doc(prev_bar);
       prev.get().then((snap) => {
+        //Finding average age of voters
         let age = snap.data().avg_age;
-
         var votes = snap.data().votes - 1;
         let avg_age = ((age*snap.data().votes)-this.user.age)/votes;
         let demographics = snap.data().demographics;
@@ -331,8 +331,7 @@ export class MainComponent implements OnInit {
 
   }
   /**
-   * [function description]
-   * @return [description]
+   * Clear Votes if vote is not rights
    */
   clearVotes = function() {
     if (this.voted) this.voted = false;
@@ -392,8 +391,7 @@ export class MainComponent implements OnInit {
       });
   }
   /**
-   * [function description]
-   * @return [description]
+   * Logout of App
    */
   logout = function() {
     window.localStorage.clear();
@@ -406,17 +404,17 @@ export class MainComponent implements OnInit {
   }
 
   /**
-   * [function description]
-   * @param  i [description]
-   * @return   [description]
+   * Retrieving info about restaurant
+   * @param  i index of restaurants array
    */
   info = function(i) {
     console.log("Getting Info For: ", this.restaurants[i]);
     this.restaurant = this.restaurants[i];
   }
+
+
   /**
-   * [function description]
-   * @return [description]
+   * To see if vote is accepted
    */
   checkVoted = function() {
     var user = this.user || firebase.auth().currentUser;

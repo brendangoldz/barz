@@ -33,6 +33,8 @@
 <div class="body col-md-12" *ngIf="loaded">
   <button (click)="clearVotes()" class="btn btn-primary clear" [disabled]="!voted">Clear Vote</button>
   <div *ngFor="let r of restaurants; let i = index" class="vote_section">
+    <br>
+    <br>
 
     <li>
       <!--<button type="button" class="btn btn-primary" data-toggle="modal"
