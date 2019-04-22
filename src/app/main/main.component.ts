@@ -62,8 +62,10 @@ export class MainComponent implements OnInit {
     });
 
     /**
-     * [subscribe description- The user subscrition is authorized 'IF' their user email is verified. Once verified, program will continue to run ]
-     * @param  user=>{if( This section refers to document data. The code pulls the user ID to then pull existing documents. If the document and data exist it will be displayed. ]
+     * [subscribe description- The user subscrition is authorized 'IF' their
+     user email is verified. Once verified, program will continue to run ]
+     * @param  user=>{if( This section refers to document data. The code pulls the user ID to then pull data within
+      existing documents. If the document and data exist it will be displayed. ]
      * @return                [description]
      */
     this.sub = this.af.authState.subscribe(user => {
