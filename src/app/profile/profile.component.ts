@@ -117,7 +117,7 @@ updateForm = new FormGroup({
           firstName: this.updateForm.value.firstName || "",
           lastName: this.updateForm.value.lastName || "",
           gender: this.updateForm.value.gender || "",
-          dob: this.updateForm.value.dob || "",
+          // dob: this.updateForm.value.dob || "",
           occupation:this.updateForm.value.occupation || "",
           relationshipStatus: this.updateForm.value.relationshipStatus || "",
           favDrink: this.updateForm.value.favDrink || "",
@@ -140,7 +140,7 @@ updateForm = new FormGroup({
         firstName: this.updateForm.value.firstName || "",
         lastName: this.updateForm.value.lastName || "",
         gender: this.updateForm.value.gender || "",
-        dob: this.updateForm.value.dob || "",
+        // dob: this.updateForm.value.dob || "",
         occupation:this.updateForm.value.occupation || "",
         relationshipStatus: this.updateForm.value.relationshipStatus || "",
         favDrink: this.updateForm.value.favDrink || "",
@@ -189,7 +189,7 @@ updateForm = new FormGroup({
         this.updateForm.patchValue({firstName: this.userData['firstName']})
         this.updateForm.patchValue({lastName: this.userData['lastName']})
         this.updateForm.patchValue({bio: this.userData['bio']})
-        this.updateForm.patchValue({dob: this.userData['dob']})
+        // this.updateForm.patchValue({dob: this.userData['dob']})
         this.updateForm.patchValue({occupation: this.userData['occupation']})
         this.updateForm.patchValue({favDrink: this.userData['favDrink']})
         this.updateForm.patchValue({relationshipStatus: this.userData['relationshipStatus']})
