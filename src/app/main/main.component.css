@@ -80,3 +80,9 @@ agm-map {
   height: 25%;
   background: url("../../assets/loader.gif") center no-repeat;
 }
+
+.demographics
+{
+  text-align: center;
+  vertical-align: middle;
+}
