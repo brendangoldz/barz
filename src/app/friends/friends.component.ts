@@ -46,9 +46,8 @@ export class FriendsComponent implements OnInit {
     var that = this;
     var db = firebase.firestore();
     /**
-     * [subscribe description]
-     * @param  user=>{if(user [description]
-     * @return                [description]
+     * Subscription to this method. Saying listen to what's happening here. The two options being is the user logged in or not.
+     * @param  user=>{if(user [Current user logging into the session]
      */
     this.sub = this.af.authState.subscribe(user => {
       if (user) {
@@ -90,22 +89,29 @@ export class FriendsComponent implements OnInit {
     });
 
   }
+  /**
+   * [Destroys subscription. If subscription isn't destroyed, memory will leak out of the webpage.]
+   * @return [description]
+   */
   ngOnDestroy() {
     this.sub.unsubscribe();
   }
+
   /**
-   * [function description]
-   * @return [description]
+   * [Passing the text field into the query function]
    */
   searchFriends = function() {
     console.log(this.searchFriendsForm.value.searchField);
     this.query(this.searchFriendsForm.value.searchField);
   }
+
   /**
-   * [function description]
-   * @param  arr [description]
-   * @return     [description]
+   * [Getting information on the user from the database. Friends array and requests array. In the subscription of authState, getData gets
+   data off the user and returns the data wherever it is called.
+   * @param  arr [Friends or requests array]
+   * @return     [Return the array that was called for]
    */
+
   getData = function(arr) {
     console.log(this.reqs);
     let db = firebase.firestore();
@@ -117,6 +123,8 @@ export class FriendsComponent implements OnInit {
     });
     return temp;
   }
+
+
   /**
    * [function description]
    * @return [description]
@@ -130,10 +138,11 @@ export class FriendsComponent implements OnInit {
       })
     });
   }
+
+
   /**
-   * [function description]
-   * @param  searchText [description]
-   * @return            [description]
+   * [Passing what was called from the searchFriends function]
+   * @param  searchText [Using firebase's query to search for a user by email]
    */
   query = function(searchText) {
     var that = this;
@@ -191,9 +200,10 @@ export class FriendsComponent implements OnInit {
         console.log("Error getting documents: ", error);
       });
   }
+
+
   /**
-   * [function description]
-   * @return [description]
+   * [requestFriend calls another user after searching the database via email and sends an invitation to the user to become friends.]
    */
   requestFriend = function() {
     $(event.target).attr("disabled", "disabled");
@@ -218,10 +228,11 @@ export class FriendsComponent implements OnInit {
       console.log("Cant Request Self");
     }
   }
+
+
   /**
-   * [function description]
-   * @param  i [description]
-   * @return   [description]
+   * [Confirms the friend request at the index position in the list of pending invitations.]
+   * @param  i [Index of the request]
    */
   confirmRequest = function(i) {
     $(event.target).attr("disabled", "disabled");
@@ -278,9 +289,8 @@ export class FriendsComponent implements OnInit {
   }
 
   /**
-   * [function description]
-   * @param  i [description]
-   * @return   [description]
+   * [Declines the friend request at the index position in the list of friend invitations.]
+   * @param  i [Index of the request]
    */
   declineRequest = function(i) {
     var db = firebase.firestore();
@@ -301,9 +311,9 @@ export class FriendsComponent implements OnInit {
       })
     });
   }
+
   /**
-   * [function description]
-   * @return [description]
+   * [Once user accepts friend request, friends list refreshes and displays the new freindship]
    */
   refresh = function() {
     var that = this;
@@ -339,6 +349,12 @@ export class FriendsComponent implements OnInit {
       }
     }).catch((e) => console.log(e))
   }
+
+  /**
+   * [Deletes friend from users friends list. User 1 and user 2 will no longer have each other on their friends list. ]
+   * @param  i [description]
+   * @return     [Return is returning nothing, but is there to cancel delelting a friend]
+   */
   deleteFriend = function(i){
     var db = firebase.firestore();
     var docRef = db.collection("users").doc(this.user.uid);
@@ -382,6 +398,7 @@ export class FriendsComponent implements OnInit {
     }
 
   }
+  
   /**
    * [function description]
    * @param  i [description]
