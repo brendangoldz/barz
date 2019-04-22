@@ -104,7 +104,6 @@ export class FriendsComponent implements OnInit {
     console.log(this.searchFriendsForm.value.searchField);
     this.query(this.searchFriendsForm.value.searchField);
   }
-
   /**
    * [Getting information on the user from the database. Friends array and requests array. In the subscription of authState, getData gets
    data off the user and returns the data wherever it is called.
