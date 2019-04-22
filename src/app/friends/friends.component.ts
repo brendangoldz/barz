@@ -398,11 +398,10 @@ export class FriendsComponent implements OnInit {
     }
 
   }
-  
+
   /**
-   * [function description]
-   * @param  i [description]
-   * @return   [description]
+   * [Returns the user's profile once their profile pic is clicked on]
+   * @param  i [Index of the current friend at the position in the array]
    */
   getCurrentFriend = function(i) {
     var that = this;
@@ -419,9 +418,8 @@ export class FriendsComponent implements OnInit {
 
   }
   /**
-   * [function description]
-   * @param  i [description]
-   * @return   [description]
+   * [Returns the user's profile once their profile pic is clicked on]
+   * @param  i [Index of the current request]
    */
   getCurrentRequest = function(i) {
     var that = this;
