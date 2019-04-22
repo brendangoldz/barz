@@ -31,11 +31,7 @@ export class LoginComponent implements OnInit {
     password: new FormControl(''),
     confirmPassword: new FormControl(''),
     gender: new FormControl(''),
-<<<<<<< HEAD
     dob: new FormControl(''),
-=======
-    //age: new FormControl(''),
->>>>>>> 98126905d9cc9dec03e56cab208d3e992f7ed24e
     tos: new FormControl('')
   });
 
@@ -137,10 +133,6 @@ export class LoginComponent implements OnInit {
 <<<<<<< HEAD
    */
   getAge = function(dob)
-=======
-
-   function getAge(dob)
->>>>>>> 98126905d9cc9dec03e56cab208d3e992f7ed24e
    {
      var today = new Date();
      var birthDate = new Date(dob);
@@ -152,7 +144,6 @@ export class LoginComponent implements OnInit {
      }
      return age;
    }
-  **/
 
 
 }
