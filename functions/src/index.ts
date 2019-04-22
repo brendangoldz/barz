@@ -26,7 +26,14 @@ export const dump_votes = functions.https.onRequest((message) => {
         // console.log(doc.id, " => ", doc.data());
         // tslint:disable-next-line:no-unsafe-any
         bars.doc(doc.id).set({
-          votes: 0
+          demographics: [{
+            male: 0,
+            female: 0,
+            single: 0,
+            taken: 0
+          }],
+          votes: 0,
+          avg_age: 0
         }, {merge: true}).then(()=>console.log("Dumped ", doc.id)).catch((err)=>console.log(err))
       })
     }).catch((err)=>console.log(err));
