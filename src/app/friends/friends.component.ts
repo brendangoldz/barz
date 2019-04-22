@@ -95,7 +95,6 @@ export class FriendsComponent implements OnInit {
   }
   /**
    * [function description]
-   * @return [description]
    */
   searchFriends = function() {
     console.log(this.searchFriendsForm.value.searchField);
