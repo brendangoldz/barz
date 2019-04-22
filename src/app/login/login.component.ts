@@ -31,7 +31,7 @@ export class LoginComponent implements OnInit {
     password: new FormControl(''),
     confirmPassword: new FormControl(''),
     gender: new FormControl(''),
-    age: new FormControl(''),
+    dob: new FormControl(''),
     tos: new FormControl('')
   });
 
@@ -106,8 +106,13 @@ export class LoginComponent implements OnInit {
   signup = function() {
     if (this.signupForm.value.password === this.signupForm.value.confirmPassword && this.signupForm.value.tos != false) {
       // console.log(this.signupForm.value.firstName, this.signupForm.value.lastName);
-
-      this.auth.SignUp(this.signupForm.value.firstName, this.signupForm.value.lastName, this.signupForm.value.email, this.signupForm.value.password);
+      let age = this.getAge(this.signupForm.value.dob);
+      if(age<21){
+        alert("This appliation requires users to be of age 21");
+      }
+      else{
+        this.auth.SignUp(age, this.signupForm.value.firstName, this.signupForm.value.lastName, this.signupForm.value.email, this.signupForm.value.password);
+      }
     }
     else {
       window.alert('Passwords do not match or you have not accepted the ToS');
@@ -126,19 +131,17 @@ export class LoginComponent implements OnInit {
    * [getAge description]
    * @return age
    */
-   function getAge(dob)
+  getAge = function(dob)
    {
      var today = new Date();
-     var birthDate = new Date();
+     var birthDate = new Date(dob);
      var age = today.getFullYear() - birthDate.getFullYear();
      var m = birthDate.getMonth();
      if(m<0 || (m==0 && today.getDate() < birthDate.getDate()))
      {
        age = age - 1
      }
-
      return age;
-
    }
 
 
