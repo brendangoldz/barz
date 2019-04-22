@@ -24,7 +24,7 @@ service cloud.firestore {
       allow list: if request.auth != null;
 
       // Applies to writes to nonexistent documents
-      allow create: if request.auth.uid != null;
+      allow create: if request.auth != null;
 
       // Applies to writes to existing documents
       allow update: if request.auth != null;
