@@ -55,7 +55,7 @@ mat-progress-bar{
 }
 .vote_section{
   margin-top: 5vh;
-padding: 1rem;
+  padding: 2.25rem;
 }
 
 agm-map {

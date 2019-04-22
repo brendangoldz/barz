@@ -219,10 +219,24 @@ export class MainComponent implements OnInit {
         let age = snap.data().avg_age;
         var votes = snap.data().votes + 1;
         let avg_age = (this.user.age+age)/votes;
-        console.log("Average Age ", avg_age)
+        let demographics = snap.data().demographics;
+        console.log("demographics ", demographics)
+        if(this.user.gender == 'male'){
+          demographics.male++;
+        }
+        else if(this.user.gender == 'female'){
+          demographics.female++;
+        }
+        if(this.user.relationshipStatus == 'single'){
+          demographics.single++;
+        }
+        if(this.user.relationshipStatus == 'taken'){
+          demographics.taken++;
+        }
         doc.set({
           votes: votes,
-          avg_age: avg_age
+          avg_age: avg_age,
+          demographics: demographics
         }, { merge: true }).then(() => {
           console.log("Added Vote to ", bid, " \n Vote Count: ", votes)
         })
@@ -234,10 +248,27 @@ export class MainComponent implements OnInit {
 
         var votes = snap.data().votes - 1;
         let avg_age = ((age*snap.data().votes)-this.user.age)/votes;
+        let demographics = snap.data().demographics;
+        console.log("demographics ", demographics)
+        if(this.user.gender == 'male'){
+          demographics.male--;
+        }
+        else if(this.user.gender == 'female'){
+          demographics.female--;
+        }
+        if(this.user.relationshipStatus == 'single'){
+          demographics.single--;
+        }
+        if(this.user.relationshipStatus == 'taken'){
+          demographics.taken--;
+        }
+        console.log("demographics after adjustment ", demographics)
+
         if (votes <= 0) {
           prev.set({
             votes: 0,
-            avg_age: 0
+            avg_age: 0,
+            demographics: demographics
           }, { merge: true }).then(() => {
             console.log("Removed Vote from ", prev_bar, " /n Vote Count: ", votes)
           })
@@ -245,7 +276,8 @@ export class MainComponent implements OnInit {
         else {
           prev.set({
             votes: votes,
-            avg_age: avg_age
+            avg_age: avg_age,
+            demographics: demographics
           }, { merge: true }).then(() => {
             console.log("Removed Vote from ", prev_bar, " /n Vote Count: ", votes)
           })
@@ -262,11 +294,31 @@ export class MainComponent implements OnInit {
       //CURRENT BAR VOTED
       var doc = db.collection("bars").doc(bid)
       doc.get().then((snap) => {
+        let age = snap.data().avg_age;
         var votes = snap.data().votes + 1;
+        let avg_age = (this.user.age+age)/votes;
+        let demographics = snap.data().demographics;
+        console.log("demographics before adjustment ", demographics)
+        if(this.user.gender == 'male'){
+          demographics.male++;
+        }
+        else if(this.user.gender == 'female'){
+          demographics.female++;
+        }
+        if(this.user.relationshipStatus == 'single'){
+          demographics.single++;
+        }
+        if(this.user.relationshipStatus == 'taken'){
+          demographics.taken++;
+        }
+        console.log("demographics after adjustment ", demographics)
+
         doc.set({
-          votes: votes
+          votes: votes,
+          avg_age: avg_age,
+          demographics: demographics
         }, { merge: true }).then(() => {
-          console.log("Added Vote to ", bid, " /n Vote Count: ", votes)
+          console.log("Added Vote to ", bid, " \n Vote Count: ", votes)
         })
       });
     }
@@ -288,17 +340,34 @@ export class MainComponent implements OnInit {
       let age = snap.data().avg_age;
       var votes = snap.data().votes - 1;
       let avg_age = ((age*snap.data().votes)-this.user.age)/votes;
+      let demographics = snap.data().demographics;
+      console.log("demographics ", demographics)
+      if(this.user.gender == 'male'){
+        demographics.male--;
+      }
+      else if(this.user.gender == 'female'){
+        demographics.female--;
+      }
+      if(this.user.relationshipStatus == 'single'){
+        demographics.single--;
+      }
+      if(this.user.relationshipStatus == 'taken'){
+        demographics.taken--;
+      }
+      console.log("demographics after adjustment ", demographics)
       if (votes <= 0) {
         votes = 0;
         doc.set({
           votes: votes,
-          avg_age: 0
+          avg_age: 0,
+          demographics: demographics
         }, { merge: true })
       }
       else {
         doc.set({
           votes: votes,
-          avg_age: avg_age
+          avg_age: avg_age,
+          demographics: demographics
         }, { merge: true })
       }
       if (this.prevEl) this.prevEl.css("background-position", "right bottom");
