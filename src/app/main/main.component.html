@@ -60,6 +60,12 @@
               <agm-map [zoom]="15" [latitude]="restaurant.coords.latitude" [longitude]="restaurant.coords.longitude">
                 <agm-marker [latitude]="restaurant.coords.latitude" [longitude]="restaurant.coords.longitude"></agm-marker>
               </agm-map>
+              <span>
+                <h5>
+                  <address class="address">Address:</address>
+                  {{restaurant.address}}
+                </h5>
+              </span>
               <hr>
               <span>
                 <h5>SUNDAY:</h5>{{restaurant.hours[0]}}
