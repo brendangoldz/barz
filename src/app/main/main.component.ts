@@ -227,10 +227,10 @@ export class MainComponent implements OnInit {
         else if(this.user.gender == 'female'){
           demographics.female++;
         }
-        if(this.user.relationshipStatus == 'single'){
+        if(this.user.relationshipStatus.toLowerCase() == 'single'){
           demographics.single++;
         }
-        if(this.user.relationshipStatus == 'taken'){
+        if(this.user.relationshipStatus.toLowerCase() == 'taken'){
           demographics.taken++;
         }
         doc.set({
@@ -251,16 +251,20 @@ export class MainComponent implements OnInit {
         let demographics = snap.data().demographics;
         console.log("demographics ", demographics)
         if(this.user.gender == 'male'){
-          demographics.male--;
+          if(--demographics.male>0) demographics.male == 0;
+          else --demographics.male
         }
         else if(this.user.gender == 'female'){
-          demographics.female--;
+          if(--demographics.female>0) demographics.female == 0;
+          else --demographics.female
         }
-        if(this.user.relationshipStatus == 'single'){
-          demographics.single--;
+        if(this.user.relationshipStatus.toLowerCase() == 'single'){
+          if(--demographics.single>0) demographics.single == 0;
+          else --demographics.single
         }
-        if(this.user.relationshipStatus == 'taken'){
-          demographics.taken--;
+        if(this.user.relationshipStatus.toLowerCase() == 'taken'){
+          if(--demographics.taken>0) demographics.taken == 0;
+          else --demographics.taken
         }
         console.log("demographics after adjustment ", demographics)
 
@@ -305,10 +309,10 @@ export class MainComponent implements OnInit {
         else if(this.user.gender == 'female'){
           demographics.female++;
         }
-        if(this.user.relationshipStatus == 'single'){
+        if(this.user.relationshipStatus.toLowerCase() == 'single'){
           demographics.single++;
         }
-        if(this.user.relationshipStatus == 'taken'){
+        if(this.user.relationshipStatus.toLowerCase() == 'taken'){
           demographics.taken++;
         }
         console.log("demographics after adjustment ", demographics)
@@ -343,16 +347,20 @@ export class MainComponent implements OnInit {
       let demographics = snap.data().demographics;
       console.log("demographics ", demographics)
       if(this.user.gender == 'male'){
-        demographics.male--;
+        if(--demographics.male>0) demographics.male == 0;
+        else --demographics.male
       }
       else if(this.user.gender == 'female'){
-        demographics.female--;
+        if(--demographics.female>0) demographics.female == 0;
+        else --demographics.female
       }
-      if(this.user.relationshipStatus == 'single'){
-        demographics.single--;
+      if(this.user.relationshipStatus.toLowerCase() == 'single'){
+        if(--demographics.single>0) demographics.single == 0;
+        else --demographics.single
       }
-      if(this.user.relationshipStatus == 'taken'){
-        demographics.taken--;
+      if(this.user.relationshipStatus.toLowerCase() == 'taken'){
+        if(--demographics.taken>0) demographics.taken == 0;
+        else --demographics.taken
       }
       console.log("demographics after adjustment ", demographics)
       if (votes <= 0) {
