@@ -478,7 +478,7 @@ export class FriendsComponent implements OnInit {
           temp = {
             date: new Date(Date.parse(temp.date)),
             message: temp.message,
-            sender: this.user.firstName + " " + this.user.lastName
+            sender: "Me"
           }
           this.posts.push(temp);
         }
