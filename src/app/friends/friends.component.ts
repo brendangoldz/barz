@@ -32,7 +32,7 @@ export class FriendsComponent implements OnInit {
   combinedId: string;
 
   counter: number = 0;
-
+  index: number;
   messageValue: string;
   orderOfOperation: number = 1;
   messageForm = new FormGroup({
@@ -463,13 +463,14 @@ export class FriendsComponent implements OnInit {
   }
 
   setMessageWindow = function(x){
-    this.friendId = this.friends[x].uid;
+    this.index = x;
+    this.friendId = this.friends[this.index].uid || this.friends[x].uid;
     this.posts = [];
     var user =  firebase.auth().currentUser['uid'] ;
     this.combinedId = user + this.friendId;
     const db = firebase.firestore();
     const posts = db.collection('posts');
-    posts.doc(this.combinedId).get().then((val)=>{
+    posts.doc(this.combinedId).onSnapshot((val)=>{
       let content = [];
       if(val.exists){
         console.log("Content", val.data().content)
@@ -494,7 +495,7 @@ export class FriendsComponent implements OnInit {
       }
     })
     this.combinedId = this.friendId + user;
-    posts.doc(this.combinedId).get().then((val)=>{
+    posts.doc(this.combinedId).onSnapshot((val)=>{
       let content = [];
       if(val.exists){
         console.log("Content", val.data().content)
@@ -541,7 +542,9 @@ export class FriendsComponent implements OnInit {
         posts.doc(this.combinedId).set({
           combinedId: this.combinedId,
           content: content,
-        }, {merge: true}).then(()=>{console.log('Message Sent')})
+        }, {merge: true}).then(()=>{
+          console.log('Message Sent');
+        })
       }
       else{
         // posts.get().then((val)=>{
@@ -553,7 +556,9 @@ export class FriendsComponent implements OnInit {
           posts.doc(this.combinedId).set({
             combinedId: this.combinedId,
             content: content
-          }, {merge: true}).then(()=>{console.log('Message Sent')})
+          }, {merge: true}).then(()=>{
+            console.log('Message Sent');
+          })
         // })
       }
     })
