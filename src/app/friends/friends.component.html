@@ -146,11 +146,11 @@
         </div>
         <div class="modal-body">
           <!--Message field starts here -->
-          <textarea [(ngModel)]="content" name="content" placeholder="Message..."></textarea>
+          <textarea class="form-control" [(ngModel)]="content" name="content" placeholder="Message..."></textarea>
           <br>
-          <input type="submit" value="Send" (click)="message()">
-          <ul *ngFor="let post of posts">
-            <li>
+          <input class="btn btn-danger send_msg" type="submit" value="Send" (click)="message()">
+          <ul class="list-group">
+            <li class="list-group-item" *ngFor="let post of posts">
               <b>{{post.sender}}:</b><br>
               {{post.message}}<br>
               {{post.date}}

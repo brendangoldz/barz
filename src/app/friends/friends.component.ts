@@ -62,13 +62,6 @@ export class FriendsComponent implements OnInit {
     var db = firebase.firestore();
 
     //Keeps track of total number of messages in the collection
-    db.collection('posts').get().then(snap => {
-      this.counter = snap.size // will return the collection size
-
-      console.log('Total count is' + this.counter);
-
-    });
-
     /*
         if (this.combinedId == null)
         this.postsCol = this.afs.collection('posts');
@@ -108,8 +101,7 @@ export class FriendsComponent implements OnInit {
                 console.log(x);
                 that.friends.push(x);
               })
-              if (that.friends.length > 0) that.friends =
-                that.getData(that.friends);
+              if (that.friends.length > 0) that.friends = that.getData(that.friends);
               console.log("Friends Array", that.friends)
             }
           } else {
@@ -484,12 +476,20 @@ export class FriendsComponent implements OnInit {
         for(var i = 0;i<val.data().content.length; i++){
           let temp = val.data().content[i];
           temp = {
-            date: new Date(Date.parse(temp.date)).toLocaleTimeString('en-US'),
+            date: new Date(Date.parse(temp.date)),
             message: temp.message,
             sender: this.user.firstName + " " + this.user.lastName
           }
           this.posts.push(temp);
         }
+        console.log("Posts before sort", this.posts)
+        this.posts.sort((a, b)=>{
+          var dateA = new Date(a.date), dateB = new Date(b.date);
+          return dateA.getTime() - dateB.getTime();
+        })
+        // this.posts.map((a)=>a.date = new Date(Date.parse(a.date)).toTimeString())
+
+        console.log("Posts after sort", this.posts)
         // this.posts.push(val.data().content);
       }
     })
@@ -501,18 +501,23 @@ export class FriendsComponent implements OnInit {
         for(var i = 0;i<val.data().content.length; i++){
           let temp = val.data().content[i];
           temp = {
-            date: new Date(Date.parse(temp.date)).toLocaleTimeString('en-US'),
+            date: new Date(Date.parse(temp.date)),
             message: temp.message,
             sender: this.friends[x].firstName + " " + this.friends[x].lastName
           }
+          console.log("Posts In Receiving Messages", this.posts)
           this.posts.push(temp);
         }
+        console.log("Posts before sort", this.posts)
+        this.posts.sort((a, b)=>{
+          console.log("Date A: ", a.date, " vs. Date B: ", b.date)
+          return new Date(a.date).getTime() - new Date(b.date).getTime();
+        })
+        this.posts.map((a)=>a.date = new Date(Date.parse(a.date)).toTimeString())
+        console.log("Posts after sort", this.posts)
       }
     })
-    this.posts.sort((a, b)=>{
-      return Date.parse(a.date) - Date.parse(b.date);
-    })
-    console.log("Posts ", this.posts)
+
   }
 
 
