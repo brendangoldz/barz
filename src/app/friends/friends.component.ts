@@ -484,7 +484,7 @@ export class FriendsComponent implements OnInit {
         for(var i = 0;i<val.data().content.length; i++){
           let temp = val.data().content[i];
           temp = {
-            date: temp.date,
+            date: new Date(Date.parse(temp.date)).toLocaleTimeString('en-US'),
             message: temp.message,
             sender: this.user.firstName + " " + this.user.lastName
           }
@@ -501,7 +501,7 @@ export class FriendsComponent implements OnInit {
         for(var i = 0;i<val.data().content.length; i++){
           let temp = val.data().content[i];
           temp = {
-            date: temp.date,
+            date: new Date(Date.parse(temp.date)).toLocaleTimeString('en-US'),
             message: temp.message,
             sender: this.friends[x].firstName + " " + this.friends[x].lastName
           }
@@ -510,7 +510,7 @@ export class FriendsComponent implements OnInit {
       }
     })
     this.posts.sort((a, b)=>{
-      return a.date - b.date;
+      return Date.parse(a.date) - Date.parse(b.date);
     })
     console.log("Posts ", this.posts)
   }
@@ -523,7 +523,7 @@ export class FriendsComponent implements OnInit {
     console.log(this.combinedId);
     const db = firebase.firestore();
     const posts = db.collection('posts');
-    let date = new Date();
+    let date = new Date().toString();
     posts.doc(this.combinedId).get().then((val)=>{
       let content = [];
       if(val.exists){
