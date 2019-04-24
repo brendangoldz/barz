@@ -463,17 +463,15 @@ export class FriendsComponent implements OnInit {
   }
 
   setMessageWindow = function(x){
-    this.index = x;
-    this.friendId = this.friends[this.index].uid || this.friends[x].uid;
-    this.posts = [];
+    this.friendId = this.friends[x].uid;
     var user =  firebase.auth().currentUser['uid'] ;
     this.combinedId = user + this.friendId;
     const db = firebase.firestore();
     const posts = db.collection('posts');
     posts.doc(this.combinedId).onSnapshot((val)=>{
-      let content = [];
       if(val.exists){
-        console.log("Content", val.data().content)
+        // console.log("Content", val.data().content)
+        this.posts = [];
         for(var i = 0;i<val.data().content.length; i++){
           let temp = val.data().content[i];
           temp = {
@@ -481,43 +479,39 @@ export class FriendsComponent implements OnInit {
             message: temp.message,
             sender: "Me"
           }
+          console.log("Posts In Sent Messages", this.posts)
           this.posts.push(temp);
         }
-        console.log("Posts before sort", this.posts)
         this.posts.sort((a, b)=>{
-          var dateA = new Date(a.date), dateB = new Date(b.date);
-          return dateA.getTime() - dateB.getTime();
-        })
-        // this.posts.map((a)=>a.date = new Date(Date.parse(a.date)).toTimeString())
-
-        console.log("Posts after sort", this.posts)
-        // this.posts.push(val.data().content);
-      }
-    })
-    this.combinedId = this.friendId + user;
-    posts.doc(this.combinedId).onSnapshot((val)=>{
-      let content = [];
-      if(val.exists){
-        console.log("Content", val.data().content)
-        for(var i = 0;i<val.data().content.length; i++){
-          let temp = val.data().content[i];
-          temp = {
-            date: new Date(Date.parse(temp.date)),
-            message: temp.message,
-            sender: this.friends[x].firstName + " " + this.friends[x].lastName
-          }
-          console.log("Posts In Receiving Messages", this.posts)
-          this.posts.push(temp);
-        }
-        console.log("Posts before sort", this.posts)
-        this.posts.sort((a, b)=>{
-          console.log("Date A: ", a.date, " vs. Date B: ", b.date)
           return new Date(a.date).getTime() - new Date(b.date).getTime();
         })
         // this.posts.map((a)=>a.date = new Date(Date.parse(a.date)).toTimeString())
-        console.log("Posts after sort", this.posts)
+        // this.posts.push(val.data().content);
       }
+      let combinedId2 = this.friendId + user;
+      // console.log()
+      posts.doc(combinedId2).get().then((val)=>{
+        if(val.exists){
+          for(var i = 0;i<val.data().content.length; i++){
+            let temp = val.data().content[i];
+            temp = {
+              date: new Date(Date.parse(temp.date)),
+              message: temp.message,
+              sender: this.friends[x].firstName + " " + this.friends[x].lastName
+            }
+            console.log("Posts In Receiving Messages", this.posts)
+            this.posts.push(temp);
+          }
+          this.posts.sort((a, b)=>{
+            // console.log("Date A: ", a.date, " vs. Date B: ", b.date)
+            return new Date(a.date).getTime() - new Date(b.date).getTime();
+          })
+          // this.posts.map((a)=>a.date = new Date(Date.parse(a.date)).toTimeString())
+          // console.log("Posts after sort", this.posts)
+        }
+      })
     })
+
 
   }
 
@@ -526,6 +520,7 @@ export class FriendsComponent implements OnInit {
     //alert("Coming Soon!");
     var user =  firebase.auth().currentUser['uid'] ;
     this.combinedId = user + this.friendId
+    this.posts = [];
     console.log(this.combinedId);
     const db = firebase.firestore();
     const posts = db.collection('posts');
@@ -534,7 +529,7 @@ export class FriendsComponent implements OnInit {
       let content = [];
       if(val.exists){
         content = (val.data().content);
-        console.log("Content", content)
+        // console.log("Content", content)
         content.push({
           message: this.content,
           date: date
