@@ -513,7 +513,7 @@ export class FriendsComponent implements OnInit {
           console.log("Date A: ", a.date, " vs. Date B: ", b.date)
           return new Date(a.date).getTime() - new Date(b.date).getTime();
         })
-        this.posts.map((a)=>a.date = new Date(Date.parse(a.date)).toTimeString())
+        // this.posts.map((a)=>a.date = new Date(Date.parse(a.date)).toTimeString())
         console.log("Posts after sort", this.posts)
       }
     })
