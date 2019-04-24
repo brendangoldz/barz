@@ -1,24 +1,43 @@
-import {
-  Component, OnInit, Directive, ViewContainerRef, OnDestroy,
-  ViewChild, ComponentFactoryResolver, ComponentRef,
-  ComponentFactory, Input, NgZone
-} from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 import { HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { FirebaseuiAngularLibraryService } from 'firebaseui-angular';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import * as firebase from 'firebase';
+//import FirebaseListObservable from '@angular/fire';
+import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators'
 declare var $: any;
 
+
+interface Post {
+  title: string;
+  content: string;
+}
 @Component({
   selector: 'app-friends',
   templateUrl: './friends.component.html',
   styleUrls: ['./friends.component.css']
-
 })
-
 export class FriendsComponent implements OnInit {
+  postsCol: AngularFirestoreCollection<Post>;
+  posts: any = [];
+
+  content: string;
+
+  friendId: string;
+  friendUid: string;
+  combinedId: string;
+
+  counter: number = 0;
+
+  messageValue: string;
+  orderOfOperation: number = 1;
+  messageForm = new FormGroup({
+    message: new FormControl('')
+  });
   searchResults: any;
   searchFriendsForm = new FormGroup({
     searchField: new FormControl(''),
@@ -33,20 +52,31 @@ export class FriendsComponent implements OnInit {
   isNotFriends: boolean = true;
   isNotRequested: boolean = true;
   isNotSent: boolean = true;
-  @ViewChild('messagecontainer', { read: ViewContainerRef }) entry: ViewContainerRef;
-
-
-
-  constructor(private fb: FirebaseuiAngularLibraryService,
-      private af: AngularFireAuth, private router: Router, private zone: NgZone)
-      {
-
+  constructor(public afs: AngularFirestore, private fb: FirebaseuiAngularLibraryService,
+    private af: AngularFireAuth, private router: Router, private zone: NgZone) {
   }
-
-
   ngOnInit() {
+
+
     var that = this;
     var db = firebase.firestore();
+
+    //Keeps track of total number of messages in the collection
+    db.collection('posts').get().then(snap => {
+      this.counter = snap.size // will return the collection size
+
+      console.log('Total count is' + this.counter);
+
+    });
+
+    /*
+        if (this.combinedId == null)
+        this.postsCol = this.afs.collection('posts');
+        else
+        this.postsCol = this.afs.collection('posts', ref => ref.where('combinedId', '==', this.combinedId));
+
+          this.posts = this.postsCol.valueChanges();
+    */
     /**
      * Subscription to this method. Saying listen to what's happening here.
                             The two options being is the user logged in or not.
@@ -55,7 +85,7 @@ export class FriendsComponent implements OnInit {
     this.sub = this.af.authState.subscribe(user => {
       if (user) {
         if (!user.emailVerified) {
-          this.zone.run(()=>{
+          this.zone.run(() => {
             this.router.navigate(['verify']);
           })
         }
@@ -79,7 +109,7 @@ export class FriendsComponent implements OnInit {
                 that.friends.push(x);
               })
               if (that.friends.length > 0) that.friends =
-                                                    that.getData(that.friends);
+                that.getData(that.friends);
               console.log("Friends Array", that.friends)
             }
           } else {
@@ -128,14 +158,7 @@ export class FriendsComponent implements OnInit {
     });
     return temp;
   }
-
-
-  /**
-   * [function description]
-   * @return [description]
-   */
   logout = function() {
-    window.localStorage.clear();
     this.af.auth.signOut().then(() => {
       console.log("Logging out");
       this.zone.run(()=>{
@@ -143,7 +166,6 @@ export class FriendsComponent implements OnInit {
       })
     });
   }
-
 
   /**
    * [Passing what was called from the searchFriends function]
@@ -447,7 +469,95 @@ export class FriendsComponent implements OnInit {
       })
     });
   }
-  message = function(i){
-    alert("Coming Soon!");
+
+  setMessageWindow = function(x){
+    this.friendId = this.friends[x].uid;
+    this.posts = [];
+    var user =  firebase.auth().currentUser['uid'] ;
+    this.combinedId = user + this.friendId;
+    const db = firebase.firestore();
+    const posts = db.collection('posts');
+    posts.doc(this.combinedId).get().then((val)=>{
+      let content = [];
+      if(val.exists){
+        console.log("Content", val.data().content)
+        for(var i = 0;i<val.data().content.length; i++){
+          let temp = val.data().content[i];
+          temp = {
+            date: temp.date,
+            message: temp.message,
+            sender: this.user.firstName + " " + this.user.lastName
+          }
+          this.posts.push(temp);
+        }
+        // this.posts.push(val.data().content);
+      }
+    })
+    this.combinedId = this.friendId + user;
+    posts.doc(this.combinedId).get().then((val)=>{
+      let content = [];
+      if(val.exists){
+        console.log("Content", val.data().content)
+        for(var i = 0;i<val.data().content.length; i++){
+          let temp = val.data().content[i];
+          temp = {
+            date: temp.date,
+            message: temp.message,
+            sender: this.friends[x].firstName + " " + this.friends[x].lastName
+          }
+          this.posts.push(temp);
+        }
+      }
+    })
+    this.posts.sort((a, b)=>{
+      return a.date - b.date;
+    })
+    console.log("Posts ", this.posts)
   }
+
+
+  message = function(){
+    //alert("Coming Soon!");
+    var user =  firebase.auth().currentUser['uid'] ;
+    this.combinedId = user + this.friendId
+    console.log(this.combinedId);
+    const db = firebase.firestore();
+    const posts = db.collection('posts');
+    let date = new Date();
+    posts.doc(this.combinedId).get().then((val)=>{
+      let content = [];
+      if(val.exists){
+        content = (val.data().content);
+        console.log("Content", content)
+        content.push({
+          message: this.content,
+          date: date
+        })
+        posts.doc(this.combinedId).set({
+          combinedId: this.combinedId,
+          content: content,
+        }, {merge: true}).then(()=>{console.log('Message Sent')})
+      }
+      else{
+        // posts.get().then((val)=>{
+          // if(val.data().content) content = (val.data().content);
+          content.push({
+            message: this.content,
+            date: date
+          })
+          posts.doc(this.combinedId).set({
+            combinedId: this.combinedId,
+            content: content
+          }, {merge: true}).then(()=>{console.log('Message Sent')})
+        // })
+      }
+    })
+
+
+    // this.afs.collection('posts').doc(this.combinedId).set({'combinedId':user+this.friendId,'content': this.content});
+    //
+    // this.afs.collection('posts').doc(this.combinedId).set({'combinedId':this.friendId+user,'content': this.content});
+
+  }
+
 }
