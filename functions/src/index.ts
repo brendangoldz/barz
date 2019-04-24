@@ -23,15 +23,15 @@ export const dump_votes = functions.https.onRequest((message) => {
     // tslint:disable-next-line:no-unsafe-any
     bars.get().then((snapshot)=>{
       snapshot.forEach((doc)=>{
+        const demographics = doc.data().demographics;
+        demographics.male = 0;
+        demographics.female = 0;
+        demographics.single = 0;
+        demographics.taken = 0;
         // console.log(doc.id, " => ", doc.data());
         // tslint:disable-next-line:no-unsafe-any
-        bars.doc(doc.id).set({
-          demographics: [{
-            male: 0,
-            female: 0,
-            single: 0,
-            taken: 0
-          }],
+        bars.doc(doc.data().bid).set({
+          demographics: demographics,
           votes: 0,
           avg_age: 0
         }, {merge: true}).then(()=>console.log("Dumped ", doc.id)).catch((err)=>console.log(err))

@@ -6,16 +6,16 @@
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav">
       <li class="nav-item">
-        <a class="nav-link" href="#/main">Home</a>
+        <a class="nav-link" href="/#/main">Home</a>
       </li>
       <li class="nav-item active">
-        <a class="nav-link" href="#/friends">Friends<span class="sr-only">(current)</span><sup *ngIf="requests">{{requests}}</sup></a>
+        <a class="nav-link" href="/#/friends">Friends<span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#/profile">Profile</a>
+        <a class="nav-link" href="/#/profile">Profile</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#/settings">Settings</a>
+        <a class="nav-link" href="/#/settings">Settings</a>
       </li>
 
     </ul>
@@ -27,7 +27,6 @@
 
   </div>
 </nav>
-
 <div class="body col-md-12">
   <h2 class="page_title">Requests
     <hr>
@@ -73,12 +72,12 @@
       <li class="list-inline-item friend_item" *ngFor="let f of friends; let i = index">
         <a data-toggle="modal" role="button" data-target="#friend_modal" (click)="getCurrentFriend(i)"><img class="profile_pic" src='{{f.photoURL}}' onerror="this.src = './assets/friend.png';"></a>
         <h4>{{f.firstName}} {{f.lastName}} </h4>
-        <span><i class="fa fa-comments fa-lg" aria-hidden="true" (click)="message(i)"></i><i class="fa fa-times fa-lg" aria-hidden="true" (click)="deleteFriend(i)"></i>
+        <span><i class="fa fa-comments fa-lg" aria-hidden="true" (click)="setMessageWindow(i)" data-toggle="modal" role="button" data-target="#type_message"></i><i class="fa fa-times fa-lg" aria-hidden="true" (click)="deleteFriend(i)"></i>
         </span>
       </li>
       <!--FRIEND ONE PROFILE VIEW MODAL-->
     </ul>
-    </div>
+  </div>
 
   <div id="friend_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" *ngIf="currentFriend">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -139,7 +138,33 @@
       </div>
     </div>
   </div>
-
+  <div id="type_message" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Type message</h2>
+        </div>
+        <div class="modal-body">
+          <!--Message field starts here -->
+          <textarea [(ngModel)]="content" name="content" placeholder="Message..."></textarea>
+          <br>
+          <input type="submit" value="Send" (click)="message()">
+          <ul *ngFor="let post of posts">
+            <li>
+              <b>{{post.sender}}:</b><br>
+              {{post.message}}<br>
+              {{post.date}}
+            </li>
+          </ul>
+          <!--Message field ends here -->
+        </div>
+        <div class="modal-footer">
+          <button class="btn" data-dismiss="modal" aria-hidden="true">
+            Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 
 </div>
