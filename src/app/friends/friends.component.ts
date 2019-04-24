@@ -466,6 +466,7 @@ export class FriendsComponent implements OnInit {
     this.friendId = this.friends[x].uid;
     var user =  firebase.auth().currentUser['uid'] ;
     this.combinedId = user + this.friendId;
+    this.posts = [];
     const db = firebase.firestore();
     const posts = db.collection('posts');
     posts.doc(this.combinedId).onSnapshot((val)=>{
@@ -539,6 +540,7 @@ export class FriendsComponent implements OnInit {
           content: content,
         }, {merge: true}).then(()=>{
           console.log('Message Sent');
+          this.content = ""
         })
       }
       else{
@@ -553,6 +555,7 @@ export class FriendsComponent implements OnInit {
             content: content
           }, {merge: true}).then(()=>{
             console.log('Message Sent');
+            this.content = ""
           })
         // })
       }

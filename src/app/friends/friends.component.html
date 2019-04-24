@@ -6,16 +6,16 @@
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav">
       <li class="nav-item">
-        <a class="nav-link" href="/#/main">Home</a>
+        <a class="nav-link" href="#/main">Home</a>
       </li>
       <li class="nav-item active">
-        <a class="nav-link" href="/#/friends">Friends<span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="#/friends">Friends<span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/#/profile">Profile</a>
+        <a class="nav-link" href="#/profile">Profile</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/#/settings">Settings</a>
+        <a class="nav-link" href="#/settings">Settings</a>
       </li>
 
     </ul>
@@ -146,7 +146,7 @@
         </div>
         <div class="modal-body">
           <!--Message field starts here -->
-          <textarea class="form-control" [(ngModel)]="content" name="content" placeholder="Message..."></textarea>
+          <input class="form-control" type="text" [(ngModel)]="content" name="content" placeholder="Message...">
           <br>
           <input class="btn btn-danger send_msg" type="submit" value="Send" (click)="message()">
           <ul class="list-group">
