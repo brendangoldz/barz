@@ -48,7 +48,8 @@
         <button class="btn btn-default vote">VOTE</button></a>
       <mat-progress-bar [mode]="mode" [color]="color" [value]="r.normalized">
       </mat-progress-bar>
-      <h5>VOTES: {{r.votes}} <br/> AVERAGE AGE: {{r.avg_age}} <br> MALES: {{r.demographics.male}}   | FEMALES: {{r.demographics.female}} <br> SINGLE: {{r.demographics.single}} | TAKEN: {{r.demographics.taken}}  </h5>
+      <h5>VOTES: {{r.votes}} <br /> AVERAGE AGE: {{r.avg_age}} <br> <i class="fas fa-mars fa-lg"></i> {{r.demographics.male}} &nbsp;| <i class="fas fa-venus fa-lg"></i> {{r.demographics.female}} <br> SINGLE: {{r.demographics.single}} | TAKEN:
+        {{r.demographics.taken}} </h5>
       <hr>
       <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" *ngIf="restaurant">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -57,7 +58,7 @@
               <h3 id="myModalLabel">{{restaurant.name}}</h3>
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
-              <a href="{{restaurant.website}}">{{restaurant.website}}</a>
+            <a href="{{restaurant.website}}">{{restaurant.website}}</a>
             <div class="modal-body">
               <agm-map [zoom]="15" [latitude]="restaurant.coords.latitude" [longitude]="restaurant.coords.longitude">
                 <agm-marker [latitude]="restaurant.coords.latitude" [longitude]="restaurant.coords.longitude"></agm-marker>
