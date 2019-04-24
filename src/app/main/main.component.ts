@@ -113,7 +113,6 @@ export class MainComponent implements OnInit {
       snap.forEach((doc) => {
         console.log(doc.id, " votes ", doc.data().votes);
         this.restaurants.push(doc.data());
-        this.totalVotes += doc.data().votes;
       });
       this.sub2 = that.lo.getLocation().subscribe(res => {
         // alert("LOCATION: " + res.coords.latitude + res.coords.longitude);
@@ -144,9 +143,13 @@ export class MainComponent implements OnInit {
 
           console.log("Temp before Normalized ", temp);
           temp.forEach((val) => {
+            this.totalVotes += val.votes;
+          })
+          console.log("Total votes in this area", that.totalVotes)
+          that.restaurants = temp;
+          that.restaurants.forEach((val)=>{
             val.normalized = (val.votes / that.totalVotes) * 100;
           })
-          that.restaurants = temp;
           that.loaded = true;
           if(that.restaurants.length == 0) alert("We currently do not support your location, please send email to brendan@barz.app to request your location")
           if (that.user && that.loaded) that.checkVoted();

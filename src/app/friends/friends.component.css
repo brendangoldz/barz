@@ -9,6 +9,9 @@
     height: 30vw !important;
     max-height: 30vw !important;
   }
+  .send_msg{
+    width: 25vw !important;
+  }
 }
 .body{
   margin-top: 15vh;
