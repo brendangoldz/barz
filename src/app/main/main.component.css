@@ -60,6 +60,7 @@ mat-progress-bar{
 agm-map {
   height: 30vh;
 }
+
 .clear{
   background: #f8f9fa;
   color: black;
@@ -84,4 +85,5 @@ agm-map {
 {
   text-align: center;
   vertical-align: middle;
+
 }

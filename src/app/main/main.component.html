@@ -33,8 +33,8 @@
 <div class="body col-md-12" *ngIf="loaded">
   <button (click)="clearVotes()" class="btn btn-primary clear" [disabled]="!voted">Clear Vote</button>
   <div *ngFor="let r of restaurants; let i = index" class="vote_section">
-  <br>
-  <br>
+  <br/>
+  <br/>
     <li>
 
       <!--<button type="button" class="btn btn-primary" data-toggle="modal"
@@ -49,15 +49,11 @@
         <br>
       <mat-progress-bar [mode]="mode" [color]="color" [value]="r.normalized">
       </mat-progress-bar>
-<<<<<<< HEAD
 
-      <h5 class="demographics">VOTES: {{r.votes}} <br/> AVG. AGE: {{r.avg_age}} <br> MALES: {{r.demographics.male}}   | FEMALES: {{r.demographics.female}} <br> SINGLE: {{r.demographics.single}} | TAKEN: {{r.demographics.taken}}
-      </h5>
-=======
       <h5>VOTES: {{r.votes}} <br /> AVERAGE AGE: {{r.avg_age}} <br> <i class="fas fa-mars fa-lg"></i> {{r.demographics.male}} &nbsp;| <i class="fas fa-venus fa-lg"></i> {{r.demographics.female}} <br> SINGLE: {{r.demographics.single}} | TAKEN:
-        {{r.demographics.taken}} </h5>
->>>>>>> 746de592dfbcc82a6a376a2f14edadc46824bb6c
+        {{r.demographics.taken}}
       <hr>
+      <br>
       <br>
       <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" *ngIf="restaurant">
         <div class="modal-dialog modal-dialog-centered" role="document">
