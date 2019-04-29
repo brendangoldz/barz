@@ -346,6 +346,8 @@ export class FriendsComponent implements OnInit {
     var db = firebase.firestore();
     var docRef = db.collection("users").doc(this.user.uid);
     docRef.onSnapshot((doc)=> {
+      that.reqs = [];
+      that.friends = [];
       if (doc.exists) {
         if (doc.data().uid == that.user.uid) that.user = doc.data();
         console.log("Document data:", doc.data());
