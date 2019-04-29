@@ -220,7 +220,9 @@ export class MainComponent implements OnInit {
       doc.get().then((snap) => {
         let age = snap.data().avg_age;
         var votes = snap.data().votes + 1;
-        let avg_age = (this.user.age+age)/votes;
+        let avg_age;
+        if(this.user.age != 0) avg_age = Math.round((this.user.age+age)/votes);
+        else avg_age = age;
         let demographics = snap.data().demographics;
         //Splicing data into demographics and relationshipStatus
         console.log("demographics ", demographics)
@@ -250,7 +252,9 @@ export class MainComponent implements OnInit {
         //Finding average age of voters
         let age = snap.data().avg_age;
         var votes = snap.data().votes - 1;
-        let avg_age = ((age*snap.data().votes)-this.user.age)/votes;
+        let avg_age;
+        if(this.user.age != 0) avg_age = Math.round((this.user.age+age)/votes);
+        else avg_age = age;
         let demographics = snap.data().demographics;
         console.log("demographics ", demographics)
         if(this.user.gender == 'male'){
@@ -303,7 +307,9 @@ export class MainComponent implements OnInit {
       doc.get().then((snap) => {
         let age = snap.data().avg_age;
         var votes = snap.data().votes + 1;
-        let avg_age = (this.user.age+age)/votes;
+        let avg_age;
+        if(this.user.age != 0) avg_age = Math.round((this.user.age+age)/votes);
+        else avg_age = age;
         let demographics = snap.data().demographics;
         console.log("demographics before adjustment ", demographics)
         if(this.user.gender == 'male'){
@@ -345,7 +351,9 @@ export class MainComponent implements OnInit {
     doc.get().then((snap) => {
       let age = snap.data().avg_age;
       var votes = snap.data().votes - 1;
-      let avg_age = ((age*snap.data().votes)-this.user.age)/votes;
+      let avg_age;
+      if(this.user.age != 0) avg_age = Math.round((this.user.age+age)/votes);
+      else avg_age = age;
       let demographics = snap.data().demographics;
       console.log("demographics ", demographics)
       if(this.user.gender == 'male'){
