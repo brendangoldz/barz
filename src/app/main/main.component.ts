@@ -352,7 +352,7 @@ export class MainComponent implements OnInit {
       let age = snap.data().avg_age;
       var votes = snap.data().votes - 1;
       let avg_age;
-      if(this.user.age != 0) avg_age = Math.round((this.user.age+age)/votes);
+      if(this.user.age != 0) avg_age = Math.round(((age*snap.data().votes)-this.user.age)/votes);
       else avg_age = age;
       let demographics = snap.data().demographics;
       console.log("demographics ", demographics)
