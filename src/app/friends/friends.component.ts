@@ -56,8 +56,6 @@ export class FriendsComponent implements OnInit {
     private af: AngularFireAuth, private router: Router, private zone: NgZone) {
   }
   ngOnInit() {
-
-
     var that = this;
     var db = firebase.firestore();
 
@@ -347,7 +345,9 @@ export class FriendsComponent implements OnInit {
     this.friends = [];
     var db = firebase.firestore();
     var docRef = db.collection("users").doc(this.user.uid);
-    docRef.get().then(function(doc) {
+    docRef.onSnapshot((doc)=> {
+      that.reqs = [];
+      that.friends = [];
       if (doc.exists) {
         if (doc.data().uid == that.user.uid) that.user = doc.data();
         console.log("Document data:", doc.data());
@@ -372,7 +372,7 @@ export class FriendsComponent implements OnInit {
         // doc.data() will be undefined in this case
         console.log("No such document!");
       }
-    }).catch((e) => console.log(e))
+    })
   }
 
   /**
