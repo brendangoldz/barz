@@ -104,7 +104,7 @@ export class LoginComponent implements OnInit {
     if (this.signupForm.value.password === this.signupForm.value.confirmPassword && this.signupForm.value.tos != false) {
       // console.log(this.signupForm.value.firstName, this.signupForm.value.lastName);
       let age = this.getAge(this.signupForm.value.dob);
-      if(age<21){
+      if(age<21 || age != typeof Number){
         alert("This appliation requires users to be of age 21");
       }
       else{
@@ -124,7 +124,7 @@ export class LoginComponent implements OnInit {
   }
 
   /**
-   * Trying to get the age from user in order to complete App requirements 
+   * Trying to get the age from user in order to complete App requirements
    * @return age
    */
   getAge = function(dob)
