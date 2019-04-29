@@ -126,7 +126,6 @@
                 <button class="btn btn-danger request_btn" id="request" (click)="confirmRequest()" [disabled]="!isNotFriends" *ngIf="isNotFriends && isNotSent && !isNotRequested">Confirm Request</button>
                 <button class="btn btn-danger request_btn" id="request" [disabled]="!isNotFriends" *ngIf="!isNotFriends && isNotRequested && isNotSent">Already Friends</button>
                 <button class="btn btn-danger request_btn" id="request" [disabled]="true" *ngIf="isNotFriends && isNotRequested && !isNotSent">Request Sent</button>
-
               </li>
             </ul>
           </form>

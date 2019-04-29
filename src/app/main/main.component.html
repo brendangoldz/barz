@@ -7,7 +7,8 @@
     <ul class="navbar-nav">
       <li class="nav-item active">
         <a class="nav-link" href="#/main">Home <span class="sr-only">(current)
-          </span></a>
+          </span>
+        </a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="#/friends">Friends<sup *ngIf="requests">{{requests}}</sup></a>
@@ -22,7 +23,8 @@
     </ul>
     <form>
       <li class="nav-item logout">
-        <button class="btn btn-outline-danger my-2 my-sm-0 logout" type="submit" (click)="logout()">Logout</button>
+        <button class="btn btn-outline-danger my-2 my-sm-0 logout" type="submit" (click)="logout()">Logout
+        </button>
       </li>
     </form>
 
@@ -33,8 +35,8 @@
 <div class="body col-md-12" *ngIf="loaded">
   <button (click)="clearVotes()" class="btn btn-primary clear" [disabled]="!voted">Clear Vote</button>
   <div *ngFor="let r of restaurants; let i = index" class="vote_section">
-  <br/>
-  <br/>
+    <br />
+    <br />
     <li>
 
       <!--<button type="button" class="btn btn-primary" data-toggle="modal"
@@ -42,69 +44,68 @@
   Launch demo modal
 </button>  -->
       <h3 class="rest_name"> <a href="javscript:0;" data-toggle="modal" role="button" data-target="#myModal" (click)="info(i)">
-          {{r.name}}<i class="fas fa-info-circle
-                                        fa-xs"></i></a></h3>
+          {{r.name}}<i class="fas fa-info-circlefa-xs"><i> </a>
+      </h3>
       <a href="javascript:0;" (click)="vote(i)" id="bar{{i}}">
         <button class="btn btn-default vote">VOTE</button></a>
-        <br>
+      <br>
       <mat-progress-bar [mode]="mode" [color]="color" [value]="r.normalized">
       </mat-progress-bar>
 
       <h5>VOTES: {{r.votes}} <br /> AVERAGE AGE: {{r.avg_age}} <br> <i class="fas fa-mars fa-lg"></i> {{r.demographics.male}} &nbsp;| <i class="fas fa-venus fa-lg"></i> {{r.demographics.female}} <br> SINGLE: {{r.demographics.single}} | TAKEN:
         {{r.demographics.taken}}
-      <hr>
-      <br>
-      <br>
-      <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" *ngIf="restaurant">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h3 id="myModalLabel">{{restaurant.name}}</h3>
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            </div>
-            <a href="{{restaurant.website}}">{{restaurant.website}}</a>
-            <div class="modal-body">
-              <agm-map [zoom]="15" [latitude]="restaurant.coords.latitude" [longitude]="restaurant.coords.longitude">
-                <agm-marker [latitude]="restaurant.coords.latitude" [longitude]="restaurant.coords.longitude"></agm-marker>
-              </agm-map>
-              <span>
-                <h5>
-                  <address class="address">Address:</address>
-                  {{restaurant.address}}
-                </h5>
-              </span>
-              <hr>
-              <span>
-                <h5>SUNDAY:</h5>{{restaurant.hours[0]}}
-              </span>
-              <span>
-                <h5>MONDAY:</h5>{{restaurant.hours[1]}}
-              </span>
-              <span>
-                <h5>TUESDAY:</h5>{{restaurant.hours[2]}}
-              </span>
-              <span>
-                <h5>WEDNESDAY:</h5>{{restaurant.hours[3]}}
-              </span>
-              <span>
-                <h5>THURSDAY:</h5>{{restaurant.hours[4]}}
-              </span>
-              <span>
-                <h5>FRIDAY:</h5>{{restaurant.hours[5]}}
-              </span>
-              <span>
-                <h5>SATURDAY:</h5>{{restaurant.hours[6]}}
-              </span>
-              <hr>
+        <hr>
+        <br>
+        <br>
+        <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" *ngIf="restaurant">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h3 id="myModalLabel">{{restaurant.name}}</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+              </div>
+              <a href="{{restaurant.website}}">{{restaurant.website}}</a>
+              <div class="modal-body">
+                <agm-map [zoom]="15" [latitude]="restaurant.coords.latitude" [longitude]="restaurant.coords.longitude">
+                  <agm-marker [latitude]="restaurant.coords.latitude" [longitude]="restaurant.coords.longitude"></agm-marker>
+                </agm-map>
+                <span>
+                  <h5>
+                    <address class="address">Address:</address>
+                    {{restaurant.address}}
+                  </h5>
+                </span>
+                <hr>
+                <span>
+                  <h5>SUNDAY:</h5>{{restaurant.hours[0]}}
+                </span>
+                <span>
+                  <h5>MONDAY:</h5>{{restaurant.hours[1]}}
+                </span>
+                <span>
+                  <h5>TUESDAY:</h5>{{restaurant.hours[2]}}
+                </span>
+                <span>
+                  <h5>WEDNESDAY:</h5>{{restaurant.hours[3]}}
+                </span>
+                <span>
+                  <h5>THURSDAY:</h5>{{restaurant.hours[4]}}
+                </span>
+                <span>
+                  <h5>FRIDAY:</h5>{{restaurant.hours[5]}}
+                </span>
+                <span>
+                  <h5>SATURDAY:</h5>{{restaurant.hours[6]}}
+                </span>
+                <hr>
 
-            </div>
-            <div class="modal-footer">
-              <button class="btn" data-dismiss="modal" aria-hidden="true">
-                Close</button>
+              </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
     </li>
   </div>
 </div>
